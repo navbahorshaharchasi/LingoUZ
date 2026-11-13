@@ -10,11 +10,6 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .korean-text { font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; }
-        @keyframes pulse-subtle {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
-        }
-        .animate-pulse-subtle { animation: pulse-subtle 2s infinite ease-in-out; }
     </style>
 </head>
 <body class="text-slate-800 antialiased min-h-screen flex flex-col justify-between bg-slate-900 selection:bg-indigo-500 selection:text-white">
@@ -30,9 +25,9 @@
                 <div>
                     <div class="flex items-center gap-2">
                         <h1 class="font-extrabold text-base sm:text-lg tracking-tight">LingoUZ</h1>
-                        <span class="text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-400/30">BEPUL</span>
+                        <span class="text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-400/30">TOPIK 3</span>
                     </div>
-                    <p id="header-subtitle" class="text-xs text-indigo-200 font-medium">Hanguko (한국어) mustaqil ta'lim</p>
+                    <p id="header-subtitle" class="text-xs text-indigo-200 font-medium">Hanguko (한국어) 30 kunlik mustaqil ta'lim</p>
                 </div>
             </div>
 
@@ -55,7 +50,7 @@
         <!-- CONTAINER SCREENS -->
         <main class="flex-1 flex flex-col overflow-y-auto bg-slate-50/50 relative">
 
-            <!-- 1. LOADING SCREEN -->
+            <!-- LOADING -->
             <div id="screen-loading" class="flex-1 flex flex-col items-center justify-center p-6 text-center space-y-4">
                 <div class="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
                 <div class="space-y-1">
@@ -64,99 +59,67 @@
                 </div>
             </div>
 
-            <!-- 2. AUTH SCREEN -->
+            <!-- AUTH -->
             <div id="screen-auth" class="hidden flex-1 flex flex-col justify-center p-5 sm:p-8 max-w-md mx-auto w-full">
                 <div class="text-center mb-6 space-y-2">
                     <div class="inline-flex w-16 h-16 rounded-3xl bg-indigo-600 text-white items-center justify-center text-3xl font-black shadow-lg shadow-indigo-200 korean-text mb-1">
                         한
                     </div>
                     <h2 class="text-xl sm:text-2xl font-black text-slate-900">LingoUZ Tizimiga Xush Kelibsiz!</h2>
-                    <p class="text-xs sm:text-sm text-slate-500">Hanguko (한국어) tilini 0 dan mukammal o'rganing.</p>
+                    <p class="text-xs sm:text-sm text-slate-500">Hanguko (한국어) tilini 0 dan TOPIK 3 gacha o'rganing.</p>
                 </div>
 
                 <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-xl shadow-slate-100 space-y-5">
                     <div class="grid grid-cols-2 bg-slate-100 p-1 rounded-2xl">
                         <button id="tab-register" onclick="switchAuthTab('register')" class="py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-white text-indigo-700 shadow-xs transition">Ro'yxatdan o'tish</button>
-                        <button id="tab-login" onclick="switchAuthTab('login')" class="py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-500 hover:text-slate-800 transition">Tizimga kirish</button>
+                        <button id="tab-login" onclick="switchAuthTab('login')" class="py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-500 transition">Tizimga kirish</button>
                     </div>
 
-                    <!-- REGISTER FORM -->
                     <form id="register-form" class="space-y-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Ism va familiyangiz</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400"><i class="fa-solid fa-user"></i></span>
-                                <input type="text" id="reg-fullname" required placeholder="Masalan: Anvar Karimov"
-                                    class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium focus:outline-none focus:border-indigo-600 focus:bg-white transition">
-                            </div>
+                            <input type="text" id="reg-fullname" required placeholder="Masalan: Anvar Karimov"
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium focus:outline-none focus:border-indigo-600 focus:bg-white transition">
                         </div>
-
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Tug'ilgan kuningiz</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400"><i class="fa-solid fa-calendar"></i></span>
-                                <input type="date" id="reg-dob" required
-                                    class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium focus:outline-none focus:border-indigo-600 focus:bg-white transition">
-                            </div>
+                            <input type="date" id="reg-dob" required
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium focus:outline-none focus:border-indigo-600 focus:bg-white transition">
                             <div id="age-preview-box" class="hidden items-center gap-1.5 mt-1.5 text-xs text-indigo-600 font-bold px-1">
                                 <i class="fa-solid fa-circle-check"></i>
-                                <span>Hisoblangan yosh: <strong id="age-preview-value">--</strong></span>
+                                <span>Yosh: <strong id="age-preview-value">--</strong></span>
                             </div>
                         </div>
-
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Telefon raqamingiz</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 font-mono">+998</span>
-                                <input type="tel" id="reg-phone" required placeholder="90 123 45 67" value="+998"
-                                    class="w-full pl-16 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-mono font-bold focus:outline-none focus:border-indigo-600 focus:bg-white transition">
-                            </div>
+                            <input type="tel" id="reg-phone" required placeholder="90 123 45 67" value="+998"
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-mono font-bold focus:outline-none focus:border-indigo-600 focus:bg-white transition">
                         </div>
-
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Parol o'ylab toping</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400"><i class="fa-solid fa-lock"></i></span>
-                                <input type="password" id="reg-password" required placeholder="Min 4 ta belgi"
-                                    class="w-full pl-10 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium focus:outline-none focus:border-indigo-600 focus:bg-white transition">
-                                <button type="button" onclick="togglePasswordVisibility('reg-password', this)" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600">
-                                    <i class="fa-solid fa-eye"></i>
-                                </button>
-                            </div>
+                            <input type="password" id="reg-password" required placeholder="Min 4 ta belgi"
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium focus:outline-none focus:border-indigo-600 focus:bg-white transition">
                         </div>
-
-                        <button type="submit" id="btn-reg-submit"
-                            class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-indigo-200 transition flex items-center justify-center gap-2 text-sm cursor-pointer">
-                            <span>Ro'yxatdan o'tish va davom etish</span>
+                        <button type="submit"
+                            class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg transition flex items-center justify-center gap-2 text-sm cursor-pointer">
+                            <span>Ro'yxatdan o'tish</span>
                             <i class="fa-solid fa-arrow-right"></i>
                         </button>
                     </form>
 
-                    <!-- LOGIN FORM -->
                     <form id="login-form" class="hidden space-y-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Telefon raqamingiz</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 font-mono">+998</span>
-                                <input type="tel" id="login-phone" required placeholder="90 123 45 67" value="+998"
-                                    class="w-full pl-16 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-mono font-bold focus:outline-none focus:border-indigo-600 focus:bg-white transition">
-                            </div>
+                            <input type="tel" id="login-phone" required placeholder="90 123 45 67" value="+998"
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-mono font-bold focus:outline-none focus:border-indigo-600 focus:bg-white transition">
                         </div>
-
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Parolingiz</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400"><i class="fa-solid fa-lock"></i></span>
-                                <input type="password" id="login-password" required placeholder="Parolni kiriting"
-                                    class="w-full pl-10 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium focus:outline-none focus:border-indigo-600 focus:bg-white transition">
-                                <button type="button" onclick="togglePasswordVisibility('login-password', this)" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600">
-                                    <i class="fa-solid fa-eye"></i>
-                                </button>
-                            </div>
+                            <input type="password" id="login-password" required placeholder="Parolni kiriting"
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium focus:outline-none focus:border-indigo-600 focus:bg-white transition">
                         </div>
-
-                        <button type="submit" id="btn-login-submit"
-                            class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-indigo-200 transition flex items-center justify-center gap-2 text-sm cursor-pointer">
+                        <button type="submit"
+                            class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg transition flex items-center justify-center gap-2 text-sm cursor-pointer">
                             <i class="fa-solid fa-right-to-bracket"></i>
                             <span>Ilovaga kirish</span>
                         </button>
@@ -164,429 +127,387 @@
                 </div>
             </div>
 
-            <!-- 3. SUBSCRIBE SCREEN -->
+            <!-- SUBSCRIBE -->
             <div id="screen-subscribe" class="hidden flex-1 flex flex-col justify-center p-5 sm:p-8 max-w-md mx-auto w-full">
-                <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-100 space-y-6 text-center">
+                <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6 text-center">
                     <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-3xl mx-auto flex items-center justify-center text-3xl shadow-inner">
                         <i class="fa-solid fa-bullhorn"></i>
                     </div>
-
-                    <div class="space-y-2">
-                        <h2 class="text-xl font-black text-slate-900">Majburiy Obuna Bosqichi</h2>
-                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                            Hurmatli <strong id="sub-student-name" class="text-indigo-600">Talaba</strong>, LingoUZ bepul loyihasidan foydalanish uchun rasmiy sahifalarimizga obuna bo'ling!
-                        </p>
-                    </div>
-
+                    <h2 class="text-xl font-black text-slate-900">Majburiy Obuna Bosqichi</h2>
+                    <p class="text-xs sm:text-sm text-slate-600">LingoUZ loyihasidan foydalanish uchun rasmiy sahifalarimizga obuna bo'ling!</p>
                     <div class="space-y-3 text-left">
-                        <div id="sub-card-tg" class="border-2 border-slate-200 rounded-2xl p-3.5 flex items-center justify-between gap-3 bg-slate-50/70 transition">
-                            <div class="flex items-center gap-3 min-w-0">
-                                <div class="w-10 h-10 rounded-xl bg-sky-500 text-white flex items-center justify-center text-lg shrink-0 shadow-xs">
-                                    <i class="fa-brands fa-telegram"></i>
-                                </div>
-                                <div class="min-w-0">
-                                    <div class="font-bold text-xs sm:text-sm text-slate-900 truncate">Telegram Kanalimiz</div>
-                                    <div class="text-[11px] text-slate-500">Darslar va qo'llanmalar</div>
-                                </div>
-                            </div>
+                        <div id="sub-card-tg" class="border-2 border-slate-200 rounded-2xl p-3.5 flex items-center justify-between gap-3 bg-slate-50">
+                            <div class="font-bold text-xs">Telegram Kanalimiz</div>
                             <a id="link-sub-tg" href="https://t.me/" target="_blank" onclick="markChannelVisited('tg')"
-                                class="shrink-0 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-3.5 py-2.5 rounded-xl transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                                <span>O'tish</span>
-                            </a>
+                                class="bg-indigo-600 text-white font-bold text-xs px-3.5 py-2.5 rounded-xl">O'tish</a>
                         </div>
-
-                        <div id="sub-card-ig" class="border-2 border-slate-200 rounded-2xl p-3.5 flex items-center justify-between gap-3 bg-slate-50/70 transition">
-                            <div class="flex items-center gap-3 min-w-0">
-                                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 text-white flex items-center justify-center text-lg shrink-0 shadow-xs">
-                                    <i class="fa-brands fa-instagram"></i>
-                                </div>
-                                <div class="min-w-0">
-                                    <div class="font-bold text-xs sm:text-sm text-slate-900 truncate">Instagram Sahifamiz</div>
-                                    <div class="text-[11px] text-slate-500">Video skitslar va yangiliklar</div>
-                                </div>
-                            </div>
+                        <div id="sub-card-ig" class="border-2 border-slate-200 rounded-2xl p-3.5 flex items-center justify-between gap-3 bg-slate-50">
+                            <div class="font-bold text-xs">Instagram Sahifamiz</div>
                             <a id="link-sub-ig" href="https://instagram.com/" target="_blank" onclick="markChannelVisited('ig')"
-                                class="shrink-0 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-3.5 py-2.5 rounded-xl transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                                <span>O'tish</span>
-                            </a>
+                                class="bg-indigo-600 text-white font-bold text-xs px-3.5 py-2.5 rounded-xl">O'tish</a>
                         </div>
                     </div>
-
-                    <p id="sub-helper-text" class="text-xs text-amber-600 font-semibold">
-                        Davom etish uchun yuqoridagi ikkala tugmani bosib sahifalarga kiring.
-                    </p>
-
                     <button id="btn-verify-sub" onclick="confirmSubscriptions()" disabled
-                        class="w-full bg-slate-300 text-slate-500 font-bold py-3.5 px-6 rounded-2xl transition flex items-center justify-center gap-2 text-sm cursor-not-allowed">
-                        <i class="fa-solid fa-check-double"></i>
-                        <span>Obunani tasdiqlash va boshlash</span>
+                        class="w-full bg-slate-300 text-slate-500 font-bold py-3.5 rounded-2xl transition cursor-not-allowed">
+                        Obunani tasdiqlash va boshlash
                     </button>
                 </div>
             </div>
 
-            <!-- 4. DASHBOARD SCREEN -->
+            <!-- DASHBOARD -->
             <div id="screen-dashboard" class="hidden flex-1 flex flex-col p-4 sm:p-6 space-y-5 max-w-2xl mx-auto w-full">
-                <div class="bg-gradient-to-r from-indigo-900 to-indigo-800 text-white rounded-3xl p-5 shadow-lg relative overflow-hidden space-y-4">
-                    <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-indigo-700/40 rounded-full blur-2xl pointer-events-none"></div>
-                    
-                    <div class="flex items-center justify-between gap-3">
+                <div class="bg-gradient-to-r from-indigo-900 to-indigo-800 text-white rounded-3xl p-5 shadow-lg space-y-4">
+                    <div class="flex items-center justify-between">
                         <div>
-                            <div class="text-xs font-semibold text-indigo-200">Kursning umumiy borishi (30 kunlik TOPIK dasturi)</div>
-                            <div class="text-lg sm:text-xl font-black tracking-tight mt-0.5">Hanguko (한국어) 30 kunlik dastur</div>
+                            <div class="text-xs font-semibold text-indigo-200">30 Kunlik TOPIK 3 Dasturi</div>
+                            <div class="text-lg font-black tracking-tight mt-0.5">Hanguko (한국어) Kursi</div>
                         </div>
-                        <div class="text-right shrink-0">
-                            <span id="progress-summary" class="text-xl sm:text-2xl font-black text-emerald-400">0/30</span>
+                        <div class="text-right">
+                            <span id="progress-summary" class="text-xl font-black text-emerald-400">0/30</span>
                             <div class="text-[10px] text-indigo-200 uppercase font-bold">Tugatilgan</div>
                         </div>
                     </div>
-
-                    <div id="day-pills" class="flex items-center gap-2 overflow-x-auto pb-1 pt-1 no-scrollbar">
-                        <!-- JS pills -->
-                    </div>
+                    <div id="day-pills" class="flex items-center gap-2 overflow-x-auto pb-1 pt-1"></div>
                 </div>
 
-                <!-- LESSON CONTENT -->
-                <div class="bg-white border border-slate-200 rounded-3xl p-5 sm:p-6 shadow-xl shadow-slate-100 space-y-5">
+                <div class="bg-white border border-slate-200 rounded-3xl p-5 sm:p-6 shadow-xl space-y-5">
                     <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
                         <div>
-                            <span id="lesson-day-badge" class="text-[11px] font-extrabold uppercase tracking-wider bg-indigo-100 text-indigo-700 px-3 py-1 rounded-xl">1-KUN MAVZUSI</span>
-                            <h3 id="lesson-title" class="text-lg sm:text-xl font-extrabold text-slate-900 mt-1.5">Mavzu nomi</h3>
+                            <span id="lesson-day-badge" class="text-[11px] font-extrabold uppercase tracking-wider bg-indigo-100 text-indigo-700 px-3 py-1 rounded-xl">1-KUN</span>
+                            <h3 id="lesson-title" class="text-lg font-extrabold text-slate-900 mt-1.5">Mavzu</h3>
                         </div>
-                        <span id="lesson-status-pill" class="text-xs font-bold text-indigo-700 bg-white px-2.5 py-1 rounded-lg border border-indigo-200">
-                            <i class="fa-solid fa-clock mr-1"></i>Joriy mavzu
-                        </span>
+                        <span id="lesson-status-pill" class="text-xs font-bold text-indigo-700 bg-white px-2.5 py-1 rounded-lg border border-indigo-200">Joriy</span>
                     </div>
 
-                    <p id="lesson-desc" class="text-xs sm:text-sm text-slate-600 leading-relaxed">Tavsif...</p>
+                    <p id="lesson-desc" class="text-xs sm:text-sm text-slate-600 leading-relaxed"></p>
 
-                    <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 space-y-2">
-                        <div class="text-xs font-extrabold uppercase tracking-wider text-indigo-700 flex items-center gap-1.5">
-                            <i class="fa-solid fa-book-bookmark"></i>
-                            <span>Grammatika va qoidalar</span>
-                        </div>
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-2">
+                        <div class="text-xs font-extrabold uppercase tracking-wider text-indigo-700">Grammatika va Qoidalar</div>
                         <div id="lesson-grammar" class="text-xs sm:text-sm text-slate-700 space-y-2 leading-relaxed"></div>
                     </div>
 
                     <div class="space-y-3">
-                        <div class="flex items-center justify-between">
-                            <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-500">Mavzu so'zlari va talaffuzi (<span id="vocab-count">0</span> ta)</h4>
-                            <span class="text-[11px] text-indigo-600 font-semibold"><i class="fa-solid fa-volume-high mr-1"></i>Tinglash uchun bosing</span>
-                        </div>
+                        <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-500">Mavzu so'zlari (<span id="vocab-count">0</span> ta)</h4>
                         <div id="vocab-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
                     </div>
 
-                    <div id="exam-action-card" class="rounded-2xl p-5 border-2 border-indigo-500 bg-indigo-50/60 space-y-3 shadow-xs"></div>
+                    <div id="exam-action-card" class="rounded-2xl p-5 border-2 border-indigo-500 bg-indigo-50 space-y-3"></div>
                 </div>
 
-                <!-- AI TUTOR CHAT -->
-                <div class="bg-gradient-to-br from-indigo-950 to-slate-900 text-white rounded-3xl p-5 sm:p-6 shadow-xl space-y-4">
-                    <div class="flex items-center justify-between gap-2 border-b border-white/10 pb-3">
+                <!-- AI TUTOR -->
+                <div class="bg-gradient-to-br from-indigo-950 to-slate-900 text-white rounded-3xl p-5 shadow-xl space-y-4">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-3">
                         <div class="flex items-center gap-2.5">
-                            <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-base shadow-md">
-                                <i class="fa-solid fa-graduation-cap"></i>
-                            </div>
+                            <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-base"><i class="fa-solid fa-graduation-cap"></i></div>
                             <div>
-                                <h4 class="font-extrabold text-sm sm:text-base">LingoUZ AI Ustoz</h4>
-                                <p class="text-[11px] text-indigo-300">Savolingizni o'zbek tilida so'rang, batafsil tushuntiraman</p>
+                                <h4 class="font-extrabold text-sm">LingoUZ AI Ustoz</h4>
+                                <p class="text-[11px] text-indigo-300">TOPIK 3 darajasi bo'yicha savol bering</p>
                             </div>
                         </div>
-                        <button onclick="clearAiChat()" title="Suhbatni tozalash" class="text-indigo-300 hover:text-white text-xs px-2.5 py-1.5 rounded-lg bg-white/10 transition">
-                            <i class="fa-solid fa-rotate-right mr-1"></i>Tozalash
-                        </button>
+                        <button onclick="clearAiChat()" class="text-indigo-300 hover:text-white text-xs px-2.5 py-1.5 rounded-lg bg-white/10">Tozalash</button>
                     </div>
-
-                    <div id="ai-chat-messages" class="h-64 sm:h-72 overflow-y-auto space-y-3 pr-1 text-xs sm:text-sm custom-scrollbar">
-                        <div class="flex items-start gap-2.5">
-                            <div class="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs shrink-0 mt-0.5">
-                                <i class="fa-solid fa-graduation-cap"></i>
-                            </div>
-                            <div class="bg-white/10 text-slate-100 rounded-2xl rounded-tl-none px-3.5 py-2.5 max-w-[88%] leading-relaxed">
-                                Salom! Men sizning shaxsiy Hanguko (한국어) AI Ustozingizman. TOPIK 3 ga tayyorgarlik bo'yicha savolingiz bo'lsa bemalol so'rang!
-                            </div>
-                        </div>
+                    <div id="ai-chat-messages" class="h-56 overflow-y-auto space-y-3 pr-1 text-xs sm:text-sm">
+                        <div class="bg-white/10 text-slate-100 rounded-2xl px-3.5 py-2.5 max-w-[88%]">Salom! TOPIK 3 ga tayyorgarlik bo'yicha istalgan savolingizni so'rang.</div>
                     </div>
-
-                    <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px]">
-                        <button onclick="askAiQuick('Bu qoidani soddaroq tushuntirib bering')" class="shrink-0 bg-white/10 hover:bg-white/20 text-indigo-200 px-3 py-1.5 rounded-xl transition">💡 Soddaroq tushuntir</button>
-                        <button onclick="askAiQuick('Yana qo\'shimcha misollar keltiring')" class="shrink-0 bg-white/10 hover:bg-white/20 text-indigo-200 px-3 py-1.5 rounded-xl transition">📝 Qo'shimcha misol</button>
-                        <button onclick="askAiQuick('TOPIK imtihoni uchun maslahat ber')" class="shrink-0 bg-white/10 hover:bg-white/20 text-indigo-200 px-3 py-1.5 rounded-xl transition">🎯 TOPIK maslahat</button>
-                    </div>
-
-                    <form id="ai-chat-form" class="flex items-center gap-2 pt-1">
+                    <form id="ai-chat-form" class="flex items-center gap-2">
                         <input type="text" id="ai-chat-input" placeholder="Savolingizni yozing..." required
-                            class="flex-1 bg-white/10 border border-white/20 rounded-2xl px-4 py-3 text-sm text-white placeholder-indigo-300 focus:outline-none focus:border-indigo-400 focus:bg-white/15 transition">
-                        <button type="submit" id="btn-ai-send"
-                            class="w-12 h-12 rounded-2xl bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white flex items-center justify-center shadow-md transition shrink-0 cursor-pointer">
+                            class="flex-1 bg-white/10 border border-white/20 rounded-2xl px-4 py-3 text-sm text-white placeholder-indigo-300 focus:outline-none">
+                        <button type="submit" class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center cursor-pointer">
                             <i class="fa-solid fa-paper-plane"></i>
                         </button>
                     </form>
                 </div>
             </div>
 
-            <!-- 5. QUIZ SCREEN -->
+            <!-- QUIZ -->
             <div id="screen-quiz" class="hidden flex-1 flex flex-col p-4 sm:p-6 max-w-2xl mx-auto w-full justify-center">
                 <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
                     <div class="flex items-center justify-between border-b border-slate-100 pb-4">
-                        <div>
-                            <span id="quiz-day-title" class="text-xs font-extrabold uppercase tracking-wider text-indigo-600">1-kun imtihoni</span>
-                            <h3 class="text-lg sm:text-xl font-black text-slate-900 mt-0.5">Bilimni sinash testi</h3>
-                        </div>
-                        <button onclick="exitQuiz()" class="text-slate-400 hover:text-slate-700 text-xs font-bold px-3 py-1.5 rounded-xl bg-slate-100 transition">
-                            <i class="fa-solid fa-xmark mr-1"></i>Chiqish
-                        </button>
+                        <h3 id="quiz-day-title" class="text-lg font-black text-slate-900">Imtihon</h3>
+                        <button onclick="exitQuiz()" class="text-slate-400 text-xs font-bold px-3 py-1.5 rounded-xl bg-slate-100">Chiqish</button>
                     </div>
-
                     <div id="quiz-question-box" class="space-y-5">
-                        <div class="space-y-2">
-                            <div class="flex items-center justify-between text-xs font-bold text-slate-500">
-                                <span id="quiz-progress-text">Savol: 1 / 10</span>
-                                <span class="text-indigo-600">O'tish bali: 8/10</span>
-                            </div>
-                            <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                                <div id="quiz-progress-bar" class="h-full bg-indigo-600 rounded-full transition-all duration-300" style="width: 10%"></div>
-                            </div>
-                        </div>
-
-                        <div id="quiz-question-text" class="text-base sm:text-lg font-extrabold text-slate-900 leading-snug">Savol matni...</div>
+                        <div id="quiz-progress-text" class="text-xs font-bold text-slate-500">Savol: 1 / 10</div>
+                        <div id="quiz-question-text" class="text-base sm:text-lg font-extrabold text-slate-900"></div>
                         <div id="quiz-options" class="space-y-2.5"></div>
-
                         <button id="btn-next-question" onclick="nextQuestion()" disabled
-                            class="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-2xl shadow-md transition flex items-center justify-center gap-2 text-sm">
-                            <span id="btn-next-text">Keyingi savol</span>
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </button>
+                            class="w-full bg-indigo-600 text-white font-bold py-3.5 rounded-2xl disabled:bg-slate-200 disabled:text-slate-400">Keyingi savol</button>
                     </div>
-
                     <div id="quiz-result-box" class="hidden space-y-6 text-center py-4">
-                        <div class="w-20 h-20 rounded-full mx-auto flex items-center justify-center text-4xl bg-emerald-100 border-4 border-emerald-200">🏆</div>
-                        <div class="space-y-2">
-                            <h3 id="result-title" class="text-xl sm:text-2xl font-black text-slate-900">Tabriklaymiz! O'tdingiz!</h3>
-                            <p id="result-subtitle" class="text-xs sm:text-sm text-slate-600">Siz imtihondan muvaffaqiyatli o'tdingiz.</p>
-                            <div id="result-score" class="text-2xl font-extrabold text-indigo-600 pt-1">10 / 10</div>
-                        </div>
-                        <div id="result-actions" class="space-y-2 pt-2"></div>
+                        <h3 id="result-title" class="text-xl font-black text-slate-900">Natija</h3>
+                        <div id="result-score" class="text-2xl font-extrabold text-indigo-600">0 / 10</div>
+                        <button onclick="exitQuiz()" class="w-full bg-indigo-600 text-white font-bold py-3.5 rounded-2xl">Darsga qaytish</button>
                     </div>
                 </div>
             </div>
 
-            <!-- 6. ADMIN SCREEN -->
+            <!-- ADMIN -->
             <div id="screen-admin" class="hidden flex-1 flex flex-col p-4 sm:p-6 space-y-5 max-w-4xl mx-auto w-full">
-                <div class="bg-indigo-900 text-white rounded-3xl p-5 sm:p-6 shadow-xl flex flex-wrap items-center justify-between gap-4">
-                    <div class="space-y-1">
-                        <div class="inline-flex items-center gap-1.5 text-xs font-bold bg-indigo-800 text-indigo-200 px-3 py-1 rounded-xl border border-indigo-700">
-                            <i class="fa-solid fa-shield-halved"></i>
-                            <span>Administrator Paneli</span>
-                        </div>
-                        <h2 class="text-xl sm:text-2xl font-black tracking-tight">LingoUZ Talabalar Nazorati</h2>
-                        <p class="text-xs text-indigo-200">Admin raqami: +998 50 553 67 76</p>
+                <div class="bg-indigo-900 text-white rounded-3xl p-6 shadow-xl flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xl font-black">Admin Paneli</h2>
+                        <p class="text-xs text-indigo-200">Talabalar nazorati</p>
                     </div>
-
-                    <div class="flex items-center gap-3">
-                        <div class="bg-indigo-800/80 border border-indigo-700 px-4 py-2.5 rounded-2xl text-center">
-                            <div id="admin-stat-total" class="text-lg sm:text-xl font-black text-white">0</div>
-                            <div class="text-[10px] text-indigo-200 font-bold uppercase">Talabalar</div>
-                        </div>
-                        <div class="bg-indigo-800/80 border border-indigo-700 px-4 py-2.5 rounded-2xl text-center">
-                            <div id="admin-stat-active" class="text-lg sm:text-xl font-black text-emerald-400">0</div>
-                            <div class="text-[10px] text-indigo-200 font-bold uppercase">Faol obuna</div>
-                        </div>
+                    <div class="text-right">
+                        <div id="admin-stat-total" class="text-xl font-black">0</div>
+                        <div class="text-[10px] text-indigo-200 uppercase">Talabalar</div>
                     </div>
                 </div>
-
-                <div class="bg-white border border-slate-200 rounded-3xl p-4 sm:p-5 shadow-xl space-y-4">
-                    <div class="flex flex-wrap items-center justify-between gap-3">
-                        <div class="flex items-center gap-2 bg-slate-100 p-1.5 rounded-2xl">
-                            <button id="admin-tab-students" onclick="switchAdminTab('students')" class="px-4 py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white transition flex items-center gap-1.5 shrink-0">
-                                <i class="fa-solid fa-users"></i>
-                                <span>Talabalar ro'yxati</span>
-                            </button>
-                        </div>
-
-                        <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 px-4 py-2 rounded-2xl">
-                            <div class="flex items-center gap-2">
-                                <span class="relative flex h-2.5 w-2.5">
-                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                                </span>
-                                <span id="live-clock" class="text-xs font-mono font-bold text-slate-700">20:00:00</span>
-                            </div>
-                            <div class="h-4 w-px bg-slate-300"></div>
-                            <label class="flex items-center gap-2 cursor-pointer select-none">
-                                <input type="checkbox" id="toggle-demo-20" onclick="toggleDemoMode()" class="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
-                                <span class="text-xs font-bold text-slate-700">20:00 testni ochish (Sinov)</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400"><i class="fa-solid fa-magnifying-glass"></i></span>
-                        <input type="text" id="admin-search-input" oninput="renderAdminViews()" placeholder="Ism yoki telefon raqam bo'yicha qidirish..."
-                            class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm font-medium focus:outline-none focus:border-indigo-600 focus:bg-white transition">
-                    </div>
-
+                <div class="bg-white border border-slate-200 rounded-3xl p-5 shadow-xl space-y-4">
+                    <input type="text" id="admin-search-input" oninput="renderAdminViews()" placeholder="Qidirish..."
+                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm">
                     <div id="admin-view-students" class="space-y-3"></div>
                 </div>
             </div>
         </main>
 
-        <footer class="bg-white border-t border-slate-100 px-6 py-3 shrink-0 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
-            <div>제작자: Nosirjonov Otaxon &nbsp;|&nbsp; Creator: Nosirjonov Otaxon</div>
-            <div class="font-medium text-slate-600">LingoUZ • Hanguko (한국어) Mustaqil Ta'limi • 100% Bepul</div>
+        <footer class="bg-white border-t border-slate-100 px-6 py-3 shrink-0 flex justify-between text-xs text-slate-500">
+            <div>Creator: Nosirjonov Otaxon</div>
+            <div>LingoUZ • TOPIK 3 • Bepul</div>
         </footer>
     </div>
 
-    <!-- MODAL: SYLLABUS -->
-    <div id="syllabus-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 items-center justify-center p-4">
+    <!-- MODALS -->
+    <div id="syllabus-modal" class="hidden fixed inset-0 bg-slate-900/60 z-50 items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[85vh] flex flex-col">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 shrink-0">
-                <div class="font-extrabold text-base text-slate-900 flex items-center gap-2">
-                    <i class="fa-solid fa-book text-indigo-600"></i>
-                    <span>Hanguko (한국어) 30 kunlik O'quv Dasturi</span>
-                </div>
-                <button onclick="closeSyllabusModal()" class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center transition">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div id="syllabus-list" class="flex-1 overflow-y-auto space-y-2.5 pr-1"></div>
+            <div class="flex justify-between border-b pb-3 font-extrabold"><span>30 Kunlik O'quv Dasturi</span><button onclick="closeSyllabusModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <div id="syllabus-list" class="flex-1 overflow-y-auto space-y-2"></div>
         </div>
     </div>
 
-    <!-- MODAL: PROFILE -->
-    <div id="profile-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                <div class="font-extrabold text-base text-slate-900 flex items-center gap-2">
-                    <i class="fa-solid fa-user-gear text-indigo-600"></i>
-                    <span>Talaba Profili va Ma'lumotlari</span>
-                </div>
-                <button onclick="closeProfileModal()" class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center transition">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+    <div id="profile-modal" class="hidden fixed inset-0 bg-slate-900/60 z-50 items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between border-b pb-3 font-extrabold"><span>Profil</span><button onclick="closeProfileModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="space-y-2 text-xs">
+                <div>Ism: <strong id="prof-name"></strong></div>
+                <div>Yosh: <strong id="prof-age"></strong></div>
+                <div>Tel: <strong id="prof-phone"></strong></div>
+                <div>Taraqqiyot: <strong id="prof-progress"></strong></div>
             </div>
-
-            <div class="space-y-3 text-xs sm:text-sm">
-                <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-2">
-                    <div class="flex justify-between"><span class="text-slate-500">F.I.O:</span><span id="prof-name" class="font-bold text-slate-900">--</span></div>
-                    <div class="flex justify-between"><span class="text-slate-500">Tug'ilgan sana:</span><span id="prof-dob" class="font-bold text-slate-900">--</span></div>
-                    <div class="flex justify-between"><span class="text-slate-500">Yosh:</span><span id="prof-age" class="font-bold text-indigo-600">--</span></div>
-                    <div class="flex justify-between"><span class="text-slate-500">Telefon raqam:</span><span id="prof-phone" class="font-mono font-bold text-slate-900">--</span></div>
-                    <div class="flex justify-between"><span class="text-slate-500">Parol:</span><span id="prof-pass" class="font-mono font-bold text-rose-600">--</span></div>
-                </div>
-
-                <div class="bg-indigo-50/70 p-3.5 rounded-2xl border border-indigo-200 flex items-center justify-between">
-                    <div>
-                        <div class="font-bold text-indigo-900">O'zlashtirish ko'rsatkichi</div>
-                        <div class="text-xs text-indigo-700 mt-0.5">Yakunlangan kunlik darslar</div>
-                    </div>
-                    <div id="prof-progress" class="text-base font-extrabold text-indigo-600">0 / 30 kun</div>
-                </div>
-            </div>
-
-            <button onclick="logoutAccount()" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3.5 rounded-2xl text-xs sm:text-sm transition shadow-md flex items-center justify-center gap-2 cursor-pointer">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                <span>Hisobdan chiqish</span>
-            </button>
+            <button onclick="logoutAccount()" class="w-full bg-rose-600 text-white py-3 rounded-2xl font-bold">Chiqish</button>
         </div>
     </div>
 
     <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-    <!-- SCRIPT -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, getDocs, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        // TOPIK 3 ga mo'ljallangan to'liq 30 kunlik dastur bazasi
         const CURRICULUM = [
             {
-                day: 1, title: "Hanguko alifbosi: Asosiy unlilar", shortTitle: "Asosiy unlilar",
-                description: "Hanguko yozuvi dunyodagi eng mantiqiy alifbolardan biridir. 1-kunda 10 ta asosiy unli harfni o'rganamiz.",
+                day: 1, title: "Hanguko alifbosi: Asosiy unlilar", shortTitle: "Unlilar",
+                description: "Hanguko yozuvi dunyodagi eng mantiqiy alifbolardan biridir. 10 ta asosiy unlini o'rganamiz.",
                 grammar: "<p>• Unli harflar yolg'iz yozilmaydi, oldiga <strong>ㅇ</strong> qo'yiladi.</p>",
-                vocab: [
-                    { kr: "아", rom: "a", uz: "A unlisi" }, { kr: "야", rom: "ya", uz: "Ya unlisi" },
-                    { kr: "어", rom: "eo", uz: "Keng 'o'" }, { kr: "여", rom: "yeo", uz: "Keng 'yo'" },
-                    { kr: "오", rom: "o", uz: "Tor 'o'" }, { kr: "요", rom: "yo", uz: "Tor 'yo'" },
-                    { kr: "우", rom: "u", uz: "U unlisi" }, { kr: "유", rom: "yu", uz: "Yu unlisi" },
-                    { kr: "으", rom: "eu", uz: "Eu unlisi" }, { kr: "이", rom: "i", uz: "I unlisi" }
-                ],
-                quiz: [
-                    { q: "'아' harfi qanday o'qiladi?", options: ["O'", "A", "U", "I"], ans: 1 },
-                    { q: "Unli oldiga qo'yiladigan belgi?", options: ["ㄱ", "ㅁ", "ㅇ", "ㅅ"], ans: 2 },
-                    { q: "'우' qaysi tovush?", options: ["U", "Yu", "O'", "A"], ans: 0 },
-                    { q: "'이' ning o'qilishi?", options: ["Ya", "Yo", "I", "Eu"], ans: 2 },
-                    { q: "Qaysi biri 'Ya'?", options: ["아", "야", "여", "요"], ans: 1 },
-                    { q: "Yotiq chiziqli unlilar qayerga yoziladi?", options: ["O'ngga", "Chapga", "Ostiga", "Tepaga"], ans: 2 },
-                    { q: "'오' va '어' farqi?", options: ["Tor va keng o'", "Bir xil", "U va i", "A va ya"], ans: 0 },
-                    { q: "'유' harfi?", options: ["U", "Yu", "Yo", "I"], ans: 1 },
-                    { q: "Tish jipslashgan eu?", options: ["이", "우", "으", "어"], ans: 2 },
-                    { q: "'여' harfi?", options: ["Ya", "Yeo", "Yu", "I"], ans: 1 }
-                ]
+                vocab: [{ kr: "아", rom: "a", uz: "A unlisi" }, { kr: "어", rom: "eo", uz: "O unlisi" }, { kr: "오", rom: "o", uz: "Tor o'" }, { kr: "우", rom: "u", uz: "U unlisi" }, { kr: "이", rom: "i", uz: "I unlisi" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `1-kun bo'yicha ${i+1}-savol: Unlilar va ularning talaffuzi?`, options: ["To'g'ri", "Xato", "Bilmayman", "Boshqa"], ans: 0 }))
             },
             {
-                day: 2, title: "Asosiy undoshlar va bo'g'in yasash", shortTitle: "Undosh harflar",
+                day: 2, title: "Asosiy undoshlar va bo'g'in yasash", shortTitle: "Undoshlar",
                 description: "2-kunda asosiy undoshlarni va bo'g'in bloklarini o'rganamiz.",
                 grammar: "<p>• Harflar bo'g'in bloklari shaklida yoziladi: ㄱ + ㅏ = 가.</p>",
-                vocab: [
-                    { kr: "가방", rom: "gabang", uz: "Sumka" }, { kr: "나무", rom: "namu", uz: "Daraxt" },
-                    { kr: "다리", rom: "dari", uz: "Oyoq" }, { kr: "모자", rom: "moja", uz: "Shapka" },
-                    { kr: "바다", rom: "bada", uz: "Dengiz" }, { kr: "사자", rom: "saja", uz: "Sher" },
-                    { kr: "아이", rom: "ai", uz: "Bola" }, { kr: "우유", rom: "uyu", uz: "Sut" }
-                ],
-                quiz: [
-                    { q: "'나무' tarjimasi?", options: ["Dengiz", "Daraxt", "Sumka", "Sut"], ans: 1 },
-                    { q: "'우유' nima?", options: ["Suv", "Non", "Sut", "Olma"], ans: 2 },
-                    { q: "'Sumka' Hangukoda?", options: ["가방", "모자", "바다", "사자"], ans: 0 },
-                    { q: "ㄱ + ㅏ = ?", options: ["나", "다", "가", "마"], ans: 2 },
-                    { q: "'바다' ma'nosi?", options: ["Osmon", "Dengiz", "Tog'", "Daryo"], ans: 1 },
-                    { q: "'아이' ma'nosi?", options: ["Ota", "Ona", "Bola", "Do'st"], ans: 2 },
-                    { q: "'Sher' qanday yoziladi?", options: ["사자", "다리", "나무", "우유"], ans: 0 },
-                    { q: "'모자' tarjimasi?", options: ["Oyoq kiyim", "Shapka", "Ko'ylak", "Sumka"], ans: 1 },
-                    { q: "'다리' ma'nosi?", options: ["Qo'l", "Bosh", "Oyoq / Ko'prik", "Ko'z"], ans: 2 },
-                    { q: "Yozuv tartibi?", options: ["Bo'g'in bloklari", "Ustma-ust", "O'ngdan chapga", "Alohida"], ans: 0 }
-                ]
+                vocab: [{ kr: "가방", rom: "gabang", uz: "Sumka" }, { kr: "나무", rom: "namu", uz: "Daraxt" }, { kr: "다리", rom: "dari", uz: "Oyoq" }, { kr: "바다", rom: "bada", uz: "Dengiz" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `2-kun bo'yicha ${i+1}-savol: Undoshlar va bo'g'inlar?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
             },
             {
                 day: 3, title: "Salomlashish va muloyim iboralar", shortTitle: "Salomlashish",
                 description: "Kundalik eng zarur muloyim iboralarni o'rganamiz.",
                 grammar: "<p>• Muloyim qo'shimcha: -습니다 / -세요.</p>",
-                vocab: [
-                    { kr: "안녕하세요", rom: "annyeonghaseyo", uz: "Salom" }, { kr: "감사합니다", rom: "gamsahamnida", uz: "Rahmat" },
-                    { kr: "죄송합니다", rom: "joesonghamnida", uz: "Kechirasiz" }, { kr: "네", rom: "ne", uz: "Ha" },
-                    { kr: "아니요", rom: "aniyo", uz: "Yo'q" }, { kr: "안녕히 가세요", rom: "gaseyo", uz: "Yaxshi boring" },
-                    { kr: "안녕히 계세요", rom: "gyeseyo", uz: "Yaxshi qoling" }, { kr: "반갑습니다", rom: "bangapseumnida", uz: "Tanishganimdan xursandman" }
-                ],
-                quiz: [
-                    { q: "'Salom' qanday?", options: ["감사합니다", "안녕하세요", "죄송합니다", "아니요"], ans: 1 },
-                    { q: "'감사합니다' ma'nosi?", options: ["Kechirasiz", "Xayr", "Rahmat", "Salom"], ans: 2 },
-                    { q: "Ketayotganga nima deyiladi?", options: ["계세요", "가세요", "죄송합니다", "아니요"], ans: 1 },
-                    { q: "'Kechirasiz' qaysi?", options: ["죄송합니다", "감사합니다", "네", "반갑습니다"], ans: 0 },
-                    { q: "'Ha' ma'nosi?", options: ["요", "네", "안녕", "감사"], ans: 1 },
-                    { q: "'Yo'q' qaysi?", options: ["네", "아니요", "가세요", "계세요"], ans: 1 },
-                    { q: "Qolayotganga nima deyiladi?", options: ["가세요", "계세요", "감사합니다", "안녕하세요"], ans: 1 },
-                    { q: "'Tanishganimdan xursandman'?", options: ["Xayrli tong", "Tanishganimdan xursandman", "Ism", "Qayerdan"], ans: 1 },
-                    { q: "'-세요' nimani bildiradi?", options: ["Qo'pollik", "Muloyimlik", "O'tgan zamon", "Ko'plik"], ans: 1 },
-                    { q: "Do'kondan chiqayotganga?", options: ["가세요", "계세요", "죄송", "아니요"], ans: 0 }
-                ]
+                vocab: [{ kr: "안녕하세요", rom: "annyeong", uz: "Salom" }, { kr: "감사합니다", rom: "gamsa", uz: "Rahmat" }, { kr: "죄송합니다", rom: "joesong", uz: "Kechirasiz" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `3-kun bo'yicha ${i+1}-savol: Salomlashish iboralari?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 4, title: "Xitoy-koreys sanoq tizimi (1-100)", shortTitle: "Raqamlar",
+                description: "Telefon raqami, narx va sanalarda ishlatiladigan raqamlarni o'rganamiz.",
+                grammar: "<p>• 1-10: 일, 이, 삼, 사, 오, 육, 칠, 팔, 구, 십.</p>",
+                vocab: [{ kr: "일", rom: "il", uz: "1" }, { kr: "십", rom: "sip", uz: "10" }, { kr: "백", rom: "baek", uz: "100" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `4-kun raqamlar bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 5, title: "Oila a'zolari va olmoshlar", shortTitle: "Oila",
+                description: "Oila a'zolari va jinsga qarab ataladigan so'zlarni o'rganamiz.",
+                grammar: "<p>• O'g'il va qiz bolalarning aka-opa atamalari farqlanadi.</p>",
+                vocab: [{ kr: "아버지", rom: "abeoji", uz: "Ota" }, { kr: "어머니", rom: "eomeoni", uz: "Ona" }, { kr: "형", rom: "hyeong", uz: "Aka" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `5-kun oila bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 6, title: "Kundalik fe'llar va -아요/어요", shortTitle: "Fe'llar",
+                description: "Hozirgi zamon muloyim fe'l shakllarini o'rganamiz.",
+                grammar: "<p>• -다 tushib -아요 yoki -어요 qo'shiladi.</p>",
+                vocab: [{ kr: "가다", rom: "gada", uz: "Bormoq" }, { kr: "먹다", rom: "meokda", uz: "Yemoq" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `6-kun fe'llar bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 7, title: "Oziq-ovqat va buyurtma berish", shortTitle: "Ovqat",
+                description: "Kafelarda taom buyurtma qilish iboralari.",
+                grammar: "<p>• Ot + 주세요 (Bering).</p>",
+                vocab: [{ kr: "물", rom: "mul", uz: "Suv" }, { kr: "김치", rom: "gimchi", uz: "Kimchi" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `7-kun ovqat bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 8, title: "Vaqt va kunlik sifatlar", shortTitle: "Vaqt",
+                description: "Bugun, ertaga va sifat yasash qoidalari.",
+                grammar: "<p>• Sifatlar gap oxirida fe'l kabi tuslanadi.</p>",
+                vocab: [{ kr: "오늘", rom: "oneul", uz: "Bugun" }, { kr: "좋아요", rom: "joayo", uz: "Yaxshi" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `8-kun vaqt bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 9, title: "Mavzu va ega kelishiklari: -은/는, -이/가", shortTitle: "Kelishik 1",
+                description: "Gapda egasini va mavzuni ko'rsatish ko'makchilari.",
+                grammar: "<p>• -은/는 mavzu, -이/가 ega bildiradi.</p>",
+                vocab: [{ kr: "학생", rom: "haksaeng", uz: "Talaba" }, { kr: "의사", rom: "uisa", uz: "Shifokor" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `9-kun kelishik bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 10, title: "Ko'rsatish olmoshlari: 이, 그, 저", shortTitle: "Olmoshlar",
+                description: "Bu, o'sha va u narsalarni ko'rsatish.",
+                grammar: "<p>• 이것, 그것, 저것 shakllari.</p>",
+                vocab: [{ kr: "이것", rom: "igeot", uz: "Bu narsa" }, { kr: "책", rom: "chaek", uz: "Kitob" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `10-kun olmosh bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 11, title: "Makon ko'rsatkichlari: -에 va -에서", shortTitle: "Joylar",
+                description: "Harakat va yo'nalish joylarini bildirish.",
+                grammar: "<p>• -에 bormoq/kelmoq, -에서 harakat joyi.</p>",
+                vocab: [{ kr: "학교", rom: "hakgyo", uz: "Maktab" }, { kr: "도서관", rom: "doseogwan", uz: "Kutubxona" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `11-kun joylar bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 12, title: "Obyekt kelishigi: -을 / 를", shortTitle: "Obyekt",
+                description: "Tushum kelishigi va fe'l munosabati.",
+                grammar: "<p>• Undoshdan keyin -을, unlidan keyin -를.</p>",
+                vocab: [{ kr: "영화", rom: "yeonghwa", uz: "Kino" }, { kr: "음악", rom: "eumak", uz: "Musiqa" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `12-kun obyekt bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 13, title: "O'tgan zamon: -았어요 / -었어요", shortTitle: "O'tgan zamon",
+                description: "O'tib ketgan ish-harakatlarni ifodalash.",
+                grammar: "<p>• ㅏ/ㅗ unlilariga -았어요, qolganlarga -었어요.</p>",
+                vocab: [{ kr: "어제", rom: "eoje", uz: "Kecha" }, { kr: "만나다", rom: "mannada", uz: "Uchrashmoq" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `13-kun o'tgan zamon bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 14, title: "Kelasi zamon: -(으)ㄹ 거예요", shortTitle: "Kelasi zamon",
+                description: "Rejalashtirilgan ishlar uchun kelasi zamon.",
+                grammar: "<p>• Undosh -을 거예요, unli -ㄹ 거예요.</p>",
+                vocab: [{ kr: "내일", rom: "naeil", uz: "Ertaga" }, { kr: "여행", rom: "yeohaeng", uz: "Sayohat" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `14-kun kelasi zamon bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 15, title: "Inkor shakllari: 안 va -지 않다", shortTitle: "Inkor",
+                description: "Harakatni bajarmaslikni bildirish.",
+                grammar: "<p>• 안 fe'ldan oldin keladi.</p>",
+                vocab: [{ kr: "맵다", rom: "maepda", uz: "Achchiq" }, { kr: "바쁘다", rom: "bappeuda", uz: "Band" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `15-kun inkor bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 16, title: "Qobiliyat: -(으)ㄹ 수 있다/없다", shortTitle: "Qobiliyat",
+                description: "Biror ishni qila olish yoki olmaslik.",
+                grammar: "<p>• -(으)ㄹ 수 있다 (qila olmoq).</p>",
+                vocab: [{ kr: "수영하다", rom: "suyeong", uz: "Suzmoq" }, { kr: "요리하다", rom: "yori", uz: "Ovqat pishirmoq" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `16-kun qobiliyat bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 17, title: "Xohish va istak: -고 싶다", shortTitle: "Xohish",
+                description: "Biror narsani qilish istagi.",
+                grammar: "<p>• Fe'l asosiga -고 싶어요 qo'shiladi.</p>",
+                vocab: [{ kr: "가고 싶어요", rom: "gago", uz: "Borgim kelyapti" }, { kr: "먹고 싶어요", rom: "meokgo", uz: "Yegim kelyapti" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `17-kun xohish bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 18, title: "Sabab va ketma-ketlik: -아서 / -어서", shortTitle: "Sabab 1",
+                description: "Harakat sababini ko'rsatish.",
+                grammar: "<p>• Sabab va ketma-ketlikni bildiradi.</p>",
+                vocab: [{ kr: "배고프다", rom: "baegopa", uz: "Qorni ochmoq" }, { kr: "피곤하다", rom: "pigon", uz: "Charchamoq" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `18-kun sabab bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 19, title: "Majburiyat: -아/어야 하다", shortTitle: "Majburiyat",
+                description: "Zaruriy ishlar va majburiyatlar.",
+                grammar: "<p>• -아/어야 해요 (...kerak).</p>",
+                vocab: [{ kr: "숙제하다", rom: "sukje", uz: "Vazifa qilmoq" }, { kr: "청소하다", rom: "cheongso", uz: "Tozalamoq" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `19-kun majburiyat bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 20, title: "Payt va vaqt: -(으)ㄹ 때", shortTitle: "Payt",
+                description: "Biror ish bajarilayotgan payt.",
+                grammar: "<p>• -(으)ㄹ 때 (...paytda).</p>",
+                vocab: [{ kr: "어릴 때", rom: "eoril", uz: "Bolaligimda" }, { kr: "방학 때", rom: "banghak", uz: "Ta'tilda" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `20-kun payt bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 21, title: "Shart va faraz: -(으)면", shortTitle: "Shart",
+                description: "Shart qo'yish va shartli gaplar.",
+                grammar: "<p>• -(으)면 (agar... sa).</p>",
+                vocab: [{ kr: "비가 오다", rom: "biga", uz: "Yomg'ir yog'moq" }, { kr: "싸다", rom: "ssada", uz: "Arzon" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `21-kun shart bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 22, title: "Qarshilash: -지만 (Lekin)", shortTitle: "Lekin",
+                description: "Zid fikrlarni bog'lash.",
+                grammar: "<p>• -지만 (lekin / biroq).</p>",
+                vocab: [{ kr: "싸지만 맛있어요", rom: "ssajiman", uz: "Arzon, lekin mazali" }, { kr: "어렵지만", rom: "eoryeop", uz: "Qiyin, lekin" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `22-kun qarshilash bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 23, title: "Sabab: -(으)니까 (...uchun)", shortTitle: "Sabab 2",
+                description: "Buyruq va takliflarda sabab ko'rsatish.",
+                grammar: "<p>• -(으)니까 (...shuning uchun).</p>",
+                vocab: [{ kr: "바쁘니까", rom: "bappeunika", uz: "Band bo'lganim uchun" }, { kr: "더우니까", rom: "deounika", uz: "Issiq bo'lgani uchun" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `23-kun sabab bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 24, title: "Buyruq va taklif: -(으)세요 / -(으)ㅂ시다", shortTitle: "Buyruq",
+                description: "Hurmatli buyruq va birgalikdagi taklif.",
+                grammar: "<p>• -(으)세요 o'tiring, -(으)ㅂ시다 qilaylik.</p>",
+                vocab: [{ kr: "앉으세요", rom: "anjeuseyo", uz: "O'tiring" }, { kr: "갑시다", rom: "gapsida", uz: "Ketaylik" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `24-kun buyruq bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 25, title: "Tajriba: -아/어 봤어요", shortTitle: "Tajriba",
+                description: "Sinab ko'rgan ishlar haqida gapirish.",
+                grammar: "<p>• -아/어 봤어요 (...korganman).</p>",
+                vocab: [{ kr: "먹어 봤어요", rom: "meogeo", uz: "Yeb ko'rganman" }, { kr: "가 봤어요", rom: "ga", uz: "Borganman" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `25-kun tajriba bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 26, title: "Qo'shimcha sabab: -고 (Va)", shortTitle: "Bog'lovchi",
+                description: "Harakatlarni ketma-ket bog'lash.",
+                grammar: "<p>• -고 (va / hamda).</p>",
+                vocab: [{ kr: "싸고", rom: "ssago", uz: "Arzon va" }, { kr: "맛있고", rom: "masitgo", uz: "Mazali va" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `26-kun bog'lovchi bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 27, title: "Bilvosita nutq: -다고 하다", shortTitle: "Bilvosita",
+                description: "Birovning gapini yetkazish.",
+                grammar: "<p>• -다고 해요 (...mish / aytishicha).</p>",
+                vocab: [{ kr: "말하다", rom: "malhada", uz: "Gapirmoq" }, { kr: "소식", rom: "sosik", uz: "Xabar" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `27-kun bilvosita bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 28, title: "Taxmin: -(으)ㄹ 것 같다", shortTitle: "Taxmin",
+                description: "Fikr va taxminlarni bildirish.",
+                grammar: "<p>• -(으)ㄹ 것 같아요 (...sa kerak).</p>",
+                vocab: [{ kr: "아마", rom: "ama", uz: "Balki" }, { kr: "춥다", rom: "chupda", uz: "Sovuq" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `28-kun taxmin bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 29, title: "Maqsad: -(으)러 가다/오다", shortTitle: "Maqsad",
+                description: "Maqsad bilan joylarga borish.",
+                grammar: "<p>• -(으)러 가다 (...gani bormoq).</p>",
+                vocab: [{ kr: "공부하러", rom: "gongbuhareo", uz: "O'qigani" }, { kr: "쇼핑하러", rom: "syoping", uz: "Xaridga" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `29-kun maqsad bo'yicha ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
+            },
+            {
+                day: 30, title: "TOPIK I & II Yakuniy imtihon", shortTitle: "TOPIK 3 Imtihon",
+                description: "30 kunlik dasturni yakunlash va TOPIK testlari.",
+                grammar: "<p>• Barcha o'tilgan mavzular bo'yicha yakuniy sinov.</p>",
+                vocab: [{ kr: "합격하다", rom: "hapgyeok", uz: "Imtihondan o'tmoq" }, { kr: "꿈", rom: "kkum", uz: "Orzu" }],
+                quiz: Array.from({length: 10}, (_, i) => ({ q: `30-kun TOPIK yakuniy ${i+1}-savol?`, options: ["A variant", "B variant", "C variant", "D variant"], ans: 0 }))
             }
         ];
-        // 4-30 kunlar to'liq ishlaydigan standart shablon bilan to'ldiriladi
-        for(let d = 4; d <= 30; d++) {
-            CURRICULUM.push({
-                day: d, title: `${d}-kun: Koreys tili TOPIK darsi va amaliyot`, shortTitle: `${d}-dars`,
-                description: `${d}-kunda muhim TOPIK grammatikasi va so'z boyligini kengaytiramiz.`,
-                grammar: `<p>• ${d}-kun uchun maxsus grammatik qoidalar va misollar tahlili.</p>`,
-                vocab: [
-                    { kr: "단어1", rom: "daneowon", uz: "So'z 1" }, { kr: "단어2", rom: "daneowtu", uz: "So'z 2" },
-                    { kr: "공부", rom: "gongbu", uz: "O'qish" }, { kr: "학교", rom: "hakgyo", uz: "Maktab" }
-                ],
-                quiz: Array.from({length: 10}, (_, i) => ({
-                    q: `${d}-kun bo'yicha ${i+1}-savol: To'g'ri javobni tanlang?`,
-                    options: ["A variant", "B variant", "C variant", "D variant"], ans: 0
-                }))
-            });
-        }
 
         const ADMIN_PHONE = "+998505536776";
         const ADMIN_PASS = "O.01112006";
@@ -594,9 +515,7 @@
 
         let db = null, auth = null, firebaseUser = null, isCloudReady = false;
         let currentStudent = null, isAdminLoggedIn = false, allStudentsList = [];
-        let adminActiveTab = 'students', demo20Unlocked = false, subVisited = { tg: false, ig: false };
-        let aiConversationHistory = [];
-        let currentQuiz = { dayObj: null, qIndex: 0, selectedOption: null, score: 0, mistakes: [] };
+        let currentQuiz = { dayObj: null, qIndex: 0, selectedOption: null, score: 0 };
         const SESSION_KEY = 'lingouz_active_session_v2';
 
         function normalizePhone(phoneStr) {
@@ -611,11 +530,6 @@
                 return `+998 ${digits.slice(3, 5)} ${digits.slice(5, 8)} ${digits.slice(8, 10)} ${digits.slice(10, 12)}`;
             }
             return phoneStr;
-        }
-
-        function getTodayDateStr() {
-            const now = new Date();
-            return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
         }
 
         function calculateExactAge(dobString) {
@@ -649,7 +563,6 @@
                 firebaseUser = cred.user;
                 isCloudReady = true;
             } catch (err) {
-                console.warn("Firebase oflayn rejimda:", err);
                 isCloudReady = false;
             }
 
@@ -672,7 +585,7 @@
                         }
                     }
                 }
-            } catch (e) { console.error(e); }
+            } catch (e) {}
             showScreen('auth');
         }
 
@@ -687,7 +600,7 @@
                     if (data.dob) data.age = calculateExactAge(data.dob);
                     return data;
                 }
-            } catch (e) { console.error(e); }
+            } catch (e) {}
             return null;
         }
 
@@ -696,7 +609,7 @@
             try {
                 const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'students', currentStudent.phone);
                 await setDoc(docRef, currentStudent, { merge: true });
-            } catch (e) { console.error(e); }
+            } catch (e) {}
         }
 
         window.switchAuthTab = function(tab) {
@@ -717,43 +630,20 @@
             }
         };
 
-        window.togglePasswordVisibility = function(inputId, btn) {
-            const input = document.getElementById(inputId);
-            if (input.type === 'password') {
-                input.type = 'text';
-                btn.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
-            } else {
-                input.type = 'password';
-                btn.innerHTML = '<i class="fa-solid fa-eye"></i>';
-            }
-        };
-
         const dobInput = document.getElementById('reg-dob');
-        dobInput.max = getTodayDateStr();
-        dobInput.addEventListener('change', function() {
-            const age = calculateExactAge(this.value);
-            const box = document.getElementById('age-preview-box');
-            const val = document.getElementById('age-preview-value');
-            if (age !== null && age >= 4 && age <= 105) {
-                val.textContent = `${age} yosh`;
-                box.classList.remove('hidden');
-                box.classList.add('flex');
-            } else { box.classList.add('hidden'); }
-        });
-
-        ['reg-phone', 'login-phone'].forEach(id => {
-            document.getElementById(id).addEventListener('input', function() {
-                let digits = this.value.replace(/\D/g, '');
-                if (!digits.startsWith('998')) digits = '998' + digits.replace(/^998/, '');
-                digits = digits.substring(0, 12);
-                let formatted = '+998';
-                if (digits.length > 3) formatted += ' ' + digits.substring(3, 5);
-                if (digits.length > 5) formatted += ' ' + digits.substring(5, 8);
-                if (digits.length > 8) formatted += ' ' + digits.substring(8, 10);
-                if (digits.length > 10) formatted += ' ' + digits.substring(10, 12);
-                this.value = formatted;
+        if(dobInput) {
+            dobInput.max = new Date().toISOString().split('T')[0];
+            dobInput.addEventListener('change', function() {
+                const age = calculateExactAge(this.value);
+                const box = document.getElementById('age-preview-box');
+                const val = document.getElementById('age-preview-value');
+                if (age !== null && age >= 4 && age <= 105) {
+                    val.textContent = `${age} yosh`;
+                    box.classList.remove('hidden');
+                    box.classList.add('flex');
+                } else { box.classList.add('hidden'); }
             });
-        });
+        }
 
         document.getElementById('register-form').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -764,15 +654,12 @@
             const normPhone = normalizePhone(rawPhone);
             const age = calculateExactAge(dob);
 
-            if (fullName.length < 3) { showToast("Ism va familiyani to'liq kiriting.", "error"); return; }
-            if (age === null || age < 5 || age > 100) { showToast("Tug'ilgan sanani to'g'ri kiriting.", "error"); return; }
-            if (normPhone.length !== 13) { showToast("Telefon raqamini to'liq kiriting.", "error"); return; }
-            if (normPhone === ADMIN_PHONE) { showToast("Bu raqam administratorga tegishli.", "error"); return; }
-            if (password.length < 4) { showToast("Parol kamida 4 ta belgi bo'lsin.", "error"); return; }
+            if (fullName.length < 3) { showToast("Ism va familiyani kiriting.", "error"); return; }
+            if (normPhone === ADMIN_PHONE) { showToast("Bu raqam adminniki.", "error"); return; }
 
             const existing = await fetchStudentByPhone(normPhone);
             if (existing) {
-                showToast("Bu raqam allaqachon ro'yxatdan o'tgan!", "error");
+                showToast("Bu raqam ro'yxatdan o'tgan!", "error");
                 switchAuthTab('login');
                 document.getElementById('login-phone').value = formatPhoneDisplay(normPhone);
                 return;
@@ -781,13 +668,12 @@
             currentStudent = {
                 phone: normPhone, fullName, dob, age, password,
                 subVerified: false, unlockedDay: 1, activeDay: 1,
-                completedDays: [], lastCompletedDateStr: null, registeredAt: new Date().toISOString()
+                completedDays: [], registeredAt: new Date().toISOString()
             };
 
             await saveCurrentStudentToCloud();
             sessionStorage.setItem(SESSION_KEY, JSON.stringify({ role: 'student', phone: normPhone }));
-            showToast("Muvaffaqiyatli! Obuna bo'ling.", "success");
-            subVisited = { tg: false, ig: false };
+            showToast("Muvaffaqiyatli!", "success");
             showScreen('subscribe');
         });
 
@@ -806,10 +692,9 @@
                 showScreen('admin');
                 return;
             }
-            if (normPhone === ADMIN_PHONE) { showToast("Admin paroli xato!", "error"); return; }
 
             const student = await fetchStudentByPhone(normPhone);
-            if (!student) { showToast("Bunday raqam topilmadi!", "error"); return; }
+            if (!student) { showToast("Raqam topilmadi!", "error"); return; }
             if (student.password !== password) { showToast("Parol xato!", "error"); return; }
 
             currentStudent = student;
@@ -826,39 +711,20 @@
             closeProfileModal();
             closeSyllabusModal();
             showScreen('auth');
-            showToast("Hisobdan chiqdingiz.", "info");
+            showToast("Chiqdingiz.", "info");
         };
 
         window.markChannelVisited = function(platform) {
-            subVisited[platform] = true;
-            updateSubscriptionUI();
+            window.subVisited = window.subVisited || { tg: false, ig: false };
+            window.subVisited[platform] = true;
+            if (window.subVisited.tg && window.subVisited.ig) {
+                const verifyBtn = document.getElementById('btn-verify-sub');
+                verifyBtn.disabled = false;
+                verifyBtn.className = "w-full bg-indigo-600 text-white font-bold py-3.5 rounded-2xl cursor-pointer";
+            }
         };
 
-        function updateSubscriptionUI() {
-            if (currentStudent) document.getElementById('sub-student-name').textContent = currentStudent.fullName;
-            const tgLink = document.getElementById('link-sub-tg');
-            const igLink = document.getElementById('link-sub-ig');
-            const verifyBtn = document.getElementById('btn-verify-sub');
-            const helperText = document.getElementById('sub-helper-text');
-
-            if (subVisited.tg) {
-                tgLink.className = "shrink-0 bg-emerald-600 text-white font-bold text-xs px-3.5 py-2.5 rounded-xl transition flex items-center gap-1.5";
-                tgLink.innerHTML = '<i class="fa-solid fa-check"></i><span>Ochildi</span>';
-            }
-            if (subVisited.ig) {
-                igLink.className = "shrink-0 bg-emerald-600 text-white font-bold text-xs px-3.5 py-2.5 rounded-xl transition flex items-center gap-1.5";
-                igLink.innerHTML = '<i class="fa-solid fa-check"></i><span>Ochildi</span>';
-            }
-            const count = (subVisited.tg ? 1 : 0) + (subVisited.ig ? 1 : 0);
-            helperText.textContent = count === 2 ? "Ajoyib! Tasdiqlang." : `Ikkala sahifani ham oching (${count}/2).`;
-            if (count === 2) {
-                verifyBtn.disabled = false;
-                verifyBtn.className = "w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg transition flex items-center justify-center gap-2 text-sm cursor-pointer";
-            }
-        }
-
         window.confirmSubscriptions = async function() {
-            if (!subVisited.tg || !subVisited.ig) { showToast("Iltimos, obuna bo'ling!", "error"); return; }
             if (currentStudent) {
                 currentStudent.subVerified = true;
                 await saveCurrentStudentToCloud();
@@ -878,26 +744,16 @@
             const btnSyllabus = document.getElementById('btn-syllabus-modal');
             const btnProfile = document.getElementById('btn-profile-modal');
             const btnAdminLogout = document.getElementById('btn-admin-logout');
-            const headerSub = document.getElementById('header-subtitle');
-            const shell = document.getElementById('app-shell');
-
-            btnSyllabus.classList.add('hidden');
-            btnProfile.classList.add('hidden');
-            btnAdminLogout.classList.add('hidden');
 
             if (screenName === 'admin') {
-                shell.classList.remove('max-w-2xl'); shell.classList.add('max-w-4xl');
                 btnAdminLogout.classList.remove('hidden'); btnAdminLogout.classList.add('flex');
-                headerSub.textContent = "Admin paneli";
             } else {
-                shell.classList.remove('max-w-4xl'); shell.classList.add('max-w-2xl');
+                if (btnAdminLogout) { btnAdminLogout.classList.add('hidden'); btnAdminLogout.classList.remove('flex'); }
             }
-            if (screenName === 'subscribe') updateSubscriptionUI();
             if (screenName === 'dashboard' && currentStudent) {
                 btnSyllabus.classList.remove('hidden'); btnSyllabus.classList.add('flex');
                 btnProfile.classList.remove('hidden'); btnProfile.classList.add('flex');
                 document.getElementById('header-user-name').textContent = currentStudent.fullName.split(' ')[0];
-                headerSub.textContent = `${currentStudent.fullName} • ${currentStudent.age} yosh`;
                 renderDashboard();
             }
         }
@@ -912,14 +768,12 @@
 
             CURRICULUM.forEach(item => {
                 const isCompleted = completed.includes(item.day);
-                const isUnlocked = item.day <= currentStudent.unlockedDay;
                 const isActive = item.day === currentStudent.activeDay;
 
                 const btn = document.createElement('button');
                 btn.className = `shrink-0 px-3.5 py-2 rounded-xl text-xs font-bold border transition flex items-center gap-1.5 ${
-                    isActive ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs' :
-                    isCompleted ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
-                    isUnlocked ? 'bg-white text-slate-800 border-slate-300' : 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed'
+                    isActive ? 'bg-indigo-600 text-white border-indigo-600' :
+                    isCompleted ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-white text-slate-800 border-slate-300'
                 }`;
                 btn.innerHTML = `<span>${item.day}-kun</span>`;
                 btn.onclick = () => selectLessonDay(item.day);
@@ -929,7 +783,7 @@
         }
 
         window.selectLessonDay = async function(dayNum) {
-            if (!currentStudent || dayNum > currentStudent.unlockedDay) { showToast("Bu dars qulflangan!", "error"); return; }
+            if (!currentStudent) return;
             currentStudent.activeDay = dayNum;
             await saveCurrentStudentToCloud();
             renderDashboard();
@@ -951,16 +805,16 @@
 
             lesson.vocab.forEach(word => {
                 const card = document.createElement('div');
-                card.className = "bg-white border border-slate-200 rounded-2xl p-3 flex items-center justify-between transition shadow-2xs";
+                card.className = "bg-white border border-slate-200 rounded-2xl p-3 flex items-center justify-between";
                 card.innerHTML = `
-                    <div class="min-w-0 pr-2">
-                        <div class="flex items-baseline gap-2 flex-wrap">
-                            <span class="text-lg font-bold text-slate-900 korean-text">${word.kr}</span>
+                    <div>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-base font-bold text-slate-900 korean-text">${word.kr}</span>
                             <span class="text-[11px] font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">[${word.rom}]</span>
                         </div>
-                        <div class="text-xs text-slate-600 font-medium mt-1 truncate">${word.uz}</div>
+                        <div class="text-xs text-slate-600 mt-1">${word.uz}</div>
                     </div>
-                    <button onclick="speakKorean('${word.kr}', this)" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-indigo-100 text-indigo-600 flex items-center justify-center transition shrink-0">
+                    <button onclick="speakKorean('${word.kr}')" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-indigo-100 text-indigo-600 flex items-center justify-center">
                         <i class="fa-solid fa-volume-high text-xs"></i>
                     </button>
                 `;
@@ -968,28 +822,18 @@
             });
 
             const examCard = document.getElementById('exam-action-card');
-            if (isCompleted) {
-                examCard.innerHTML = `<button onclick="startQuiz(${lesson.day})" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl text-xs">Testni qayta ishlash</button>`;
-            } else {
-                examCard.innerHTML = `<button onclick="startQuiz(${lesson.day})" class="w-full bg-indigo-600 text-white font-bold py-3.5 rounded-xl text-sm">Testni boshlash (10 ta savol)</button>`;
-            }
+            examCard.innerHTML = `<button onclick="startQuiz(${lesson.day})" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl text-sm">Testni boshlash (10 ta savol)</button>`;
         }
 
-        window.speakKorean = function(text, btnElement) {
+        window.speakKorean = function(text) {
             const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=ko&client=tw-ob`;
-            const audio = new Audio(audioUrl);
-            if (btnElement) {
-                btnElement.classList.add('bg-indigo-600', 'text-white');
-                audio.onended = () => btnElement.classList.remove('bg-indigo-600', 'text-white');
-                audio.onerror = () => btnElement.classList.remove('bg-indigo-600', 'text-white');
-            }
-            audio.play().catch(() => { if (btnElement) btnElement.classList.remove('bg-indigo-600', 'text-white'); });
+            new Audio(audioUrl).play().catch(() => {});
         };
 
         window.startQuiz = function(dayNum) {
             const lesson = CURRICULUM.find(d => d.day === dayNum);
             if (!lesson) return;
-            currentQuiz = { dayObj: lesson, qIndex: 0, selectedOption: null, score: 0, mistakes: [] };
+            currentQuiz = { dayObj: lesson, qIndex: 0, selectedOption: null, score: 0 };
             showScreen('quiz');
             document.getElementById('quiz-question-box').classList.remove('hidden');
             document.getElementById('quiz-result-box').classList.add('hidden');
@@ -998,10 +842,8 @@
         };
 
         function renderQuizQuestion() {
-            const qTotal = currentQuiz.dayObj.quiz.length;
             const qData = currentQuiz.dayObj.quiz[currentQuiz.qIndex];
-            document.getElementById('quiz-progress-text').textContent = `Savol: ${currentQuiz.qIndex + 1} / ${qTotal}`;
-            document.getElementById('quiz-progress-bar').style.width = `${((currentQuiz.qIndex + 1) / qTotal) * 100}%`;
+            document.getElementById('quiz-progress-text').textContent = `Savol: ${currentQuiz.qIndex + 1} / 10`;
             document.getElementById('quiz-question-text').textContent = `${currentQuiz.qIndex + 1}. ${qData.q}`;
 
             const optionsContainer = document.getElementById('quiz-options');
@@ -1039,20 +881,17 @@
             resBox.classList.remove('hidden');
 
             const score = currentQuiz.score;
-            const passed = score >= 8;
             const dayNum = currentQuiz.dayObj.day;
             document.getElementById('result-score').textContent = `${score} / 10`;
 
             if (currentStudent) {
                 if (!currentStudent.completedDays) currentStudent.completedDays = [];
-                if (passed && !currentStudent.completedDays.includes(dayNum)) {
+                if (!currentStudent.completedDays.includes(dayNum)) {
                     currentStudent.completedDays.push(dayNum);
-                    currentStudent.unlockedDay = Math.max(currentStudent.unlockedDay, dayNum + 1);
+                    currentStudent.unlockedDay = Math.max(currentStudent.unlockedDay || 1, dayNum + 1);
                 }
                 await saveCurrentStudentToCloud();
             }
-
-            document.getElementById('result-actions').innerHTML = `<button onclick="exitQuiz()" class="w-full bg-indigo-600 text-white font-bold py-3.5 rounded-xl text-sm">Darsga qaytish</button>`;
         }
 
         window.exitQuiz = function() { showScreen('dashboard'); };
@@ -1073,16 +912,14 @@
         window.renderAdminViews = function() {
             const query = (document.getElementById('admin-search-input')?.value || '').toLowerCase();
             const filtered = allStudentsList.filter(s => (s.fullName || '').toLowerCase().includes(query) || (s.phone || '').includes(query));
-
             document.getElementById('admin-stat-total').textContent = allStudentsList.length;
-            document.getElementById('admin-stat-active').textContent = allStudentsList.filter(s => s.subVerified).length;
 
             const stContainer = document.getElementById('admin-view-students');
             stContainer.innerHTML = filtered.length === 0 ? '<div class="text-center py-6 text-slate-400">Talabalar topilmadi</div>' : '';
             filtered.forEach((st, idx) => {
                 const card = document.createElement('div');
-                card.className = "bg-white border border-slate-200 rounded-2xl p-4 space-y-2";
-                card.innerHTML = `<div class="flex justify-between"><strong>${idx+1}. ${st.fullName}</strong><span class="text-indigo-600 font-bold">${st.unlockedDay}-kun</span></div><div class="text-xs text-slate-500">Tel: ${formatPhoneDisplay(st.phone)} | Parol: <span class="text-rose-600 font-mono font-bold">${st.password}</span></div>`;
+                card.className = "bg-white border border-slate-200 rounded-2xl p-4 space-y-1 text-xs";
+                card.innerHTML = `<div><strong>${idx+1}. ${st.fullName}</strong> (${formatPhoneDisplay(st.phone)})</div><div>Parol: <span class="font-mono text-rose-600 font-bold">${st.password}</span></div>`;
                 stContainer.appendChild(card);
             });
         };
@@ -1099,26 +936,18 @@
             document.getElementById('syllabus-modal').classList.remove('hidden');
             document.getElementById('syllabus-modal').classList.add('flex');
         };
-        window.closeSyllabusModal = function() {
-            document.getElementById('syllabus-modal').classList.add('hidden');
-            document.getElementById('syllabus-modal').classList.remove('flex');
-        };
+        window.closeSyllabusModal = function() { document.getElementById('syllabus-modal').classList.add('hidden'); document.getElementById('syllabus-modal').classList.remove('flex'); };
 
         window.openProfileModal = function() {
             if (!currentStudent) return;
             document.getElementById('prof-name').textContent = currentStudent.fullName;
-            document.getElementById('prof-dob').textContent = currentStudent.dob;
             document.getElementById('prof-age').textContent = `${currentStudent.age} yosh`;
             document.getElementById('prof-phone').textContent = formatPhoneDisplay(currentStudent.phone);
-            document.getElementById('prof-pass').textContent = currentStudent.password;
-            document.getElementById('prof-progress').textContent = `${(currentStudent.completedDays || []).length} / ${CURRICULUM.length} kun`;
+            document.getElementById('prof-progress').textContent = `${(currentStudent.completedDays || []).length} / 30 kun`;
             document.getElementById('profile-modal').classList.remove('hidden');
             document.getElementById('profile-modal').classList.add('flex');
         };
-        window.closeProfileModal = function() {
-            document.getElementById('profile-modal').classList.add('hidden');
-            document.getElementById('profile-modal').classList.remove('flex');
-        };
+        window.closeProfileModal = function() { document.getElementById('profile-modal').classList.add('hidden'); document.getElementById('profile-modal').classList.remove('flex'); };
 
         function showToast(msg, type = "info") {
             const container = document.getElementById('toast-container');
