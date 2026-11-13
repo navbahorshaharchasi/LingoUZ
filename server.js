@@ -3,93 +3,51 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 
+const app = express();
+
+// Middleware sozlamalari
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// public papkasini ulash (frontend uchun)
 app.use(express.static(path.join(__dirname, 'public')));
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
-
-// Vaqtinchalik baza (Real loyihada MongoDB yoki PostgreSQL ulanadi)
-let users = []; 
+// Vaqtinchalik ma'lumotlar bazasi (Xotirada saqlash uchun massivlar)
+let users = [];
 let verificationCodes = {};
 
-// Ro'yxatdan o'tish
+// 1. Ro'yxatdan o'tish (Register)
 app.post('/api/register', (req, res) => {
     const { fullName, birthDate, phone, passport, password } = req.body;
-    
-    // Pasport yoki telefon band qilinganligini tekshirish
+
+    // Telefon yoki pasport band qilinganligini tekshirish
     const exists = users.find(u => u.passport === passport || u.phone === phone);
     if (exists) {
-        return res.status(400).json({ success: false, message: "Bu pasport yoki telefon raqam allaqachon ro'yxatdan o'tgan!" });
+        return res.status(400).json({ success: false, message: 'Bu telefon raqam yoki pasport allaqachon ro‘yxatdan o‘tgan!' });
     }
 
-    const newUser = {
-        id: Date.now().toString(),
-        fullName,
-        birthDate,
-        phone,
-        passport,
-        password,
-        currentDay: 1,
-        completedTests: [],
-        mistakes: [],
-        createdAt: new Date()
-    };
-
+    // Yangi foydalanuvchini qo'shish
+    const newUser = { fullName, birthDate, phone, passport, password, createdAt: new Date() };
     users.push(newUser);
-    res.json({ success: true, user: newUser });
+
+    res.json({ success: false, message: 'Muvaffaqiyatli ro‘yxatdan o‘tdingiz!' });
 });
 
-// Kirish (Login)
+// 2. Kirish (Login)
 app.post('/api/login', (req, res) => {
-    const { phone, password } = req.body;
-    const user = users.find(u => u.phone === phone && u.password === password);
+    const { identifier, password } = req.body; // identifier - telefon yoki pasport bo'lishi mumkin
+
+    const user = users.find(u => (u.phone === identifier || u.passport === identifier) && u.password === password);
     if (!user) {
-        return res.status(400).json({ success: false, message: "Telefon raqam yoki parol xato!" });
-    }
-    res.json({ success: true, user });
-});
-
-// Parolni tiklash: Kod yuborish (+998505536776 raqamidan simulyatsiya)
-app.post('/api/forgot-password', (req, res) => {
-    const { phone } = req.body;
-    const user = users.find(u => u.phone === phone);
-    if (!user) {
-        return res.status(400).json({ success: false, message: "Bu raqam ro'yxatdan o'tmagan!" });
+        return res.status(400).json({ success: false, message: 'Login yoki parol xato!' });
     }
 
-    const code = Math.floor(1000 + Math.random() * 9000).toString();
-    verificationCodes[phone] = code;
-
-    // Real loyihada bu yerda Telegram Bot yoki SMS API orqali +998505536776 raqamidan kod yuboriladi
-    console.log(`[SMS +998505536776]: ${phone} raqamiga tasdiqlash kodi yuborildi: ${code}`);
-    
-    res.json({ success: true, message: "Tasdiqlash kodi yuborildi", debugCode: code }); // Sinov uchun code qaytariladi
+    res.json({ success: true, message: 'Xush kelibsiz!', user: { fullName: user.fullName, phone: user.phone } });
 });
 
-// Kodni tekshirish va parolni o'zgartirish
-app.post('/api/reset-password', (req, res) => {
-    const { phone, code, newPassword } = req.body;
-    if (verificationCodes[phone] !== code) {
-        return res.status(400).json({ success: false, message: "Tasdiqlash kodi noto'g'ri!" });
-    }
-
-    const user = users.find(u => u.phone === phone);
-    if (user) {
-        user.password = newPassword;
-        delete verificationCodes[phone];
-        return res.json({ success: true, message: "Parol muvaffaqiyatli o'zgartirildi!" });
-    }
-    res.status(400).json({ success: false, message: "Foydalanuvchi topilmadi." });
-});
-
-// Admin ma'lumotlarini olish
-app.get('/api/admin/users', (req, res) => {
-    res.json({ success: true, users });
-});
-
+// Portni sozlash (Render avtomatik beradigan port yoki 3000)
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`LingoUZ server ishga tushdi: http://localhost:${PORT}`);
+    console.log(`Server ${PORT}-portda ishga tushdi!`);
 });
