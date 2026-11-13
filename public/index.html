@@ -1,1 +1,2385 @@
 
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LingoUZ — Hanguko (한국어) 0 dan Mustaqil O'rganish</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Noto Sans KR -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        korean: ['Noto Sans KR', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f1f5f9;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .korean-text {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        .typing-dot {
+            animation: typingBounce 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typingBounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- Toast / Notification Container (alert() o'rniga) -->
+    <div id="toast-container" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-11/12 max-w-md pointer-events-none flex flex-col gap-2"></div>
+
+    <!-- Main Responsive App Shell -->
+    <div id="app-shell" class="w-full max-w-2xl mx-auto bg-white min-h-screen sm:min-h-0 sm:my-6 sm:rounded-3xl sm:shadow-xl sm:border sm:border-slate-200 overflow-hidden flex flex-col transition-all duration-300">
+        
+        <!-- Top Header -->
+        <header class="bg-gradient-to-r from-indigo-600 via-indigo-700 to-blue-600 text-white px-5 py-4 flex items-center justify-between shadow-sm">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-xl font-bold korean-text shadow-inner">
+                    한
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="font-extrabold text-base sm:text-lg leading-tight tracking-tight">LingoUZ</h1>
+                        <span class="bg-emerald-400/20 text-emerald-100 border border-emerald-300/30 text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider">Bepul</span>
+                    </div>
+                    <p class="text-xs text-indigo-100" id="header-subtitle">Hanguko (한국어) mustaqil ta'lim</p>
+                </div>
+            </div>
+
+            <!-- Right Header Actions -->
+            <div class="flex items-center gap-2">
+                <!-- Mundarija (Syllabus) Button -->
+                <button id="btn-syllabus-modal" onclick="openSyllabusModal()" class="hidden items-center gap-1.5 bg-white/15 hover:bg-white/25 active:scale-95 transition px-3 py-2 rounded-xl text-xs font-semibold">
+                    <i class="fa-solid fa-list-ul"></i>
+                    <span>Mundarija</span>
+                </button>
+                <!-- Profile Button -->
+                <button id="btn-profile-modal" onclick="openProfileModal()" class="hidden items-center gap-1.5 bg-white/15 hover:bg-white/25 active:scale-95 transition px-3 py-2 rounded-xl text-xs font-semibold">
+                    <i class="fa-solid fa-user-graduate"></i>
+                    <span id="header-user-name" class="max-w-[85px] truncate">Profil</span>
+                </button>
+                <!-- Admin Logout Button -->
+                <button id="btn-admin-logout" onclick="logoutAccount()" class="hidden items-center gap-1.5 bg-rose-500/80 hover:bg-rose-600 active:scale-95 transition px-3 py-2 rounded-xl text-xs font-bold">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Chiqish</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- LOADING OVERLAY (while connecting to cloud) -->
+        <div id="screen-loading" class="p-10 flex-1 flex flex-col items-center justify-center text-center space-y-3">
+            <div class="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+            <p class="text-sm font-semibold text-slate-600">LingoUZ bulutli tizimi yuklanmoqda...</p>
+        </div>
+
+        <!-- SCREEN 1: AUTHENTICATION (RO'YXATDAN O'TISH & KIRISH + ADMIN) -->
+        <main id="screen-auth" class="hidden p-5 sm:p-8 flex-1 flex flex-col justify-center">
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full text-xs font-semibold mb-2.5">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> LingoUZ • 100% Bepul • Barcha qurilmalarda sinxron
+                </div>
+                <h2 class="text-2xl font-extrabold text-slate-900">Hanguko (한국어) ni 0 dan o'rganing</h2>
+                <p class="text-xs sm:text-sm text-slate-500 mt-1">Yangi talabgor sifatida ro'yxatdan o'ting yoki telefon raqam va parolingiz bilan kiring.</p>
+            </div>
+
+            <!-- Auth Mode Switcher Tabs -->
+            <div class="grid grid-cols-2 bg-slate-100 p-1 rounded-2xl mb-6 border border-slate-200/80">
+                <button type="button" id="tab-register" onclick="switchAuthTab('register')"
+                    class="py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-white text-indigo-700 shadow-xs transition">
+                    <i class="fa-solid fa-user-plus mr-1.5"></i>Ro'yxatdan o'tish
+                </button>
+                <button type="button" id="tab-login" onclick="switchAuthTab('login')"
+                    class="py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-500 hover:text-slate-800 transition">
+                    <i class="fa-solid fa-right-to-bracket mr-1.5"></i>Kirish (Parol bilan)
+                </button>
+            </div>
+
+            <!-- REGISTER FORM -->
+            <form id="register-form" class="space-y-4">
+                <div>
+                    <label for="reg-fullname" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                        1. Ism va familiyangiz <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        <input type="text" id="reg-fullname" required placeholder="Masalan: Sardor Karimov"
+                            class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="reg-dob" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                        2. Tug'ilgan sanangiz (Yosh avtomatik hisoblanadi) <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </span>
+                        <input type="date" id="reg-dob" required
+                            class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition">
+                    </div>
+                    <div id="age-preview-box" class="mt-2 hidden items-center justify-between bg-indigo-50 border border-indigo-100 px-3.5 py-2 rounded-xl text-xs">
+                        <span class="text-indigo-700 font-medium"><i class="fa-solid fa-calculator mr-1.5"></i>Hisoblangan yoshingiz:</span>
+                        <span id="age-preview-value" class="font-bold text-indigo-900 text-sm">0 yosh</span>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="reg-phone" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                        3. Telefon raqamingiz <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                            <i class="fa-solid fa-phone"></i>
+                        </span>
+                        <input type="tel" id="reg-phone" required placeholder="+998 90 123 45 67" value="+998 "
+                            class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="reg-password" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                        4. Ilovaga kirish kodi (Parol o'ylab toping) <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                            <i class="fa-solid fa-key"></i>
+                        </span>
+                        <input type="text" id="reg-password" required minlength="4" placeholder="Kamida 4 ta belgi (masalan: 2026)"
+                            class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition">
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-1">
+                        <i class="fa-solid fa-circle-info text-indigo-500 mr-1"></i>Boshqa telefondan kirganingizda shu raqam va parol orqali kelgan joyingizdan davom etasiz.
+                    </p>
+                </div>
+
+                <button type="submit" id="btn-reg-submit"
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-indigo-200 transition flex items-center justify-center gap-2 text-sm mt-2">
+                    <span>Ro'yxatdan o'tish va davom etish</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <!-- LOGIN FORM (STUDENT + ADMIN) -->
+            <form id="login-form" class="hidden space-y-4">
+                <div class="bg-blue-50/70 border border-blue-100 rounded-2xl p-3.5 text-xs text-blue-900">
+                    <i class="fa-solid fa-mobile-screen-button text-blue-600 mr-1.5"></i>
+                    Avval ro'yxatdan o'tgan bo'lsangiz, telefon raqamingiz va parolingizni kiriting — barcha darslaringiz tiklanadi.
+                </div>
+
+                <div>
+                    <label for="login-phone" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                        Telefon raqamingiz
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                            <i class="fa-solid fa-phone"></i>
+                        </span>
+                        <input type="tel" id="login-phone" required placeholder="+998 90 123 45 67" value="+998 "
+                            class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="login-password" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                        Parol (Kirish kodi)
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        <input type="password" id="login-password" required placeholder="Parolingizni kiriting"
+                            class="w-full pl-10 pr-11 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition">
+                        <button type="button" onclick="togglePasswordVisibility('login-password', this)" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-login-submit"
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-indigo-200 transition flex items-center justify-center gap-2 text-sm mt-2">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span>Ilovaga kirish</span>
+                </button>
+            </form>
+        </main>
+
+        <!-- SCREEN 2: MANDATORY SUBSCRIPTION (RO'YXATDAN O'TISHDAN KEYIN) -->
+        <main id="screen-subscribe" class="hidden p-6 sm:p-8 flex-1 flex flex-col justify-center">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 rounded-3xl bg-gradient-to-br from-indigo-600 to-blue-500 text-white flex items-center justify-center text-3xl mx-auto mb-3 shadow-lg shadow-indigo-200">
+                    <i class="fa-solid fa-bell"></i>
+                </div>
+                <div class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold mb-2">
+                    <i class="fa-solid fa-check-circle"></i> Ro'yxatdan o'tish yakunlandi!
+                </div>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">So'nggi qadam: Majburiy obuna</h2>
+                <p class="text-xs sm:text-sm text-slate-500 mt-1.5 leading-relaxed">
+                    Hurmatli <strong id="sub-student-name" class="text-slate-800">Talabgor</strong>, <strong>LingoUZ</strong> bepul Hanguko (한국어) kursini ochish uchun rasmiy Telegram va Instagram sahifalarimizga obuna bo'ling.
+                </p>
+            </div>
+
+            <div class="space-y-3 mb-6">
+                <!-- 1. Telegram Channel -->
+                <div id="sub-card-tg" class="border-2 border-slate-200 rounded-2xl p-3.5 flex items-center justify-between gap-3 bg-slate-50/70 transition">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-11 h-11 rounded-xl bg-sky-500 text-white flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-brands fa-telegram"></i>
+                        </div>
+                        <div class="truncate">
+                            <div class="font-bold text-sm text-slate-900 truncate">LingoUZ Telegram kanali</div>
+                            <div class="text-xs text-slate-500 truncate">@LingoUz_app</div>
+                        </div>
+                    </div>
+                    <a id="link-sub-tg" href="https://t.me/LingoUz_app" target="_blank" rel="noopener noreferrer" onclick="markChannelVisited('tg')"
+                        class="shrink-0 bg-sky-500 hover:bg-sky-600 active:scale-95 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-1.5">
+                        <span>Obuna bo'lish</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    </a>
+                </div>
+
+                <!-- 2. Instagram Page -->
+                <div id="sub-card-ig" class="border-2 border-slate-200 rounded-2xl p-3.5 flex items-center justify-between gap-3 bg-slate-50/70 transition">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-600 text-white flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-brands fa-instagram"></i>
+                        </div>
+                        <div class="truncate">
+                            <div class="font-bold text-sm text-slate-900 truncate">Instagram: @uzbek.i.i</div>
+                            <div class="text-xs text-slate-500 truncate">Shaxsiy sahifa</div>
+                        </div>
+                    </div>
+                    <a id="link-sub-ig" href="https://www.instagram.com/uzbek.i.i/" target="_blank" rel="noopener noreferrer" onclick="markChannelVisited('ig')"
+                        class="shrink-0 bg-gradient-to-r from-pink-500 to-purple-600 hover:opacity-95 active:scale-95 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-1.5">
+                        <span>Obuna bo'lish</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    </a>
+                </div>
+            </div>
+
+            <button id="btn-verify-sub" type="button" onclick="confirmSubscriptions()"
+                class="w-full bg-slate-300 text-slate-500 font-bold py-3.5 px-6 rounded-2xl transition flex items-center justify-center gap-2 text-sm cursor-not-allowed">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Tasdiqlash va darslarni boshlash</span>
+            </button>
+            <p id="sub-helper-text" class="text-[11px] text-center text-slate-400 mt-2.5">
+                Davom etish uchun yuqoridagi ikkala tugmani bosib obuna bo'ling (0 / 2 bajarildi).
+            </p>
+        </main>
+
+        <!-- SCREEN 3: STUDENT MAIN LEARNING DASHBOARD -->
+        <main id="screen-dashboard" class="hidden flex-1 flex flex-col">
+            
+            <!-- Live Clock & 20:00 Test Status Banner -->
+            <div class="bg-slate-900 text-white px-5 py-3.5">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold">Joriy vaqt & 20:00 Imtihon</div>
+                        <div class="flex items-baseline gap-2 mt-0.5">
+                            <span id="live-clock" class="text-lg font-extrabold font-mono text-white">00:00:00</span>
+                            <span id="exam-status-badge" class="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-500/20 text-amber-300 border border-amber-400/30">
+                                20:00 kutilmoqda
+                            </span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-[11px] text-slate-400" id="countdown-label">Test ochilishiga:</div>
+                        <div id="countdown-timer" class="text-sm font-bold font-mono text-amber-400">--:--:--</div>
+                    </div>
+                </div>
+
+                <!-- Demo / Testing Controls -->
+                <div class="mt-3 pt-2.5 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2 text-[11px]">
+                    <label class="inline-flex items-center gap-2 cursor-pointer select-none text-slate-300 hover:text-white">
+                        <input type="checkbox" id="toggle-demo-20" onchange="toggleDemoMode()" class="rounded text-indigo-500 focus:ring-0 bg-slate-800 border-slate-600">
+                        <span>Sinov rejimi: 20:00 testini hozir ochish</span>
+                    </label>
+                    <button id="btn-demo-nextday" onclick="simulateNextDay()" class="hidden text-emerald-400 hover:text-emerald-300 font-semibold underline">
+                        Keyingi kun mavzusini ochish (Sinov) →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Horizontal Day Selector & Mundarija Trigger -->
+            <div class="bg-slate-50 border-b border-slate-200 px-4 py-3">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Kunlik reja (Takrorlash mumkin)</span>
+                    <button onclick="openSyllabusModal()" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
+                        <i class="fa-solid fa-book-bookmark"></i> To'liq mundarija (<span id="progress-summary">0/8</span>)
+                    </button>
+                </div>
+                <div id="day-pills" class="flex gap-2 overflow-x-auto pb-1">
+                    <!-- Rendered dynamically -->
+                </div>
+            </div>
+
+            <!-- Active Lesson Content Area -->
+            <div id="lesson-container" class="p-5 space-y-5 flex-1 overflow-y-auto">
+                <!-- Lesson Header Card -->
+                <div class="bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 rounded-2xl p-4">
+                    <div class="flex items-center justify-between mb-1">
+                        <span id="lesson-day-badge" class="bg-indigo-600 text-white text-xs font-bold px-2.5 py-1 rounded-lg">1-KUN</span>
+                        <span id="lesson-status-pill" class="text-xs font-semibold text-indigo-700 bg-white px-2.5 py-1 rounded-lg border border-indigo-100">
+                            Jarayonda
+                        </span>
+                    </div>
+                    <h2 id="lesson-title" class="text-lg sm:text-xl font-extrabold text-slate-900 mt-2">Mavzu nomi</h2>
+                    <p id="lesson-desc" class="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed"></p>
+                </div>
+
+                <!-- Grammar / Rule Explanation Box -->
+                <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-2xs">
+                    <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2 mb-2">
+                        <span class="w-6 h-6 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-lightbulb"></i>
+                        </span>
+                        Mavzu tushuntirishi va qoidalar
+                    </h3>
+                    <div id="lesson-grammar" class="text-xs sm:text-sm text-slate-700 space-y-2 leading-relaxed"></div>
+                </div>
+
+                <!-- Vocabulary List with Audio Pronunciation -->
+                <div>
+                    <div class="flex items-center justify-between mb-2.5">
+                        <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs">
+                                <i class="fa-solid fa-book-open"></i>
+                            </span>
+                            Mavzu so'zlari (<span id="vocab-count">0</span> ta)
+                        </h3>
+                        <span class="text-[11px] text-slate-400">Talaffuz uchun <i class="fa-solid fa-volume-high text-indigo-500"></i> bosing</span>
+                    </div>
+
+                    <div id="vocab-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <!-- Vocabulary cards injected here -->
+                    </div>
+                </div>
+
+                <!-- INTEGRATED AI TUTOR ("LingoUZ AI Ustoz") -->
+                <div class="bg-gradient-to-b from-slate-900 to-indigo-950 text-white rounded-3xl p-4 sm:p-5 shadow-lg border border-indigo-800/60">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-9 h-9 rounded-2xl bg-indigo-500/30 border border-indigo-400/40 flex items-center justify-center text-indigo-300 text-base">
+                                <i class="fa-solid fa-robot"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-sm sm:text-base flex items-center gap-1.5">
+                                    <span>LingoUZ AI Ustoz</span>
+                                    <span class="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded-full">24/7 Onlayn</span>
+                                </h3>
+                                <p class="text-[11px] text-indigo-200">Tushunmagan joyingizni so'rang — erinmay batafsil tushuntiraman!</p>
+                            </div>
+                        </div>
+                        <button onclick="clearAiChat()" title="Suhbatni tozalash" class="text-xs text-slate-400 hover:text-white px-2 py-1 rounded-lg hover:bg-white/10 transition">
+                            <i class="fa-solid fa-rotate"></i>
+                        </button>
+                    </div>
+
+                    <!-- Quick Prompt Suggestions -->
+                    <div class="flex gap-1.5 overflow-x-auto pb-2 mb-2.5">
+                        <button type="button" onclick="askAiQuick('Shu mavzu qoidalarini juda oddiy qilib, hayotiy misollar bilan erinmay tushuntirib bering.')"
+                            class="shrink-0 text-[11px] bg-white/10 hover:bg-white/20 text-indigo-100 border border-white/15 px-3 py-1.5 rounded-xl transition">
+                            ✨ Oddiy qilib tushuntiring
+                        </button>
+                        <button type="button" onclick="askAiQuick('Bugungi so\'zlarning talaffuz sirlarini va qanday to\'g\'ri o\'qilishini tushuntiring.')"
+                            class="shrink-0 text-[11px] bg-white/10 hover:bg-white/20 text-indigo-100 border border-white/15 px-3 py-1.5 rounded-xl transition">
+                            🗣️ Talaffuz qoidalari
+                        </button>
+                        <button type="button" onclick="askAiQuick('Menga shu mavzuga oid 3 ta qisqa dialog va tarjimasini yozib bering.')"
+                            class="shrink-0 text-[11px] bg-white/10 hover:bg-white/20 text-indigo-100 border border-white/15 px-3 py-1.5 rounded-xl transition">
+                            💬 Misol dialoglar
+                        </button>
+                    </div>
+
+                    <!-- AI Chat Messages Box -->
+                    <div id="ai-chat-messages" class="bg-slate-950/60 border border-white/10 rounded-2xl p-3.5 max-h-72 overflow-y-auto space-y-3 text-xs sm:text-sm mb-3">
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs shrink-0 mt-0.5">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                            </div>
+                            <div class="bg-white/10 text-slate-100 rounded-2xl rounded-tl-none px-3.5 py-2.5 leading-relaxed">
+                                Assalomu alaykum! Men sizning shaxsiy <strong>Hanguko (한국어)</strong> AI ustozingizman. Joriy mavzudagi qaysi harf, so'z yoki grammatika qoidasi tushunarsiz bo'lsa, bemalol yozing — batafsil tushuntirib beraman!
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Chat Input -->
+                    <form id="ai-chat-form" class="flex gap-2">
+                        <input type="text" id="ai-chat-input" placeholder="Savolingizni yozing (masalan: '어' va '오' farqi nima?)..."
+                            class="flex-1 bg-white/10 border border-white/20 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                        <button type="submit" id="btn-ai-send"
+                            class="bg-indigo-500 hover:bg-indigo-400 active:scale-95 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center gap-1.5 shrink-0">
+                            <span>So'rash</span>
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Daily 20:00 Exam Action Card -->
+                <div id="exam-action-card" class="rounded-2xl p-5 border-2 transition-all">
+                    <!-- Rendered dynamically -->
+                </div>
+            </div>
+        </main>
+
+        <!-- SCREEN 4: DAILY 10-QUESTION EXAM VIEW -->
+        <main id="screen-quiz" class="hidden flex-1 flex flex-col p-5 bg-slate-50">
+            <div class="flex items-center justify-between mb-4">
+                <button onclick="exitQuiz()" class="text-xs font-semibold text-slate-500 hover:text-slate-800 flex items-center gap-1.5 bg-white px-3 py-2 rounded-xl border border-slate-200">
+                    <i class="fa-solid fa-arrow-left"></i> Darsga qaytish
+                </button>
+                <div class="text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 px-3 py-1.5 rounded-xl">
+                    O'tish bali: kamida 8 / 10
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <div class="flex justify-between text-xs font-bold text-slate-600 mb-1.5">
+                    <span id="quiz-progress-text">Savol: 1 / 10</span>
+                    <span id="quiz-day-title" class="text-indigo-600">1-kun imtihoni</span>
+                </div>
+                <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+                    <div id="quiz-progress-bar" class="h-full bg-indigo-600 rounded-full transition-all duration-300" style="width: 10%"></div>
+                </div>
+            </div>
+
+            <div id="quiz-question-box" class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex-1 flex flex-col justify-between">
+                <div>
+                    <span class="inline-block text-[11px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-lg mb-3">
+                        To'g'ri javobni tanlang
+                    </span>
+                    <h3 id="quiz-question-text" class="text-base sm:text-lg font-bold text-slate-900 leading-snug mb-5">
+                        Savol matni...
+                    </h3>
+                    <div id="quiz-options" class="space-y-2.5"></div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-slate-100 flex justify-end">
+                    <button id="btn-next-question" onclick="nextQuestion()" disabled
+                        class="w-full sm:w-auto bg-indigo-600 disabled:bg-slate-300 disabled:cursor-not-allowed hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl text-sm transition flex items-center justify-center gap-2">
+                        <span id="btn-next-text">Keyingi savol</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="quiz-result-box" class="hidden bg-white border border-slate-200 rounded-2xl p-6 shadow-sm text-center space-y-4">
+                <div id="result-icon-wrapper" class="w-20 h-20 rounded-full mx-auto flex items-center justify-center text-4xl">🎉</div>
+                <div>
+                    <h3 id="result-title" class="text-xl font-extrabold text-slate-900">Tabriklaymiz!</h3>
+                    <p id="result-subtitle" class="text-sm text-slate-600 mt-1">Siz kunlik imtihondan muvaffaqiyatli o'tdingiz.</p>
+                </div>
+
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex items-center justify-around">
+                    <div>
+                        <div class="text-xs text-slate-500">Natijangiz</div>
+                        <div id="result-score" class="text-2xl font-extrabold text-indigo-600">9 / 10</div>
+                    </div>
+                    <div class="h-10 w-px bg-slate-200"></div>
+                    <div>
+                        <div class="text-xs text-slate-500">Minimal talab</div>
+                        <div class="text-2xl font-extrabold text-slate-700">8 / 10</div>
+                    </div>
+                </div>
+
+                <div id="result-mistakes" class="text-left bg-rose-50/70 border border-rose-200 rounded-xl p-3.5 hidden">
+                    <div class="text-xs font-bold text-rose-800 mb-2">Xato qilingan savollar tahlili (AI ustozdan so'rashingiz mumkin):</div>
+                    <ul id="mistakes-list" class="space-y-2 text-xs text-rose-900"></ul>
+                </div>
+
+                <div id="result-actions" class="pt-2 flex flex-col gap-2.5"></div>
+            </div>
+        </main>
+
+        <!-- SCREEN 5: ADMIN DASHBOARD (+998505536776) -->
+        <main id="screen-admin" class="hidden flex-1 flex flex-col bg-slate-50">
+            <!-- Admin Top Info Banner -->
+            <div class="bg-slate-900 text-white px-5 py-4 flex flex-wrap items-center justify-between gap-3">
+                <div>
+                    <div class="inline-flex items-center gap-1.5 bg-amber-500/20 text-amber-300 border border-amber-400/30 px-2.5 py-0.5 rounded-full text-[11px] font-bold mb-1">
+                        <i class="fa-solid fa-crown"></i> Bosh Administrator Paneli
+                    </div>
+                    <h2 class="text-lg font-extrabold">LingoUZ Talabalar Nazorati</h2>
+                    <p class="text-xs text-slate-400">Admin raqami: +998 50 553 67 76</p>
+                </div>
+                <div class="flex gap-3 text-center">
+                    <div class="bg-white/10 px-3.5 py-2 rounded-2xl">
+                        <div class="text-lg font-extrabold text-white" id="admin-stat-total">0</div>
+                        <div class="text-[10px] text-slate-300 uppercase">Talabalar</div>
+                    </div>
+                    <div class="bg-white/10 px-3.5 py-2 rounded-2xl">
+                        <div class="text-lg font-extrabold text-emerald-400" id="admin-stat-active">0</div>
+                        <div class="text-[10px] text-slate-300 uppercase">Faol</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Navigation Menu Tabs -->
+            <div class="bg-white border-b border-slate-200 px-4 py-2.5 flex gap-2 overflow-x-auto">
+                <button id="admin-tab-students" onclick="switchAdminTab('students')"
+                    class="px-4 py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white transition flex items-center gap-1.5 shrink-0">
+                    <i class="fa-solid fa-users"></i> Talabalar ro'yxati (Parol va Raqam)
+                </button>
+                <button id="admin-tab-analytics" onclick="switchAdminTab('analytics')"
+                    class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition flex items-center gap-1.5 shrink-0">
+                    <i class="fa-solid fa-chart-line"></i> O'zlashtirish va Kamchiliklar
+                </button>
+            </div>
+
+            <!-- Admin Search Bar -->
+            <div class="p-4 pb-2">
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </span>
+                    <input type="text" id="admin-search-input" oninput="renderAdminViews()" placeholder="Ism yoki telefon raqam bo'yicha qidirish..."
+                        class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+            </div>
+
+            <!-- Admin Sub-View 1: Registered Students List (Credentials & Details) -->
+            <div id="admin-view-students" class="p-4 pt-2 space-y-3 flex-1 overflow-y-auto">
+                <!-- Student cards/rows injected here -->
+            </div>
+
+            <!-- Admin Sub-View 2: Learning Progress & Weaknesses Analysis -->
+            <div id="admin-view-analytics" class="hidden p-4 pt-2 space-y-4 flex-1 overflow-y-auto">
+                <!-- Student progress & weak topics injected here -->
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-slate-50 border-t border-slate-200 px-4 py-3.5 text-center space-y-1.5">
+            <div class="flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1 text-xs font-semibold text-slate-700">
+                <span class="korean-text inline-flex items-center gap-1 bg-indigo-50 text-indigo-800 border border-indigo-100 px-2.5 py-0.5 rounded-full">
+                    <span>제작자:</span>
+                    <span class="font-bold">Nosirjonov Otaxon</span>
+                </span>
+                <span class="text-slate-300 hidden sm:inline">|</span>
+                <span class="inline-flex items-center gap-1 bg-slate-100 text-slate-700 border border-slate-200/80 px-2.5 py-0.5 rounded-full">
+                    <span>Creator:</span>
+                    <span class="font-bold">Nosirjonov Otaxon</span>
+                </span>
+            </div>
+            <div class="text-[11px] text-slate-400">
+                LingoUZ • Hanguko (한국어) Mustaqil Ta'lim Mini-Ilovasi • 100% Bepul
+            </div>
+        </footer>
+    </div>
+
+    <!-- MUNDARIJA (SYLLABUS) MODAL -->
+    <div id="syllabus-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-40 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl w-full max-w-lg max-h-[85vh] flex flex-col shadow-2xl border border-slate-100 overflow-hidden">
+            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                <div>
+                    <h3 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-book-bookmark text-indigo-600"></i> Hanguko (한국어) Mundarijasi
+                    </h3>
+                    <p class="text-xs text-slate-500">Avvalgi o'tilgan mavzularni istalgan vaqt qayta takrorlashingiz mumkin</p>
+                </div>
+                <button onclick="closeSyllabusModal()" class="w-8 h-8 rounded-full bg-white border border-slate-200 hover:bg-slate-100 flex items-center justify-center text-slate-600">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div id="syllabus-list" class="p-4 space-y-2.5 overflow-y-auto flex-1">
+                <!-- Syllabus items injected dynamically -->
+            </div>
+
+            <div class="p-4 border-t border-slate-100 bg-slate-50">
+                <button onclick="closeSyllabusModal()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-sm transition">
+                    Yopish
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROFILE MODAL -->
+    <div id="profile-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-40 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl w-full max-w-md p-6 shadow-2xl border border-slate-100">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-id-card text-indigo-600"></i> Talabgor profili
+                </h3>
+                <button onclick="closeProfileModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="bg-slate-50 rounded-2xl p-4 space-y-2.5 border border-slate-200/80 text-sm">
+                <div class="flex justify-between">
+                    <span class="text-slate-500">F.I.Sh:</span>
+                    <span id="prof-name" class="font-bold text-slate-900">-</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Tug'ilgan sana:</span>
+                    <span id="prof-dob" class="font-semibold text-slate-800">-</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Avtomatik yosh:</span>
+                    <span id="prof-age" class="font-bold text-indigo-600">-</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Telefon raqam:</span>
+                    <span id="prof-phone" class="font-semibold text-slate-800">-</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Kirish paroli:</span>
+                    <span id="prof-pass" class="font-mono font-bold text-slate-800 bg-white px-2 py-0.5 rounded border border-slate-200">-</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">O'zlashtirish:</span>
+                    <span id="prof-progress" class="font-bold text-emerald-600">0 / 8</span>
+                </div>
+            </div>
+
+            <div class="mt-5 flex flex-col gap-2">
+                <button onclick="closeProfileModal()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl text-sm transition">
+                    Yopish
+                </button>
+                <button onclick="logoutAccount()" class="w-full bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-right-from-bracket"></i> Hisobdan chiqish (Boshqa qurilma / Admin)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FIREBASE & APPLICATION SCRIPT -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, getDocs, updateDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // =========================================================================
+        // 1. STRUCTURED HANGUKO (한국어) CURRICULUM (0 DAN BOSHLAB 8 KUNLIK REJA)
+        // =========================================================================
+        const CURRICULUM = [
+            {
+                day: 1,
+                title: "Hanguko (한국어) alifbosi: Asosiy unlilar",
+                shortTitle: "Asosiy unlilar",
+                description: "Hanguko (한국어) yozuvi dunyodagi eng mantiqiy alifbolardan biridir. 1-kunda 10 ta asosiy unli harfni yozish va o'qishni o'rganamiz.",
+                grammar: `
+                    <p>• Hanguko (한국어) tilida unli harflar yolg'iz yozilmaydi. Ularning oldiga yoki tepasiga tovushsiz <strong>ㅇ (ieung)</strong> belgisi qo'yiladi.</p>
+                    <p>• Tik chiziqli unlilar (ㅏ, ㅑ, ㅓ, ㅕ, ㅣ) <strong>ㅇ</strong> ning o'ng tomoniga yoziladi: <strong>아 (a), 어 (o), 이 (i)</strong>.</p>
+                    <p>• Yotiq chiziqli unlilar (ㅗ, ㅛ, ㅜ, ㅠ, ㅡ) <strong>ㅇ</strong> ning ostiga yoziladi: <strong>오 (o'), 우 (u), 으 (eu)</strong>.</p>
+                `,
+                vocab: [
+                    { kr: "아", rom: "a", uz: "A unlisi (ochiq 'a')" },
+                    { kr: "야", rom: "ya", uz: "Ya unlisi" },
+                    { kr: "어", rom: "eo (o)", uz: "Keng 'o' tovushi" },
+                    { kr: "여", rom: "yeo (yo)", uz: "Keng 'yo' tovushi" },
+                    { kr: "오", rom: "o (o')", uz: "Tor 'o'' tovushi" },
+                    { kr: "요", rom: "yo (yo')", uz: "Tor 'yo'' tovushi" },
+                    { kr: "우", rom: "u", uz: "U unlisi" },
+                    { kr: "유", rom: "yu", uz: "Yu unlisi" },
+                    { kr: "으", rom: "eu", uz: "Tishlar jipslashgan 'i' tovushi" },
+                    { kr: "이", rom: "i", uz: "Oddiy 'i' unlisi (tish / ikki)" }
+                ],
+                quiz: [
+                    { q: "'아' harfi qanday o'qiladi?", options: ["O'", "A", "U", "I"], ans: 1 },
+                    { q: "Hanguko (한국어) tilida unli harf yolg'iz kelganda oldiga qaysi belgi qo'yiladi?", options: ["ㄱ", "ㅁ", "ㅇ", "ㅅ"], ans: 2 },
+                    { q: "'우' qaysi unli tovushni bildiradi?", options: ["U", "Yu", "O'", "A"], ans: 0 },
+                    { q: "'이' harfining o'qilishi qanday?", options: ["Ya", "Yo", "I", "Eu"], ans: 2 },
+                    { q: "Qaysi biri 'Ya' tovushini beradi?", options: ["아", "야", "여", "요"], ans: 1 },
+                    { q: "Yotiq chiziqli unlilar 'ㅇ' belgisining qayeriga yoziladi?", options: ["O'ng tomoniga", "Chap tomoniga", "Ostiga (pastiga)", "Tepasiga"], ans: 2 },
+                    { q: "'오' va '어' ning farqi nimada?", options: ["오 - tor 'o'', 어 - keng 'o'", "Ikkalasi bir xil", "오 - 'u', 어 - 'i'", "오 - 'a', 어 - 'ya'"], ans: 0 },
+                    { q: "'유' harfi qanday o'qiladi?", options: ["U", "Yu", "Yo", "I"], ans: 1 },
+                    { q: "Tishlarni jipslashtirib aytiladigan 'eu' unlisi qaysi?", options: ["이", "우", "으", "어"], ans: 2 },
+                    { q: "'여' harfi qaysi tovushni bildiradi?", options: ["Ya", "Yeo (keng yo)", "Yu", "I"], ans: 1 }
+                ]
+            },
+            {
+                day: 2,
+                title: "Hanguko (한국어) alifbosi: Asosiy undoshlar",
+                shortTitle: "Undosh harflar",
+                description: "2-kunda asosiy undosh harflarni va undosh + unli qo'shilib birinchi Hanguko (한국어) so'zlarini yasashni o'rganamiz.",
+                grammar: `
+                    <p>• Hanguko (한국어) tilida harflar <strong>bo'g'in bloklari</strong> ko'rinishida yoziladi: <strong>ㄱ (g/k) + ㅏ (a) = 가 (ga/ka)</strong>.</p>
+                    <p>• So'z boshida <strong>ㄱ, ㄷ, ㅂ, ㅈ</strong> biroz jarangsizroq (k, t, p, ch), unlilar orasida esa jarangli (g, d, b, j) o'qiladi.</p>
+                `,
+                vocab: [
+                    { kr: "가방", rom: "gabang", uz: "Sumka" },
+                    { kr: "나무", rom: "namu", uz: "Daraxt" },
+                    { kr: "다리", rom: "dari", uz: "Oyoq / Ko'prik" },
+                    { kr: "모자", rom: "moja", uz: "Shapka / Bosh kiyim" },
+                    { kr: "바다", rom: "bada", uz: "Dengiz" },
+                    { kr: "사자", rom: "saja", uz: "Sher" },
+                    { kr: "아이", rom: "ai", uz: "Bola" },
+                    { kr: "우유", rom: "uyu", uz: "Sut" }
+                ],
+                quiz: [
+                    { q: "'나무' (namu) so'zining tarjimasi nima?", options: ["Dengiz", "Daraxt", "Sumka", "Sut"], ans: 1 },
+                    { q: "'우유' (uyu) nima degani?", options: ["Suv", "Non", "Sut", "Olma"], ans: 2 },
+                    { q: "'Sumka' Hanguko (한국어) tilida qanday bo'ladi?", options: ["가방 (gabang)", "모자 (moja)", "바다 (bada)", "사자 (saja)"], ans: 0 },
+                    { q: "ㄱ + ㅏ qo'shilsa qanday bo'g'in hosil bo'ladi?", options: ["나", "다", "가", "마"], ans: 2 },
+                    { q: "'바다' (bada) so'zi nimani anglatadi?", options: ["Osmon", "Dengiz", "Tog'", "Daryo"], ans: 1 },
+                    { q: "'아이' (ai) so'zining ma'nosi nima?", options: ["Ota", "Ona", "Bola", "Do'st"], ans: 2 },
+                    { q: "'Sher' Hanguko (한국어) tilida qanday yoziladi?", options: ["사자", "다리", "나무", "우유"], ans: 0 },
+                    { q: "'모자' (moja) qanday tarjima qilinadi?", options: ["Oyoq kiyim", "Shapka (bosh kiyim)", "Ko'ylak", "Sumka"], ans: 1 },
+                    { q: "'다리' (dari) so'zining ma'nosi qaysi?", options: ["Qo'l", "Bosh", "Oyoq / Ko'prik", "Ko'z"], ans: 2 },
+                    { q: "Hanguko (한국어) yozuvida harflar qanday tartibda yoziladi?", options: ["Bo'g'in bloklari shaklida", "Faqat ustma-ust", "O'ngdan chapga", "Faqat alohida harf bo'lib"], ans: 0 }
+                ]
+            },
+            {
+                day: 3,
+                title: "Salomlashish, xayrlashish va muloyim iboralar",
+                shortTitle: "Salomlashish",
+                description: "Koreya madaniyatida hurmat va salomlashish juda muhim. Kundalik eng zarur muloyim iboralarni o'rganamiz.",
+                grammar: `
+                    <p>• Rasmiy-muloyim qo'shimcha: <strong>-습니다 / -ㅂ니다</strong> va <strong>-세요</strong>.</p>
+                    <p>• Xayrlashganda ketayotgan odamga: <strong>안녕히 가세요</strong> (Yaxshi boring).</p>
+                    <p>• Qolayotgan odamga: <strong>안녕히 계세요</strong> (Yaxshi qoling).</p>
+                `,
+                vocab: [
+                    { kr: "안녕하세요", rom: "annyeonghaseyo", uz: "Assalomu alaykum / Salom" },
+                    { kr: "감사합니다", rom: "gamsahamnida", uz: "Rahmat (rasmiy)" },
+                    { kr: "죄송합니다", rom: "joesonghamnida", uz: "Kechirasiz / Uzr" },
+                    { kr: "네", rom: "ne", uz: "Ha / Xo'p" },
+                    { kr: "아니요", rom: "aniyo", uz: "Yo'q" },
+                    { kr: "안녕히 가세요", rom: "annyeonghi gaseyo", uz: "Yaxshi boring (ketayotganga)" },
+                    { kr: "안녕히 계세요", rom: "annyeonghi gyeseyo", uz: "Yaxshi qoling (qolayotganga)" },
+                    { kr: "만나서 반갑습니다", rom: "mannaseo bangapseumnida", uz: "Tanishganimdan xursandman" }
+                ],
+                quiz: [
+                    { q: "'Assalomu alaykum' Hanguko (한국어) tilida qanday aytiladi?", options: ["감사합니다", "안녕하세요", "죄송합니다", "아니요"], ans: 1 },
+                    { q: "'감사합니다' (gamsahamnida) nimani bildiradi?", options: ["Kechirasiz", "Xayr", "Rahmat", "Salom"], ans: 2 },
+                    { q: "Ketayotgan mehmonga nima deyiladi?", options: ["안녕히 계세요", "안녕히 가세요", "죄송합니다", "아니요"], ans: 1 },
+                    { q: "'Kechirasiz / Uzr' iborasi qaysi?", options: ["죄송합니다", "감사합니다", "네", "반갑습니다"], ans: 0 },
+                    { q: "'네' (ne) so'zining ma'nosi nima?", options: ["Yo'q", "Ha / Xo'p", "Salom", "Rahmat"], ans: 1 },
+                    { q: "'Yo'q' Hanguko (한국어) tilida qanday bo'ladi?", options: ["네", "아니요", "가세요", "계세요"], ans: 1 },
+                    { q: "Qolayotgan odamga xayrlashganda qaysi ibora aytiladi?", options: ["안녕히 가세요", "안녕히 계세요", "감사합니다", "안녕하세요"], ans: 1 },
+                    { q: "'만나서 반갑습니다' qanday tarjima qilinadi?", options: ["Xayrli tong", "Tanishganimdan xursandman", "Ismingiz nima?", "Qayerdansiz?"], ans: 1 },
+                    { q: "'-세요' (-seyo) qo'shimchasi nimani bildiradi?", options: ["Qo'pollikni", "Muloyimlik va hurmatni", "O'tgan zamonni", "Ko'plikni"], ans: 1 },
+                    { q: "Do'kondan chiqib ketayotgan xaridorga sotuvchi nima deydi?", options: ["안녕히 가세요", "안녕히 계세요", "죄송합니다", "아니요"], ans: 0 }
+                ]
+            },
+            {
+                day: 4,
+                title: "Raqamlar: Xitoy-koreys sanoq tizimi (1-10)",
+                shortTitle: "Raqamlar 1-10",
+                description: "Telefon raqami, narx, sana va daqiqalarni aytishda ishlatiladigan Xitoy-koreys raqamlarini o'rganamiz.",
+                grammar: `
+                    <p>• Xitoy-koreys raqamlari 1 dan 10 gacha yodlansa, 99 gacha sanash juda oson!</p>
+                    <p>• <strong>11 = 십 (10) + 일 (1) = 십일 (sibil)</strong>.</p>
+                    <p>• <strong>20 = 이 (2) + 십 (10) = 이십 (isip)</strong>. <strong>35 = 삼십오 (samsibo)</strong>.</p>
+                `,
+                vocab: [
+                    { kr: "일", rom: "il", uz: "1 (Bir)" },
+                    { kr: "이", rom: "i", uz: "2 (Ikki)" },
+                    { kr: "삼", rom: "sam", uz: "3 (Uch)" },
+                    { kr: "사", rom: "sa", uz: "4 (To'rt)" },
+                    { kr: "오", rom: "o", uz: "5 (Besh)" },
+                    { kr: "육", rom: "yuk", uz: "6 (Olti)" },
+                    { kr: "칠", rom: "chil", uz: "7 (Yetti)" },
+                    { kr: "팔", rom: "pal", uz: "8 (Sakkiz)" },
+                    { kr: "구", rom: "gu", uz: "9 (To'qqiz)" },
+                    { kr: "십", rom: "sip", uz: "10 (O'n)" }
+                ],
+                quiz: [
+                    { q: "'오' (o) necha raqamini bildiradi?", options: ["3", "5", "7", "10"], ans: 1 },
+                    { q: "'7' raqami Hanguko (한국어) tilida qanday aytiladi?", options: ["육 (yuk)", "칠 (chil)", "팔 (pal)", "구 (gu)"], ans: 1 },
+                    { q: "'삼' (sam) va '사' (sa) qaysi raqamlar?", options: ["1 va 2", "3 va 4", "5 va 6", "8 va 9"], ans: 1 },
+                    { q: "Xitoy-koreys raqamlarida '15' qanday yoziladi?", options: ["오십", "십오", "일오", "십사"], ans: 1 },
+                    { q: "'이십' (isip) necha sonini anglatadi?", options: ["12", "20", "22", "2"], ans: 1 },
+                    { q: "'8' raqami qaysi?", options: ["팔 (pal)", "구 (gu)", "육 (yuk)", "일 (il)"], ans: 0 },
+                    { q: "'십' (sip) qaysi son?", options: ["1", "100", "10", "0"], ans: 2 },
+                    { q: "'9' raqami qanday?", options: ["칠", "팔", "구", "사"], ans: 2 },
+                    { q: "'삼십이' (samsibi) necha soni?", options: ["23", "32", "13", "30"], ans: 1 },
+                    { q: "Xitoy-koreys raqamlari qayerda ishlatiladi?", options: ["Telefon raqami, narx, sana", "Faqat yosh aytishda", "Faqat hayvon sanashda", "Hech qayerda"], ans: 0 }
+                ]
+            },
+            {
+                day: 5,
+                title: "Oila a'zolari va kishilik olmoshlari",
+                shortTitle: "Oila a'zolari",
+                description: "O'zingiz va oilangiz haqida gapirib berish uchun asosiy oila a'zolari nomlarini o'rganamiz.",
+                grammar: `
+                    <p>• Hanguko (한국어) tilida aka-uka va opa-singil nomlari <strong>gapiruvchining jinsiga qarab</strong> farqlanadi:</p>
+                    <p>• O'g'il bola akasini <strong>형 (hyeong)</strong>, opasini <strong>누나 (nuna)</strong> deydi.</p>
+                    <p>• Qiz bola akasini <strong>오빠 (oppa)</strong>, opasini <strong>언니 (eonni)</strong> deydi.</p>
+                `,
+                vocab: [
+                    { kr: "가족", rom: "gajok", uz: "Oila" },
+                    { kr: "아버지", rom: "abeoji", uz: "Ota" },
+                    { kr: "어머니", rom: "eomeoni", uz: "Ona" },
+                    { kr: "형", rom: "hyeong", uz: "Aka (o'g'il bola uchun)" },
+                    { kr: "오빠", rom: "oppa", uz: "Aka (qiz bola uchun)" },
+                    { kr: "누나", rom: "nuna", uz: "Opa (o'g'il bola uchun)" },
+                    { kr: "언니", rom: "eonni", uz: "Opa (qiz bola uchun)" },
+                    { kr: "동생", rom: "dongsaeng", uz: "Uka / Singil" }
+                ],
+                quiz: [
+                    { q: "'Oila' Hanguko (한국어) tilida qanday bo'ladi?", options: ["가족 (gajok)", "아버지 (abeoji)", "동생 (dongsaeng)", "어머니 (eomeoni)"], ans: 0 },
+                    { q: "'어머니' (eomeoni) kim?", options: ["Ota", "Ona", "Opa", "Singil"], ans: 1 },
+                    { q: "Qiz bola o'z akasini nima deb chaqiradi?", options: ["형 (hyeong)", "오빠 (oppa)", "누나 (nuna)", "언니 (eonni)"], ans: 1 },
+                    { q: "O'g'il bola o'z akasini nima deb chaqiradi?", options: ["오빠 (oppa)", "형 (hyeong)", "동생 (dongsaeng)", "언니 (eonni)"], ans: 1 },
+                    { q: "'아버지' (abeoji) so'zining ma'nosi nima?", options: ["Ota", "Bobo", "Aka", "Amaki"], ans: 0 },
+                    { q: "'동생' (dongsaeng) kimni bildiradi?", options: ["Katta aka", "Katta opa", "Uka yoki singil", "Ota-ona"], ans: 2 },
+                    { q: "O'g'il bola opasini qanday chaqiradi?", options: ["언니 (eonni)", "누나 (nuna)", "오빠 (oppa)", "어머니 (eomeoni)"], ans: 1 },
+                    { q: "Qiz bola opasini qanday chaqiradi?", options: ["누나 (nuna)", "언니 (eonni)", "형 (hyeong)", "가족 (gajok)"], ans: 1 },
+                    { q: "Qaysi so'z 'Ona' degan ma'noni anglatadi?", options: ["아버지", "어머니", "언니", "누나"], ans: 1 },
+                    { q: "Aka-uka va opa-singil nomlari nimaga qarab o'zgaradi?", options: ["Gapiruvchining jinsiga qarab", "Ob-havoga qarab", "Vaqtga qarab", "O'zgarmaydi"], ans: 0 }
+                ]
+            },
+            {
+                day: 6,
+                title: "Kundalik fe'llar va gap tuzish (-아요 / -어요)",
+                shortTitle: "Kundalik fe'llar",
+                description: "Gap tuzishni boshlash uchun eng ko'p ishlatiladigan harakat fe'llarini va ularning muloyim shaklini o'rganamiz.",
+                grammar: `
+                    <p>• Lug'atda barcha Hanguko (한국어) fe'llari <strong>-다 (-da)</strong> qo'shimchasi bilan tugaydi: <strong>가다 (bormoq), 먹다 (yemoq)</strong>.</p>
+                    <p>• Gapda ishlatish uchun <strong>-다</strong> olib tashlanadi va <strong>-아요 / -어요</strong> qo'shiladi: <strong>가다 → 가요</strong> (boraman), <strong>먹다 → 먹어요</strong> (yeyman).</p>
+                `,
+                vocab: [
+                    { kr: "가다", rom: "gada", uz: "Bormoq" },
+                    { kr: "오다", rom: "oda", uz: "Kelmoq" },
+                    { kr: "먹다", rom: "meokda", uz: "Yemoq" },
+                    { kr: "마시다", rom: "masida", uz: "Ichmoq" },
+                    { kr: "자다", rom: "jada", uz: "Uxlamoq" },
+                    { kr: "공부하다", rom: "gongbuhada", uz: "O'qimoq / Dars qilmoq" },
+                    { kr: "보다", rom: "boda", uz: "Ko'rmoq / Tomosha qilmoq" },
+                    { kr: "사다", rom: "sada", uz: "Sotib olmoq" }
+                ],
+                quiz: [
+                    { q: "'공부하다' (gongbuhada) fe'lining ma'nosi nima?", options: ["Uxlamoq", "O'qimoq / Dars qilmoq", "Yemoq", "Bormoq"], ans: 1 },
+                    { q: "'Bormoq' Hanguko (한국어) tilida qanday bo'ladi?", options: ["오다 (oda)", "가다 (gada)", "자다 (jada)", "사다 (sada)"], ans: 1 },
+                    { q: "'먹다' (meokda) nimani anglatadi?", options: ["Ichmoq", "Yemoq", "Ko'rmoq", "Kelmoq"], ans: 1 },
+                    { q: "'마시다' (masida) fe'li qaysi harakat?", options: ["Ichmoq", "Yemoq", "Uxlamoq", "Sotib olmoq"], ans: 0 },
+                    { q: "Lug'at shaklida barcha fe'llar qaysi qo'shimcha bilan tugaydi?", options: ["-요 (-yo)", "-다 (-da)", "-는 (-neun)", "-을 (-eul)"], ans: 1 },
+                    { q: "'자다' (jada) so'zining tarjimasi qaysi?", options: ["Turmoq", "Uxlamoq", "Yugurmoq", "O'tirmoq"], ans: 1 },
+                    { q: "'Kelmoq' fe'li qaysi?", options: ["가다", "오다", "보다", "사다"], ans: 1 },
+                    { q: "'Sotib olmoq' qanday yoziladi?", options: ["사다", "자다", "가다", "오다"], ans: 0 },
+                    { q: "'보다' (boda) fe'lining ma'nosi nima?", options: ["Eshitmoq", "Ko'rmoq / Tomosha qilmoq", "Gapirmoq", "Yozmoq"], ans: 1 },
+                    { q: "'가다' fe'lining muloyim hozirgi zamon shakli qaysi?", options: ["가요", "먹어요", "자요", "봐요"], ans: 0 }
+                ]
+            },
+            {
+                day: 7,
+                title: "Oziq-ovqat, ichimliklar va buyurtma berish",
+                shortTitle: "Oziq-ovqat",
+                description: "Koreya kafelarida va do'konlarida kerak bo'ladigan taom nomlari hamda 'Bering' iborasini o'rganamiz.",
+                grammar: `
+                    <p>• Biror narsa so'rash yoki buyurtma berish uchun ot + <strong>주세요 (juseyo - bering)</strong> ishlatiladi.</p>
+                    <p>• Masalan: <strong>물 주세요</strong> (Suv bering), <strong>커피 주세요</strong> (Qahva bering).</p>
+                    <p>• Taom mazali bo'lsa: <strong>맛있어요!</strong> (Masisseoyo - Mazali!).</p>
+                `,
+                vocab: [
+                    { kr: "물", rom: "mul", uz: "Suv" },
+                    { kr: "밥", rom: "bap", uz: "Guruch / Ovqat" },
+                    { kr: "빵", rom: "ppang", uz: "Non" },
+                    { kr: "커피", rom: "keopi", uz: "Qahva (Kofe)" },
+                    { kr: "차", rom: "cha", uz: "Choy" },
+                    { kr: "사과", rom: "sagwa", uz: "Olma" },
+                    { kr: "김치", rom: "gimchi", uz: "Kimchi (milliy taom)" },
+                    { kr: "주세요", rom: "juseyo", uz: "Bering (iltimos)" }
+                ],
+                quiz: [
+                    { q: "'Suv' Hanguko (한국어) tilida qanday bo'ladi?", options: ["불 (bul)", "물 (mul)", "밥 (bap)", "차 (cha)"], ans: 1 },
+                    { q: "Restoranda 'Suv bering' deb qanday aytiladi?", options: ["물 주세요", "밥 먹어요", "커피 가요", "사과 오다"], ans: 0 },
+                    { q: "'밥' (bap) so'zining ma'nosi nima?", options: ["Non", "Guruch / Ovqat", "Choy", "Olma"], ans: 1 },
+                    { q: "'빵' (ppang) qanday tarjima qilinadi?", options: ["Suv", "Sut", "Non", "Qahva"], ans: 2 },
+                    { q: "'사과' (sagwa) qaysi meva?", options: ["Banan", "Uzum", "Olma", "Anor"], ans: 2 },
+                    { q: "'Choy' qanday yoziladi?", options: ["차", "커피", "물", "밥"], ans: 0 },
+                    { q: "'주세요' (juseyo) so'zi nimani bildiradi?", options: ["Rahmat", "Bering (iltimos)", "Kechirasiz", "Xayr"], ans: 1 },
+                    { q: "'커피' (keopi) qaysi ichimlik?", options: ["Sharbat", "Qahva", "Sut", "Choy"], ans: 1 },
+                    { q: "Taom mazali ekanini aytish uchun nima deyiladi?", options: ["맛있어요 (masisseoyo)", "죄송합니다", "안녕히 가세요", "아니요"], ans: 0 },
+                    { q: "'김치' (gimchi) nima?", options: ["Koreya milliy taomi", "Ichimlik", "Meva", "Shirinlik"], ans: 0 }
+                ]
+            },
+            {
+                day: 8,
+                title: "Vaqt, hafta kunlari va kundalik sifatlar",
+                shortTitle: "Vaqt va sifatlar",
+                description: "Bugun, ertaga, kecha kabi vaqt so'zlari hamda kundalik eng ko'p ishlatiladigan sifatlarni o'rganamiz.",
+                grammar: `
+                    <p>• Hanguko (한국어) tilida sifatlar ham xuddi fe'llar kabi gap oxirida keladi va <strong>-아요 / -어요</strong> oladi.</p>
+                    <p>• <strong>크다 (katta) → 커요</strong>, <strong>작다 (kichik) → 작아요</strong>, <strong>좋다 (yaxshi) → 좋아요</strong>.</p>
+                `,
+                vocab: [
+                    { kr: "오늘", rom: "oneul", uz: "Bugun" },
+                    { kr: "내일", rom: "naeil", uz: "Ertaga" },
+                    { kr: "어제", rom: "eoje", uz: "Kecha" },
+                    { kr: "시간", rom: "sigan", uz: "Vaqt / Soat" },
+                    { kr: "좋아요", rom: "joayo", uz: "Yaxshi / Yoqadi" },
+                    { kr: "커요", rom: "keoyo", uz: "Katta" },
+                    { kr: "작아요", rom: "jagayo", uz: "Kichik" },
+                    { kr: "예뻐요", rom: "yeppeoyo", uz: "Chiroyli" }
+                ],
+                quiz: [
+                    { q: "'Bugun' Hanguko (한국어) tilida qanday bo'ladi?", options: ["내일 (naeil)", "오늘 (oneul)", "어제 (eoje)", "시간 (sigan)"], ans: 1 },
+                    { q: "'내일' (naeil) so'zining ma'nosi nima?", options: ["Kecha", "Bugun", "Ertaga", "Hozir"], ans: 2 },
+                    { q: "'좋아요' (joayo) nimani bildiradi?", options: ["Yomon", "Yaxshi / Yoqadi", "Kichik", "Qimmat"], ans: 1 },
+                    { q: "'Katta' so'zi qaysi?", options: ["작아요 (jagayo)", "커요 (keoyo)", "예뻐요 (yeppeoyo)", "어제 (eoje)"], ans: 1 },
+                    { q: "'어제' (eoje) qaysi kun?", options: ["Ertaga", "Bugun", "Kecha", "Indinga"], ans: 2 },
+                    { q: "'예뻐요' (yeppeoyo) so'zining tarjimasi nima?", options: ["Chiroyli", "Katta", "Mazali", "Tez"], ans: 0 },
+                    { q: "'작아요' (jagayo) nimani anglatadi?", options: ["Katta", "Uzun", "Kichik", "Og'ir"], ans: 2 },
+                    { q: "'시간' (sigan) so'zining ma'nosi qaysi?", options: ["Joy", "Vaqt / Soat", "Pul", "Kitob"], ans: 1 },
+                    { q: "Hanguko (한국어) tilida sifatlar gapning qayerida keladi?", options: ["Gap oxirida", "Faqat gap boshida", "O'rtasida", "Ishlatilmaydi"], ans: 0 },
+                    { q: "'오늘 좋아요' iborasi nimani bildiradi?", options: ["Kecha yomon edi", "Bugun yaxshi", "Ertaga boraman", "Vaqt yo'q"], ans: 1 }
+                ]
+            }
+        ];
+
+        // =========================================================================
+        // 2. FIREBASE CLOUD INITIALIZATION & MULTI-DEVICE SYNC
+        // =========================================================================
+        const ADMIN_PHONE = "+998505536776";
+        const ADMIN_PASS = "O.01112006";
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'lingouz-hanguko-app';
+        let db = null;
+        let auth = null;
+        let firebaseUser = null;
+        let isCloudReady = false;
+
+        // Global State
+        let currentStudent = null; // Logged-in student object from Firestore
+        let isAdminLoggedIn = false;
+        let allStudentsList = []; // Populated for Admin real-time monitoring
+        let adminActiveTab = 'students';
+        let demo20Unlocked = false;
+        let subVisited = { tg: false, ig: false };
+        let aiConversationHistory = [];
+
+        // Quiz runtime state
+        let currentQuiz = {
+            dayObj: null,
+            qIndex: 0,
+            selectedOption: null,
+            score: 0,
+            mistakes: []
+        };
+
+        // Session persistence (only stores session phone/role so page refresh stays logged in; all actual data lives in Firestore!)
+        const SESSION_KEY = 'lingouz_active_session_v2';
+
+        function normalizePhone(phoneStr) {
+            let digits = (phoneStr || '').replace(/\D/g, '');
+            if (!digits.startsWith('998') && digits.length === 9) {
+                digits = '998' + digits;
+            }
+            return '+' + digits;
+        }
+
+        function formatPhoneDisplay(phoneStr) {
+            const digits = (phoneStr || '').replace(/\D/g, '');
+            if (digits.length === 12 && digits.startsWith('998')) {
+                return `+998 ${digits.slice(3, 5)} ${digits.slice(5, 8)} ${digits.slice(8, 10)} ${digits.slice(10, 12)}`;
+            }
+            return phoneStr;
+        }
+
+        function getTodayDateStr() {
+            const now = new Date();
+            return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        }
+
+        function calculateExactAge(dobString) {
+            if (!dobString) return null;
+            const birthDate = new Date(dobString);
+            const today = new Date();
+            if (isNaN(birthDate.getTime())) return null;
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
+        async function initFirebaseAndSession() {
+            try {
+                const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+                if (firebaseConfig) {
+                    const app = initializeApp(firebaseConfig);
+                    auth = getAuth(app);
+                    db = getFirestore(app);
+
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        const cred = await signInWithCustomToken(auth, __initial_auth_token);
+                        firebaseUser = cred.user;
+                    } else {
+                        const cred = await signInAnonymously(auth);
+                        firebaseUser = cred.user;
+                    }
+                    isCloudReady = true;
+                    await seedDemoStudentsIfEmpty();
+                }
+            } catch (err) {
+                console.error("Firebase ulanish xatosi:", err);
+            }
+
+            // Restore active session if user refreshed browser
+            try {
+                const savedSession = sessionStorage.getItem(SESSION_KEY);
+                if (savedSession) {
+                    const parsed = JSON.parse(savedSession);
+                    if (parsed.role === 'admin') {
+                        isAdminLoggedIn = true;
+                        startAdminListener();
+                        showScreen('admin');
+                        return;
+                    } else if (parsed.role === 'student' && parsed.phone) {
+                        const studentData = await fetchStudentByPhone(parsed.phone);
+                        if (studentData) {
+                            currentStudent = studentData;
+                            checkDailyUnlockProgression();
+                            if (!currentStudent.subVerified) {
+                                showScreen('subscribe');
+                            } else {
+                                showScreen('dashboard');
+                            }
+                            return;
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error("Session tiklash xatosi:", e);
+            }
+
+            showScreen('auth');
+        }
+
+        // Seed 2 realistic sample students ONLY if Firestore collection is completely empty so Admin sees how analytics look
+        async function seedDemoStudentsIfEmpty() {
+            if (!isCloudReady || !firebaseUser) return;
+            try {
+                const studentsCol = collection(db, 'artifacts', appId, 'public', 'data', 'students');
+                const snap = await getDocs(studentsCol);
+                if (snap.empty) {
+                    const sampleStudents = [
+                        {
+                            phone: "+998901112233",
+                            fullName: "Madina Rustamova",
+                            dob: "2004-05-14",
+                            age: calculateExactAge("2004-05-14"),
+                            password: "madina2004",
+                            subVerified: true,
+                            unlockedDay: 3,
+                            activeDay: 3,
+                            completedDays: [1, 2],
+                            lastCompletedDateStr: "2026-11-12",
+                            registeredAt: "2026-11-10T09:30:00Z",
+                            testHistory: [
+                                { day: 1, topicTitle: "Asosiy unlilar", score: 9, total: 10, passed: true, date: "2026-11-10", wrongTopics: ["'오' va '어' ning farqi nimada?"] },
+                                { day: 2, topicTitle: "Undosh harflar", score: 8, total: 10, passed: true, date: "2026-11-11", wrongTopics: ["'다리' (dari) so'zining ma'nosi qaysi?", "'모자' (moja) qanday tarjima qilinadi?"] }
+                            ],
+                            weaknesses: [
+                                { day: 1, topic: "Asosiy unlilar", detail: "'오' (tor o') va '어' (keng o) farqida adashgan", count: 1 },
+                                { day: 2, topic: "Undosh harflar", detail: "Yangi so'zlar tarjimasi (다리, 모자) — 8/10 ball", count: 2 }
+                            ]
+                        },
+                        {
+                            phone: "+998934445566",
+                            fullName: "Jasurbek Toshmatov",
+                            dob: "2002-09-21",
+                            age: calculateExactAge("2002-09-21"),
+                            password: "jasur77",
+                            subVerified: true,
+                            unlockedDay: 2,
+                            activeDay: 2,
+                            completedDays: [1],
+                            lastCompletedDateStr: "2026-11-11",
+                            registeredAt: "2026-11-11T14:15:00Z",
+                            testHistory: [
+                                { day: 1, topicTitle: "Asosiy unlilar", score: 10, total: 10, passed: true, date: "2026-11-11", wrongTopics: [] },
+                                { day: 2, topicTitle: "Undosh harflar", score: 6, total: 10, passed: false, date: "2026-11-12", wrongTopics: ["'나무' tarjimasi", "'우유' tarjimasi", "'바다' ma'nosi", "Bo'g'in bloklari tartibi"] }
+                            ],
+                            weaknesses: [
+                                { day: 2, topic: "Undosh harflar", detail: "2-kun testidan o'ta olmagan (6/10 ball). Bo'g'in tuzilishi va so'z boyligida kamchilik bor.", count: 4 }
+                            ]
+                        }
+                    ];
+                    for (const st of sampleStudents) {
+                        await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'students', st.phone), st);
+                    }
+                }
+            } catch (e) {
+                console.error("Seed xatosi:", e);
+            }
+        }
+
+        async function fetchStudentByPhone(phone) {
+            const norm = normalizePhone(phone);
+            if (!isCloudReady || !firebaseUser) return null;
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'students', norm);
+                const snap = await getDoc(docRef);
+                if (snap.exists()) {
+                    const data = snap.data();
+                    if (data.dob) data.age = calculateExactAge(data.dob);
+                    return data;
+                }
+            } catch (e) {
+                console.error("Talabani olishda xato:", e);
+            }
+            return null;
+        }
+
+        async function saveCurrentStudentToCloud() {
+            if (!currentStudent || !isCloudReady || !firebaseUser) return;
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'students', currentStudent.phone);
+                await setDoc(docRef, currentStudent, { merge: true });
+            } catch (e) {
+                console.error("Bulutga saqlashda xatolik:", e);
+            }
+        }
+
+        function checkDailyUnlockProgression() {
+            if (!currentStudent || !currentStudent.lastCompletedDateStr) return;
+            const today = getTodayDateStr();
+            if (today > currentStudent.lastCompletedDateStr) {
+                const nextDay = (currentStudent.completedDays?.length || 0) + 1;
+                if (nextDay <= CURRICULUM.length && currentStudent.unlockedDay < nextDay) {
+                    currentStudent.unlockedDay = nextDay;
+                    currentStudent.activeDay = nextDay;
+                    saveCurrentStudentToCloud();
+                }
+            }
+        }
+
+        // =========================================================================
+        // 3. AUTHENTICATION HANDLERS (REGISTER, LOGIN & ADMIN CHECK)
+        // =========================================================================
+        window.switchAuthTab = function(tab) {
+            const regForm = document.getElementById('register-form');
+            const loginForm = document.getElementById('login-form');
+            const tabReg = document.getElementById('tab-register');
+            const tabLog = document.getElementById('tab-login');
+
+            if (tab === 'register') {
+                regForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+                tabReg.className = "py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-white text-indigo-700 shadow-xs transition";
+                tabLog.className = "py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-500 hover:text-slate-800 transition";
+            } else {
+                regForm.classList.add('hidden');
+                loginForm.classList.remove('hidden');
+                tabLog.className = "py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-white text-indigo-700 shadow-xs transition";
+                tabReg.className = "py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-500 hover:text-slate-800 transition";
+            }
+        };
+
+        window.togglePasswordVisibility = function(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
+            } else {
+                input.type = 'password';
+                btn.innerHTML = '<i class="fa-solid fa-eye"></i>';
+            }
+        };
+
+        // Live Age Auto-Calculator
+        const dobInput = document.getElementById('reg-dob');
+        dobInput.max = getTodayDateStr();
+        dobInput.addEventListener('change', function() {
+            const age = calculateExactAge(this.value);
+            const box = document.getElementById('age-preview-box');
+            const val = document.getElementById('age-preview-value');
+            if (age !== null && age >= 4 && age <= 105) {
+                val.textContent = `${age} yosh`;
+                box.classList.remove('hidden');
+                box.classList.add('flex');
+            } else if (age !== null) {
+                val.textContent = `Noto'g'ri sana (${age} yosh)`;
+                box.classList.remove('hidden');
+                box.classList.add('flex');
+            } else {
+                box.classList.add('hidden');
+            }
+        });
+
+        // Phone auto-formatter for both inputs
+        ['reg-phone', 'login-phone'].forEach(id => {
+            document.getElementById(id).addEventListener('input', function() {
+                let digits = this.value.replace(/\D/g, '');
+                if (!digits.startsWith('998')) {
+                    digits = '998' + digits.replace(/^998/, '');
+                }
+                digits = digits.substring(0, 12);
+                let formatted = '+998';
+                if (digits.length > 3) formatted += ' ' + digits.substring(3, 5);
+                if (digits.length > 5) formatted += ' ' + digits.substring(5, 8);
+                if (digits.length > 8) formatted += ' ' + digits.substring(8, 10);
+                if (digits.length > 10) formatted += ' ' + digits.substring(10, 12);
+                this.value = formatted;
+            });
+        });
+
+        // Handle Registration
+        document.getElementById('register-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const fullName = document.getElementById('reg-fullname').value.trim();
+            const dob = document.getElementById('reg-dob').value;
+            const rawPhone = document.getElementById('reg-phone').value.trim();
+            const password = document.getElementById('reg-password').value.trim();
+            const normPhone = normalizePhone(rawPhone);
+            const age = calculateExactAge(dob);
+
+            if (fullName.length < 3) {
+                showToast("Iltimos, ism va familiyangizni to'liq kiriting.", "error");
+                return;
+            }
+            if (age === null || age < 5 || age > 100) {
+                showToast("Iltimos, to'g'ri tug'ilgan sanani kiriting.", "error");
+                return;
+            }
+            if (normPhone.length !== 13) {
+                showToast("Telefon raqamini to'liq kiriting (+998 XX XXX XX XX).", "error");
+                return;
+            }
+            if (normPhone === ADMIN_PHONE) {
+                showToast("Bu raqam administratorga tegishli. 'Kirish' bo'limidan foydalaning.", "error");
+                return;
+            }
+            if (password.length < 4) {
+                showToast("Parol kamida 4 ta belgidan iborat bo'lishi kerak.", "error");
+                return;
+            }
+
+            const btn = document.getElementById('btn-reg-submit');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Tekshirilmoqda...';
+
+            const existing = await fetchStudentByPhone(normPhone);
+            if (existing) {
+                btn.disabled = false;
+                btn.innerHTML = '<span>Ro\'yxatdan o\'tish va davom etish</span><i class="fa-solid fa-arrow-right"></i>';
+                showToast("Bu telefon raqami allaqachon ro'yxatdan o'tgan! 'Kirish' tugmasi orqali kiring.", "error");
+                switchAuthTab('login');
+                document.getElementById('login-phone').value = formatPhoneDisplay(normPhone);
+                return;
+            }
+
+            const newStudent = {
+                phone: normPhone,
+                fullName,
+                dob,
+                age,
+                password,
+                subVerified: false,
+                unlockedDay: 1,
+                activeDay: 1,
+                completedDays: [],
+                lastCompletedDateStr: null,
+                registeredAt: new Date().toISOString(),
+                testHistory: [],
+                weaknesses: []
+            };
+
+            currentStudent = newStudent;
+            await saveCurrentStudentToCloud();
+            sessionStorage.setItem(SESSION_KEY, JSON.stringify({ role: 'student', phone: normPhone }));
+
+            btn.disabled = false;
+            btn.innerHTML = '<span>Ro\'yxatdan o\'tish va davom etish</span><i class="fa-solid fa-arrow-right"></i>';
+
+            showToast("Tabriklaymiz! Endi kanallarga obuna bo'lib darsni boshlang.", "success");
+            subVisited = { tg: false, ig: false };
+            showScreen('subscribe');
+        });
+
+        // Handle Login (Student or Admin)
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const rawPhone = document.getElementById('login-phone').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+            const normPhone = normalizePhone(rawPhone);
+
+            // 1. CHECK ADMIN CREDENTIALS
+            if (normPhone === ADMIN_PHONE && password === ADMIN_PASS) {
+                isAdminLoggedIn = true;
+                currentStudent = null;
+                sessionStorage.setItem(SESSION_KEY, JSON.stringify({ role: 'admin' }));
+                showToast("Xush kelibsiz, Bosh Administrator!", "success");
+                startAdminListener();
+                showScreen('admin');
+                return;
+            }
+
+            if (normPhone === ADMIN_PHONE && password !== ADMIN_PASS) {
+                showToast("Admin paroli noto'g'ri!", "error");
+                return;
+            }
+
+            // 2. CHECK STUDENT CREDENTIALS FROM CLOUD
+            const btn = document.getElementById('btn-login-submit');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Kirilmoqda...';
+
+            const student = await fetchStudentByPhone(normPhone);
+
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i><span>Ilovaga kirish</span>';
+
+            if (!student) {
+                showToast("Bunday telefon raqam topilmadi. Avval ro'yxatdan o'ting!", "error");
+                return;
+            }
+
+            if (student.password !== password) {
+                showToast("Parol noto'g'ri kiritildi! Qayta urinib ko'ring.", "error");
+                return;
+            }
+
+            currentStudent = student;
+            checkDailyUnlockProgression();
+            sessionStorage.setItem(SESSION_KEY, JSON.stringify({ role: 'student', phone: normPhone }));
+
+            showToast(`Xush kelibsiz, ${student.fullName}! (${student.unlockedDay}-kun mavzusidan davom etasiz)`, "success");
+
+            if (!currentStudent.subVerified) {
+                showScreen('subscribe');
+            } else {
+                showScreen('dashboard');
+            }
+        });
+
+        window.logoutAccount = function() {
+            sessionStorage.removeItem(SESSION_KEY);
+            currentStudent = null;
+            isAdminLoggedIn = false;
+            aiConversationHistory = [];
+            closeProfileModal();
+            closeSyllabusModal();
+            showScreen('auth');
+            showToast("Hisobdan chiqdingiz.", "info");
+        };
+
+        // =========================================================================
+        // 4. MANDATORY SUBSCRIPTION (AFTER REGISTRATION)
+        // =========================================================================
+        window.markChannelVisited = function(platform) {
+            subVisited[platform] = true;
+            updateSubscriptionUI();
+        };
+
+        function updateSubscriptionUI() {
+            if (currentStudent) {
+                document.getElementById('sub-student-name').textContent = currentStudent.fullName;
+            }
+            const tgCard = document.getElementById('sub-card-tg');
+            const tgLink = document.getElementById('link-sub-tg');
+            const igCard = document.getElementById('sub-card-ig');
+            const igLink = document.getElementById('link-sub-ig');
+            const verifyBtn = document.getElementById('btn-verify-sub');
+            const helperText = document.getElementById('sub-helper-text');
+
+            if (subVisited.tg) {
+                tgCard.className = "border-2 border-emerald-300 rounded-2xl p-3.5 flex items-center justify-between gap-3 bg-emerald-50/60 transition";
+                tgLink.className = "shrink-0 bg-emerald-600 text-white font-bold text-xs px-3.5 py-2.5 rounded-xl transition flex items-center gap-1.5";
+                tgLink.innerHTML = '<i class="fa-solid fa-check"></i><span>Ochildi</span>';
+            }
+            if (subVisited.ig) {
+                igCard.className = "border-2 border-emerald-300 rounded-2xl p-3.5 flex items-center justify-between gap-3 bg-emerald-50/60 transition";
+                igLink.className = "shrink-0 bg-emerald-600 text-white font-bold text-xs px-3.5 py-2.5 rounded-xl transition flex items-center gap-1.5";
+                igLink.innerHTML = '<i class="fa-solid fa-check"></i><span>Ochildi</span>';
+            }
+
+            const count = (subVisited.tg ? 1 : 0) + (subVisited.ig ? 1 : 0);
+            helperText.textContent = count === 2
+                ? "Ajoyib! Ikkala sahifa ham ochildi. Endi tasdiqlash tugmasini bosing."
+                : `Davom etish uchun yuqoridagi ikkala tugmani bosib obuna bo'ling (${count} / 2 bajarildi).`;
+
+            if (count === 2) {
+                verifyBtn.className = "w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-indigo-200 transition flex items-center justify-center gap-2 text-sm cursor-pointer";
+            } else {
+                verifyBtn.className = "w-full bg-slate-300 text-slate-500 font-bold py-3.5 px-6 rounded-2xl transition flex items-center justify-center gap-2 text-sm cursor-not-allowed";
+            }
+        }
+
+        window.confirmSubscriptions = async function() {
+            if (!subVisited.tg || !subVisited.ig) {
+                showToast("Iltimos, avval Telegram va Instagram sahifalarining ikkalasiga ham obuna bo'ling!", "error");
+                return;
+            }
+            if (currentStudent) {
+                currentStudent.subVerified = true;
+                await saveCurrentStudentToCloud();
+            }
+            showToast("Obuna tasdiqlandi! 1-kun darsi ochildi.", "success");
+            showScreen('dashboard');
+        };
+
+        // =========================================================================
+        // 5. SCREEN CONTROLLER & DASHBOARD RENDERING
+        // =========================================================================
+        function showScreen(screenName) {
+            const screens = ['loading', 'auth', 'subscribe', 'dashboard', 'quiz', 'admin'];
+            screens.forEach(s => {
+                const el = document.getElementById(`screen-${s}`);
+                if (el) el.classList.add('hidden');
+            });
+
+            const target = document.getElementById(`screen-${screenName}`);
+            if (target) target.classList.remove('hidden');
+
+            const btnSyllabus = document.getElementById('btn-syllabus-modal');
+            const btnProfile = document.getElementById('btn-profile-modal');
+            const btnAdminLogout = document.getElementById('btn-admin-logout');
+            const headerSub = document.getElementById('header-subtitle');
+            const shell = document.getElementById('app-shell');
+
+            btnSyllabus.classList.add('hidden');
+            btnProfile.classList.add('hidden');
+            btnAdminLogout.classList.add('hidden');
+
+            if (screenName === 'admin') {
+                shell.classList.remove('max-w-2xl');
+                shell.classList.add('max-w-4xl');
+                btnAdminLogout.classList.remove('hidden');
+                btnAdminLogout.classList.add('flex');
+                headerSub.textContent = "Administrator boshqaruv paneli";
+            } else {
+                shell.classList.remove('max-w-4xl');
+                shell.classList.add('max-w-2xl');
+            }
+
+            if (screenName === 'subscribe') {
+                updateSubscriptionUI();
+                headerSub.textContent = "Majburiy obuna bosqichi";
+            }
+
+            if (screenName === 'dashboard' && currentStudent) {
+                btnSyllabus.classList.remove('hidden');
+                btnSyllabus.classList.add('flex');
+                btnProfile.classList.remove('hidden');
+                btnProfile.classList.add('flex');
+
+                const firstName = currentStudent.fullName.split(' ')[0];
+                document.getElementById('header-user-name').textContent = firstName;
+                headerSub.textContent = `${currentStudent.fullName} • ${currentStudent.age} yosh`;
+
+                renderDashboard();
+                updateClockAndTimer();
+            }
+        }
+
+        function renderDashboard() {
+            if (!currentStudent) return;
+            checkDailyUnlockProgression();
+
+            const completed = currentStudent.completedDays || [];
+            document.getElementById('progress-summary').textContent = `${completed.length}/${CURRICULUM.length}`;
+
+            const nextDayBtn = document.getElementById('btn-demo-nextday');
+            const waitingForTomorrow = completed.includes(currentStudent.unlockedDay) && currentStudent.unlockedDay < CURRICULUM.length;
+            if (waitingForTomorrow) {
+                nextDayBtn.classList.remove('hidden');
+            } else {
+                nextDayBtn.classList.add('hidden');
+            }
+
+            // Day pills
+            const pillsContainer = document.getElementById('day-pills');
+            pillsContainer.innerHTML = '';
+
+            CURRICULUM.forEach(item => {
+                const isCompleted = completed.includes(item.day);
+                const isUnlocked = item.day <= currentStudent.unlockedDay;
+                const isActive = item.day === currentStudent.activeDay;
+
+                const btn = document.createElement('button');
+                btn.className = `shrink-0 px-3.5 py-2 rounded-xl text-xs font-bold border transition flex items-center gap-1.5 ${
+                    isActive
+                        ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
+                        : isCompleted
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                        : isUnlocked
+                        ? 'bg-white text-slate-800 border-slate-300 hover:bg-slate-100'
+                        : 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed'
+                }`;
+
+                let iconHtml = isCompleted
+                    ? '<i class="fa-solid fa-circle-check text-emerald-500"></i>'
+                    : isUnlocked
+                    ? '<i class="fa-solid fa-lock-open text-indigo-400"></i>'
+                    : '<i class="fa-solid fa-lock text-slate-400"></i>';
+
+                if (isActive && isCompleted) iconHtml = '<i class="fa-solid fa-circle-check text-white"></i>';
+                if (isActive && !isCompleted) iconHtml = '<i class="fa-solid fa-book-open text-white"></i>';
+
+                btn.innerHTML = `${iconHtml} <span>${item.day}-kun</span>`;
+                btn.onclick = () => selectLessonDay(item.day);
+                pillsContainer.appendChild(btn);
+            });
+
+            renderLesson();
+        }
+
+        window.selectLessonDay = async function(dayNum) {
+            if (!currentStudent) return;
+            if (dayNum > currentStudent.unlockedDay) {
+                showToast(`Cheklangan reja: ${dayNum}-kun mavzusi hali qulflangan! Avval oldingi kun testidan (8/10) o'ting.`, "error");
+                return;
+            }
+            currentStudent.activeDay = dayNum;
+            await saveCurrentStudentToCloud();
+            renderDashboard();
+        };
+
+        function renderLesson() {
+            const lesson = CURRICULUM.find(d => d.day === currentStudent.activeDay) || CURRICULUM[0];
+            const isCompleted = (currentStudent.completedDays || []).includes(lesson.day);
+
+            document.getElementById('lesson-day-badge').textContent = `${lesson.day}-KUN MAVZUSI`;
+            document.getElementById('lesson-title').textContent = lesson.title;
+            document.getElementById('lesson-desc').textContent = lesson.description;
+            document.getElementById('lesson-grammar').innerHTML = lesson.grammar;
+
+            const statusPill = document.getElementById('lesson-status-pill');
+            if (isCompleted) {
+                statusPill.innerHTML = '<i class="fa-solid fa-rotate-left mr-1"></i>Takrorlash rejimi (Topshirilgan)';
+                statusPill.className = "text-xs font-bold text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-lg border border-emerald-200";
+            } else {
+                statusPill.innerHTML = '<i class="fa-solid fa-clock mr-1"></i>Joriy mavzu';
+                statusPill.className = "text-xs font-bold text-indigo-700 bg-white px-2.5 py-1 rounded-lg border border-indigo-200";
+            }
+
+            // Vocabulary list
+            document.getElementById('vocab-count').textContent = lesson.vocab.length;
+            const vocabListEl = document.getElementById('vocab-list');
+            vocabListEl.innerHTML = '';
+
+            lesson.vocab.forEach(word => {
+                const card = document.createElement('div');
+                card.className = "bg-white border border-slate-200 hover:border-indigo-300 rounded-2xl p-3 flex items-center justify-between transition shadow-2xs";
+                card.innerHTML = `
+                    <div class="min-w-0 pr-2">
+                        <div class="flex items-baseline gap-2 flex-wrap">
+                            <span class="text-lg sm:text-xl font-bold text-slate-900 korean-text">${word.kr}</span>
+                            <span class="text-[11px] font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">[${word.rom}]</span>
+                        </div>
+                        <div class="text-xs text-slate-600 font-medium mt-1 truncate">${word.uz}</div>
+                    </div>
+                    <button onclick="speakKorean('${word.kr}', this)" title="Talaffuzni eshitish"
+                        class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-indigo-100 text-indigo-600 flex items-center justify-center transition active:scale-90 shrink-0">
+                        <i class="fa-solid fa-volume-high text-xs"></i>
+                    </button>
+                `;
+                vocabListEl.appendChild(card);
+            });
+
+            // Exam Card
+            const examCard = document.getElementById('exam-action-card');
+            const examOpen = isExamTimeOpen();
+
+            if (isCompleted) {
+                const hasNextDay = lesson.day < CURRICULUM.length;
+                const nextUnlocked = currentStudent.unlockedDay > lesson.day;
+
+                examCard.className = "rounded-2xl p-5 border-2 border-emerald-200 bg-emerald-50/70 space-y-3";
+                examCard.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center text-lg shrink-0">
+                            <i class="fa-solid fa-award"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-emerald-950 text-sm sm:text-base">${lesson.day}-kun imtihoni muvaffaqiyatli topshirilgan!</h4>
+                            <p class="text-xs text-emerald-800 mt-1">
+                                ${hasNextDay 
+                                    ? (nextUnlocked 
+                                        ? `Keyingi (${lesson.day + 1}-kun) mavzusi ochiq. Bu mavzuni xohlagancha takrorlashingiz mumkin.` 
+                                        : `Kunlik cheklov: Bir kunda faqat 1 ta yangi mavzu ochiladi. ${lesson.day + 1}-kun mavzusi ertaga ochiladi.`)
+                                    : "Tabriklaymiz! Siz barcha 8 kunlik boshlang'ich kursni yakunladingiz!"}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <button onclick="startQuiz(${lesson.day})" class="bg-white hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold py-2.5 px-4 rounded-xl text-xs transition">
+                            Testni qayta mashq qilish
+                        </button>
+                        ${hasNextDay && !nextUnlocked ? `
+                            <button onclick="simulateNextDay()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition">
+                                Keyingi kunga o'tish (Sinov) →
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+            } else if (examOpen) {
+                examCard.className = "rounded-2xl p-5 border-2 border-indigo-500 bg-indigo-50/60 space-y-3 shadow-xs";
+                examCard.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-lg shrink-0">
+                            <i class="fa-solid fa-file-pen"></i>
+                        </div>
+                        <div>
+                            <div class="inline-block text-[10px] font-bold uppercase tracking-wider bg-emerald-500 text-white px-2 py-0.5 rounded-md mb-1">
+                                20:00 Imtihon vaqti ochiq
+                            </div>
+                            <h4 class="font-extrabold text-slate-900 text-sm sm:text-base">${lesson.day}-kun yakuniy testi (10 ta savol)</h4>
+                            <p class="text-xs text-slate-600 mt-1">
+                                Keyingi mavzuga o'tish uchun 10 ta savoldan <strong>kamida 8 tasiga</strong> to'g'ri javob berishingiz shart.
+                            </p>
+                        </div>
+                    </div>
+                    <button onclick="startQuiz(${lesson.day})"
+                        class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3.5 px-5 rounded-xl text-sm shadow-md shadow-indigo-200 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-play"></i>
+                        <span>Testni boshlash (10 savol)</span>
+                    </button>
+                `;
+            } else {
+                examCard.className = "rounded-2xl p-5 border-2 border-amber-200 bg-amber-50/70 space-y-3";
+                examCard.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center text-lg shrink-0">
+                            <i class="fa-solid fa-hourglass-half"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-amber-950 text-sm sm:text-base">Kunlik test soat 20:00 da ochiladi</h4>
+                            <p class="text-xs text-amber-800 mt-1 leading-relaxed">
+                                Hozircha mavzu qoidalari va so'zlarni yodlang, tushunmagan joyingizni yuqoridagi <strong>LingoUZ AI Ustoz</strong>dan so'rang. Soat <strong>20:00</strong> da 10 talik test ochiladi (o'tish bali: 8/10).
+                            </p>
+                        </div>
+                    </div>
+                    <button disabled class="w-full bg-slate-200 text-slate-500 font-bold py-3 px-4 rounded-xl text-xs cursor-not-allowed flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-lock"></i>
+                        <span>Test 20:00 gacha qulflangan</span>
+                    </button>
+                `;
+            }
+        }
+
+        // =========================================================================
+        // 6. GEMINI AI TUTOR ("LingoUZ AI Ustoz" — ERINMAY BATAFSIL TUSHUNTIRADI)
+        // =========================================================================
+        function formatAiMarkdown(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/\*\*(.*?)\*\*/g, '<strong class="text-indigo-200 font-bold">$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em class="text-slate-200">$1</em>')
+                .replace(/\n/g, '<br>');
+        }
+
+        function appendAiMessage(role, htmlContent, isTyping = false) {
+            const box = document.getElementById('ai-chat-messages');
+            const wrapper = document.createElement('div');
+            if (isTyping) wrapper.id = 'ai-typing-indicator';
+
+            if (role === 'user') {
+                wrapper.className = "flex items-start justify-end gap-2";
+                wrapper.innerHTML = `
+                    <div class="bg-indigo-600 text-white rounded-2xl rounded-tr-none px-3.5 py-2.5 max-w-[85%] leading-relaxed shadow-xs">
+                        ${htmlContent}
+                    </div>
+                `;
+            } else {
+                wrapper.className = "flex items-start gap-2.5";
+                wrapper.innerHTML = `
+                    <div class="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs shrink-0 mt-0.5">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div class="bg-white/10 text-slate-100 rounded-2xl rounded-tl-none px-3.5 py-2.5 max-w-[88%] leading-relaxed">
+                        ${htmlContent}
+                    </div>
+                `;
+            }
+
+            box.appendChild(wrapper);
+            box.scrollTop = box.scrollHeight;
+        }
+
+        window.clearAiChat = function() {
+            aiConversationHistory = [];
+            const box = document.getElementById('ai-chat-messages');
+            box.innerHTML = '';
+            appendAiMessage('ai', "Suhbat tozalandi. Joriy mavzu bo'yicha yana qanday savolingiz bor? Batafsil tushuntirib beraman!");
+        };
+
+        window.askAiQuick = function(promptText) {
+            document.getElementById('ai-chat-input').value = promptText;
+            document.getElementById('ai-chat-form').dispatchEvent(new Event('submit'));
+        };
+
+        document.getElementById('ai-chat-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const inputEl = document.getElementById('ai-chat-input');
+            const question = inputEl.value.trim();
+            if (!question) return;
+
+            inputEl.value = '';
+            appendAiMessage('user', question.replace(/</g, "&lt;"));
+
+            const sendBtn = document.getElementById('btn-ai-send');
+            sendBtn.disabled = true;
+
+            appendAiMessage('ai', `
+                <div class="flex items-center gap-1.5 py-1">
+                    <span class="w-2 h-2 bg-indigo-300 rounded-full typing-dot"></span>
+                    <span class="w-2 h-2 bg-indigo-300 rounded-full typing-dot"></span>
+                    <span class="w-2 h-2 bg-indigo-300 rounded-full typing-dot"></span>
+                    <span class="text-xs text-indigo-200 ml-1">AI Ustoz javob tayyorlamoqda...</span>
+                </div>
+            `, true);
+
+            const currentLesson = CURRICULUM.find(d => d.day === (currentStudent?.activeDay || 1)) || CURRICULUM[0];
+            const vocabSummary = currentLesson.vocab.map(v => `${v.kr} [${v.rom}] - ${v.uz}`).join(', ');
+
+            const systemPrompt = `Sen "LingoUZ" ilovasidagi eng mehribon, sabrli va bilimdon Hanguko (한국어 - koreys tili) AI ustozisan.
+Qoidalar:
+1. Koreys tilini doimo "Hanguko (한국어)" deb ata (hech qachon til nomini "Hangul" dema, faqat alifbo harflariga nisbatan 한글 deyish mumkin).
+2. Talabaning savoliga o'zbek tilida, juda sodda, tushunarli, erinmasdan bosqichma-bosqich batafsil tushuntirish ber.
+3. Har bir misolda koreyscha yozuvi, o'zbekcha talaffuzi [kvadrat qavsda] va o'zbekcha tarjimasini yoz.
+4. Talaba hozir ${currentLesson.day}-kun mavzusini o'rganmoqda: "${currentLesson.title}".
+5. Mavzu so'zlari: ${vocabSummary}.
+6. Talabaning ismi: ${currentStudent?.fullName || 'Talabgor'} (${currentStudent?.age || ''} yosh). Uni ruhlantirib, do'stona munosabatda bo'l.`;
+
+            aiConversationHistory.push({ role: "user", parts: [{ text: question }] });
+
+            try {
+                const replyText = await callGeminiWithRetry(systemPrompt, aiConversationHistory);
+                const typingEl = document.getElementById('ai-typing-indicator');
+                if (typingEl) typingEl.remove();
+
+                aiConversationHistory.push({ role: "model", parts: [{ text: replyText }] });
+                appendAiMessage('ai', formatAiMarkdown(replyText));
+            } catch (err) {
+                const typingEl = document.getElementById('ai-typing-indicator');
+                if (typingEl) typingEl.remove();
+                appendAiMessage('ai', "Kechirasiz, hozir internet yoki AI serveri bilan bog'lanishda qisqa uzilish bo'ldi. Iltimos, savolingizni qayta yuboring.");
+            } finally {
+                sendBtn.disabled = false;
+            }
+        });
+
+        async function callGeminiWithRetry(systemInstructionText, contentsHistory) {
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: contentsHistory,
+                systemInstruction: {
+                    parts: [{ text: systemInstructionText }]
+                }
+            };
+
+            const delays = [1000, 2000, 4000, 8000, 16000];
+            for (let attempt = 0; attempt <= delays.length; attempt++) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                    const data = await response.json();
+                    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (text) return text;
+                    throw new Error("Bo'sh javob");
+                } catch (e) {
+                    if (attempt === delays.length) throw e;
+                    await new Promise(res => setTimeout(res, delays[attempt]));
+                }
+            }
+        }
+
+        // =========================================================================
+        // 7. MUNDARIJA (SYLLABUS MODAL — AVVALGI MAVZULARNI TAKRORLASH)
+        // =========================================================================
+        window.openSyllabusModal = function() {
+            if (!currentStudent) return;
+            const listEl = document.getElementById('syllabus-list');
+            listEl.innerHTML = '';
+            const completed = currentStudent.completedDays || [];
+
+            CURRICULUM.forEach(item => {
+                const isDone = completed.includes(item.day);
+                const isUnlocked = item.day <= currentStudent.unlockedDay;
+                const isCurrent = item.day === currentStudent.activeDay;
+
+                const row = document.createElement('div');
+                row.className = `p-3.5 rounded-2xl border-2 flex items-center justify-between gap-3 transition ${
+                    isCurrent
+                        ? 'border-indigo-500 bg-indigo-50/70'
+                        : isDone
+                        ? 'border-emerald-200 bg-emerald-50/40 hover:bg-emerald-50 cursor-pointer'
+                        : isUnlocked
+                        ? 'border-slate-200 bg-white hover:bg-slate-50 cursor-pointer'
+                        : 'border-slate-100 bg-slate-50 opacity-60 cursor-not-allowed'
+                }`;
+
+                let badgeHtml = isDone
+                    ? '<span class="text-[11px] font-bold bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-lg">Tugatilgan • Takrorlash</span>'
+                    : isUnlocked
+                    ? '<span class="text-[11px] font-bold bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-lg">Ochiq</span>'
+                    : '<span class="text-[11px] font-bold bg-slate-200 text-slate-500 px-2.5 py-1 rounded-lg"><i class="fa-solid fa-lock mr-1"></i>Qulflangan</span>';
+
+                row.innerHTML = `
+                    <div class="min-w-0">
+                        <div class="text-xs font-extrabold text-indigo-600">${item.day}-KUN</div>
+                        <div class="font-bold text-sm text-slate-900 truncate">${item.title}</div>
+                        <div class="text-[11px] text-slate-500 mt-0.5">${item.vocab.length} ta so'z • 10 ta test savoli</div>
+                    </div>
+                    <div class="shrink-0">${badgeHtml}</div>
+                `;
+
+                row.onclick = () => {
+                    if (!isUnlocked) {
+                        showToast(`${item.day}-kun mavzusi hali yopiq. Avvalgi mavzularni yakunlang!`, "error");
+                        return;
+                    }
+                    closeSyllabusModal();
+                    selectLessonDay(item.day);
+                };
+
+                listEl.appendChild(row);
+            });
+
+            const modal = document.getElementById('syllabus-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+
+        window.closeSyllabusModal = function() {
+            const modal = document.getElementById('syllabus-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        };
+
+        // =========================================================================
+        // 8. TIME, 20:00 EXAM LOCK & SPEECH SYNTHESIS
+        // =========================================================================
+        function isExamTimeOpen() {
+            if (demo20Unlocked) return true;
+            return new Date().getHours() >= 20;
+        }
+
+        function updateClockAndTimer() {
+            const now = new Date();
+            const clockEl = document.getElementById('live-clock');
+            if (clockEl) {
+                clockEl.textContent = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+            }
+
+            const badgeEl = document.getElementById('exam-status-badge');
+            const labelEl = document.getElementById('countdown-label');
+            const timerEl = document.getElementById('countdown-timer');
+            if (!badgeEl || !timerEl) return;
+
+            if (isExamTimeOpen()) {
+                badgeEl.textContent = demo20Unlocked && now.getHours() < 20 ? "20:00 Sinov rejimi OCHIQ" : "20:00 Test OCHIQ!";
+                badgeEl.className = "text-xs px-2 py-0.5 rounded-full font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30";
+                labelEl.textContent = "Imtihon holati:";
+                timerEl.textContent = "Topshirish mumkin";
+                timerEl.className = "text-xs sm:text-sm font-bold text-emerald-400";
+            } else {
+                badgeEl.textContent = "20:00 da ochiladi";
+                badgeEl.className = "text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-500/20 text-amber-300 border border-amber-400/30";
+                labelEl.textContent = "20:00 testga qoldi:";
+
+                const target = new Date(now);
+                target.setHours(20, 0, 0, 0);
+                const diffMs = target - now;
+                timerEl.textContent = `${String(Math.floor(diffMs / 3600000)).padStart(2, '0')}:${String(Math.floor((diffMs % 3600000) / 60000)).padStart(2, '0')}:${String(Math.floor((diffMs % 60000) / 1000)).padStart(2, '0')}`;
+                timerEl.className = "text-sm font-bold font-mono text-amber-400";
+            }
+        }
+
+        setInterval(() => {
+            updateClockAndTimer();
+        }, 1000);
+
+        window.toggleDemoMode = function() {
+            demo20Unlocked = document.getElementById('toggle-demo-20').checked;
+            updateClockAndTimer();
+            renderLesson();
+            if (demo20Unlocked) {
+                showToast("Sinov rejimi yoqildi: 20:00 testi hozir ochildi!", "info");
+            }
+        };
+
+        window.simulateNextDay = async function() {
+            if (!currentStudent) return;
+            const nextDay = (currentStudent.completedDays?.length || 0) + 1;
+            if (nextDay <= CURRICULUM.length) {
+                currentStudent.unlockedDay = nextDay;
+                currentStudent.activeDay = nextDay;
+                currentStudent.lastCompletedDateStr = "2000-01-01";
+                await saveCurrentStudentToCloud();
+                renderDashboard();
+                showToast(`${nextDay}-kun mavzusi ochildi!`, "success");
+            }
+        };
+
+        window.speakKorean = function(text, btnElement) {
+            if (!('speechSynthesis' in window)) {
+                showToast("Brauzeringiz ovozli talaffuzni qo'llab-quvvatlamaydi.", "error");
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'ko-KR';
+            utterance.rate = 0.85;
+            if (btnElement) {
+                btnElement.classList.add('bg-indigo-600', 'text-white');
+                utterance.onend = () => btnElement.classList.remove('bg-indigo-600', 'text-white');
+            }
+            window.speechSynthesis.speak(utterance);
+        };
+
+        // =========================================================================
+        // 9. DAILY 10-QUESTION EXAM ENGINE & WEAKNESS RECORDING
+        // =========================================================================
+        window.startQuiz = function(dayNum) {
+            const lesson = CURRICULUM.find(d => d.day === dayNum);
+            if (!lesson) return;
+
+            currentQuiz = {
+                dayObj: lesson,
+                qIndex: 0,
+                selectedOption: null,
+                score: 0,
+                mistakes: []
+            };
+
+            showScreen('quiz');
+            document.getElementById('quiz-question-box').classList.remove('hidden');
+            document.getElementById('quiz-result-box').classList.add('hidden');
+            document.getElementById('quiz-day-title').textContent = `${lesson.day}-kun imtihoni`;
+
+            renderQuizQuestion();
+        };
+
+        function renderQuizQuestion() {
+            const qTotal = currentQuiz.dayObj.quiz.length;
+            const qData = currentQuiz.dayObj.quiz[currentQuiz.qIndex];
+
+            document.getElementById('quiz-progress-text').textContent = `Savol: ${currentQuiz.qIndex + 1} / ${qTotal}`;
+            document.getElementById('quiz-progress-bar').style.width = `${((currentQuiz.qIndex + 1) / qTotal) * 100}%`;
+            document.getElementById('quiz-question-text').textContent = `${currentQuiz.qIndex + 1}. ${qData.q}`;
+
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+            currentQuiz.selectedOption = null;
+
+            const nextBtn = document.getElementById('btn-next-question');
+            nextBtn.disabled = true;
+            document.getElementById('btn-next-text').textContent = currentQuiz.qIndex === qTotal - 1 ? "Testni yakunlash" : "Keyingi savol";
+
+            const letters = ['A', 'B', 'C', 'D'];
+            qData.options.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = "quiz-opt-btn w-full text-left p-3.5 rounded-xl border-2 border-slate-200 hover:border-indigo-300 bg-white transition flex items-center gap-3 font-medium text-sm text-slate-800";
+                btn.innerHTML = `
+                    <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-600 font-bold text-xs flex items-center justify-center shrink-0 opt-badge">${letters[idx]}</span>
+                    <span class="korean-text">${optText}</span>
+                `;
+                btn.onclick = () => selectQuizOption(idx, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectQuizOption(index, clickedBtn) {
+            currentQuiz.selectedOption = index;
+            document.getElementById('btn-next-question').disabled = false;
+
+            document.querySelectorAll('.quiz-opt-btn').forEach(b => {
+                b.classList.remove('border-indigo-600', 'bg-indigo-50/70');
+                b.classList.add('border-slate-200', 'bg-white');
+                const badge = b.querySelector('.opt-badge');
+                badge.classList.remove('bg-indigo-600', 'text-white');
+                badge.classList.add('bg-slate-100', 'text-slate-600');
+            });
+
+            clickedBtn.classList.remove('border-slate-200', 'bg-white');
+            clickedBtn.classList.add('border-indigo-600', 'bg-indigo-50/70');
+            const activeBadge = clickedBtn.querySelector('.opt-badge');
+            activeBadge.classList.remove('bg-slate-100', 'text-slate-600');
+            activeBadge.classList.add('bg-indigo-600', 'text-white');
+        }
+
+        window.nextQuestion = function() {
+            if (currentQuiz.selectedOption === null) return;
+            const qData = currentQuiz.dayObj.quiz[currentQuiz.qIndex];
+            if (currentQuiz.selectedOption === qData.ans) {
+                currentQuiz.score++;
+            } else {
+                currentQuiz.mistakes.push({
+                    question: qData.q,
+                    userAns: qData.options[currentQuiz.selectedOption],
+                    correctAns: qData.options[qData.ans]
+                });
+            }
+
+            currentQuiz.qIndex++;
+            if (currentQuiz.qIndex < currentQuiz.dayObj.quiz.length) {
+                renderQuizQuestion();
+            } else {
+                finishQuiz();
+            }
+        };
+
+        async function finishQuiz() {
+            document.getElementById('quiz-question-box').classList.add('hidden');
+            const resBox = document.getElementById('quiz-result-box');
+            resBox.classList.remove('hidden');
+
+            const total = currentQuiz.dayObj.quiz.length;
+            const score = currentQuiz.score;
+            const passed = score >= 8;
+            const dayNum = currentQuiz.dayObj.day;
+
+            const iconWrap = document.getElementById('result-icon-wrapper');
+            const titleEl = document.getElementById('result-title');
+            const subEl = document.getElementById('result-subtitle');
+            const scoreEl = document.getElementById('result-score');
+            const actionsEl = document.getElementById('result-actions');
+
+            scoreEl.textContent = `${score} / ${total}`;
+
+            // Record test attempt & weaknesses in student profile for Admin & Student analytics
+            if (currentStudent) {
+                if (!currentStudent.testHistory) currentStudent.testHistory = [];
+                if (!currentStudent.weaknesses) currentStudent.weaknesses = [];
+
+                currentStudent.testHistory.push({
+                    day: dayNum,
+                    topicTitle: currentQuiz.dayObj.shortTitle,
+                    score,
+                    total,
+                    passed,
+                    date: getTodayDateStr(),
+                    wrongTopics: currentQuiz.mistakes.map(m => m.question)
+                });
+
+                if (currentQuiz.mistakes.length > 0) {
+                    const wrongSummary = currentQuiz.mistakes.map(m => m.question).slice(0, 3).join("; ");
+                    currentStudent.weaknesses.push({
+                        day: dayNum,
+                        topic: currentQuiz.dayObj.shortTitle,
+                        detail: `${score}/10 ball. Xato savollar: ${wrongSummary}`,
+                        count: currentQuiz.mistakes.length
+                    });
+                }
+
+                if (passed && !(currentStudent.completedDays || []).includes(dayNum)) {
+                    currentStudent.completedDays.push(dayNum);
+                    currentStudent.lastCompletedDateStr = getTodayDateStr();
+                }
+
+                await saveCurrentStudentToCloud();
+            }
+
+            // Mistakes UI
+            const mistakesBox = document.getElementById('result-mistakes');
+            const mistakesList = document.getElementById('mistakes-list');
+            mistakesList.innerHTML = '';
+
+            if (currentQuiz.mistakes.length > 0) {
+                mistakesBox.classList.remove('hidden');
+                currentQuiz.mistakes.forEach(m => {
+                    const li = document.createElement('li');
+                    li.className = "border-b border-rose-200/60 pb-1.5 last:border-0 last:pb-0";
+                    li.innerHTML = `
+                        <div class="font-bold">${m.question}</div>
+                        <div>Sizning javob: <span class="line-through text-rose-600">${m.userAns}</span> • To'g'ri: <span class="font-bold text-emerald-700">${m.correctAns}</span></div>
+                    `;
+                    mistakesList.appendChild(li);
+                });
+            } else {
+                mistakesBox.classList.add('hidden');
+            }
+
+            if (passed) {
+                iconWrap.textContent = "🏆";
+                iconWrap.className = "w-20 h-20 rounded-full mx-auto flex items-center justify-center text-4xl bg-emerald-100 border-4 border-emerald-200";
+                titleEl.textContent = "Tabriklaymiz! Imtihondan o'tdingiz!";
+                scoreEl.className = "text-2xl font-extrabold text-emerald-600";
+
+                const hasNext = dayNum < CURRICULUM.length;
+                subEl.textContent = hasNext
+                    ? `Siz 10 tadan ${score} ta to'g'ri javob berdingiz. Reja bo'yicha ${dayNum + 1}-kun mavzusi ertaga ochiladi.`
+                    : "Ajoyib natija! Siz barcha 8 kunlik dasturni muvaffaqiyatli yakunladingiz!";
+
+                actionsEl.innerHTML = `
+                    <button onclick="exitQuiz()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl text-sm shadow-md transition">
+                        Dars sahifasiga qaytish
+                    </button>
+                    ${hasNext ? `
+                        <button onclick="simulateNextDay(); exitQuiz();" class="w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-3 rounded-xl text-xs transition">
+                            Keyingi kun (${dayNum + 1}-kun) mavzusini hozir ochish (Sinov) →
+                        </button>
+                    ` : ''}
+                `;
+            } else {
+                iconWrap.textContent = "📚";
+                iconWrap.className = "w-20 h-20 rounded-full mx-auto flex items-center justify-center text-4xl bg-rose-100 border-4 border-rose-200";
+                titleEl.textContent = "Afsuski, o'tish bali yetarli emas";
+                scoreEl.className = "text-2xl font-extrabold text-rose-600";
+                subEl.textContent = `Keyingi mavzuga o'tish uchun kamida 8 ta to'g'ri javob kerak. Siz ${score} ta topdingiz. AI Ustozdan xatolaringizni so'rab, qayta urinib ko'ring!`;
+
+                actionsEl.innerHTML = `
+                    <button onclick="startQuiz(${dayNum})" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl text-sm shadow-md transition">
+                        <i class="fa-solid fa-rotate-right mr-1.5"></i> Testni qayta topshirish
+                    </button>
+                    <button onclick="exitQuiz()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl text-xs transition">
+                        Darsga qaytish (AI Ustozdan so'rash)
+                    </button>
+                `;
+            }
+        }
+
+        window.exitQuiz = function() {
+            showScreen('dashboard');
+        };
+
+        // =========================================================================
+        // 10. ADMIN DASHBOARD LOGIC (STUDENTS LIST, PASSWORDS & WEAKNESSES)
+        // =========================================================================
+        function startAdminListener() {
+            if (!isCloudReady || !firebaseUser) return;
+            const studentsCol = collection(db, 'artifacts', appId, 'public', 'data', 'students');
+            onSnapshot(studentsCol, (snapshot) => {
+                allStudentsList = [];
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    if (data.dob) data.age = calculateExactAge(data.dob);
+                    allStudentsList.push(data);
+                });
+                // Sort newest registered first
+                allStudentsList.sort((a, b) => (b.registeredAt || '').localeCompare(a.registeredAt || ''));
+                renderAdminViews();
+            }, (error) => {
+                console.error("Admin ma'lumotlarini olishda xato:", error);
+            });
+        }
+
+        window.switchAdminTab = function(tabName) {
+            adminActiveTab = tabName;
+            const btnSt = document.getElementById('admin-tab-students');
+            const btnAn = document.getElementById('admin-tab-analytics');
+            const viewSt = document.getElementById('admin-view-students');
+            const viewAn = document.getElementById('admin-view-analytics');
+
+            if (tabName === 'students') {
+                btnSt.className = "px-4 py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white transition flex items-center gap-1.5 shrink-0";
+                btnAn.className = "px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition flex items-center gap-1.5 shrink-0";
+                viewSt.classList.remove('hidden');
+                viewAn.classList.add('hidden');
+            } else {
+                btnAn.className = "px-4 py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white transition flex items-center gap-1.5 shrink-0";
+                btnSt.className = "px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition flex items-center gap-1.5 shrink-0";
+                viewAn.classList.remove('hidden');
+                viewSt.classList.add('hidden');
+            }
+            renderAdminViews();
+        };
+
+        window.renderAdminViews = function() {
+            const queryText = (document.getElementById('admin-search-input')?.value || '').toLowerCase().trim();
+            const filtered = allStudentsList.filter(st =>
+                (st.fullName || '').toLowerCase().includes(queryText) ||
+                (st.phone || '').toLowerCase().includes(queryText)
+            );
+
+            document.getElementById('admin-stat-total').textContent = allStudentsList.length;
+            document.getElementById('admin-stat-active').textContent = allStudentsList.filter(s => s.subVerified).length;
+
+            // 1. Render Students Credentials & Info List
+            const studentsContainer = document.getElementById('admin-view-students');
+            studentsContainer.innerHTML = '';
+
+            if (filtered.length === 0) {
+                studentsContainer.innerHTML = `<div class="text-center py-10 text-sm text-slate-400">Talabalar topilmadi.</div>`;
+            } else {
+                filtered.forEach((st, idx) => {
+                    const completedCount = (st.completedDays || []).length;
+                    const card = document.createElement('div');
+                    card.className = "bg-white border border-slate-200 rounded-2xl p-4 shadow-2xs space-y-3";
+                    card.innerHTML = `
+                        <div class="flex flex-wrap items-start justify-between gap-2">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 font-extrabold flex items-center justify-center text-sm shrink-0">
+                                    ${idx + 1}
+                                </div>
+                                <div>
+                                    <h4 class="font-extrabold text-slate-900 text-sm sm:text-base">${st.fullName}</h4>
+                                    <div class="text-xs text-slate-500">${st.age} yosh (${st.dob}) • Obuna: ${st.subVerified ? '<span class="text-emerald-600 font-bold">Tasdiqlangan ✓</span>' : '<span class="text-amber-600 font-bold">Kutilmoqda</span>'}</div>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 px-3 py-1 rounded-xl">
+                                ${st.unlockedDay}-kun mavzusida (${completedCount}/${CURRICULUM.length})
+                            </span>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200/70 text-xs">
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-500"><i class="fa-solid fa-phone text-indigo-500 mr-1.5"></i>Telefon raqam:</span>
+                                <span class="font-mono font-bold text-slate-900 select-all">${formatPhoneDisplay(st.phone)}</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-500"><i class="fa-solid fa-key text-amber-500 mr-1.5"></i>Kirish paroli:</span>
+                                <span class="font-mono font-bold text-rose-600 bg-white px-2 py-0.5 rounded border border-slate-200 select-all">${st.password}</span>
+                            </div>
+                        </div>
+                    `;
+                    studentsContainer.appendChild(card);
+                });
+            }
+
+            // 2. Render Learning Progress & Weaknesses Analytics
+            const analyticsContainer = document.getElementById('admin-view-analytics');
+            analyticsContainer.innerHTML = '';
+
+            if (filtered.length === 0) {
+                analyticsContainer.innerHTML = `<div class="text-center py-10 text-sm text-slate-400">Ma'lumot topilmadi.</div>`;
+            } else {
+                filtered.forEach(st => {
+                    const completedCount = (st.completedDays || []).length;
+                    const percent = Math.round((completedCount / CURRICULUM.length) * 100);
+                    const currentLesson = CURRICULUM.find(c => c.day === st.unlockedDay) || CURRICULUM[0];
+                    const weaknesses = st.weaknesses || [];
+                    const history = st.testHistory || [];
+
+                    const weaknessHtml = weaknesses.length > 0
+                        ? weaknesses.slice(-4).reverse().map(w => `
+                            <li class="bg-rose-50 border border-rose-200/80 rounded-xl p-2.5 text-xs text-rose-900">
+                                <span class="font-bold text-rose-700">[${w.day}-kun: ${w.topic}]</span> — ${w.detail}
+                            </li>
+                        `).join('')
+                        : `<div class="text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl p-2.5">
+                            <i class="fa-solid fa-circle-check mr-1"></i> Hozircha jiddiy kamchiliklar aniqlanmagan. A'lo darajada o'zlashtirmoqda!
+                           </div>`;
+
+                    const historyBadges = history.length > 0
+                        ? history.slice(-5).map(h => `
+                            <span class="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-lg ${
+                                h.passed ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+                            }">
+                                ${h.day}-kun: ${h.score}/${h.total} ${h.passed ? '✓' : '✗'}
+                            </span>
+                        `).join('')
+                        : '<span class="text-xs text-slate-400">Hali test topshirmagan</span>';
+
+                    const card = document.createElement('div');
+                    card.className = "bg-white border border-slate-200 rounded-2xl p-4 shadow-2xs space-y-3";
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between gap-2">
+                            <div>
+                                <h4 class="font-extrabold text-slate-900 text-sm sm:text-base">${st.fullName} <span class="text-xs font-normal text-slate-500">(${formatPhoneDisplay(st.phone)})</span></h4>
+                                <p class="text-xs text-indigo-600 font-semibold mt-0.5">Hozirgi mavzu: ${st.unlockedDay}-kun — ${currentLesson.title}</p>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-sm font-extrabold text-slate-900">${percent}%</span>
+                                <div class="w-24 h-2 bg-slate-100 rounded-full overflow-hidden mt-1">
+                                    <div class="h-full bg-emerald-500 rounded-full" style="width: ${percent}%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Topshirgan test natijalari:</div>
+                            <div class="flex flex-wrap gap-1.5">${historyBadges}</div>
+                        </div>
+
+                        <div>
+                            <div class="text-[11px] font-bold uppercase tracking-wider text-rose-600 mb-1.5">
+                                <i class="fa-solid fa-triangle-exclamation mr-1"></i>Kamchiliklari va xato qilgan mavzulari:
+                            </div>
+                            <ul class="space-y-1.5">${weaknessHtml}</ul>
+                        </div>
+                    `;
+                    analyticsContainer.appendChild(card);
+                });
+            }
+        };
+
+        // =========================================================================
+        // 11. PROFILE MODAL & TOAST NOTIFICATIONS
+        // =========================================================================
+        window.openProfileModal = function() {
+            if (!currentStudent) return;
+            document.getElementById('prof-name').textContent = currentStudent.fullName;
+            document.getElementById('prof-dob').textContent = currentStudent.dob;
+            document.getElementById('prof-age').textContent = `${currentStudent.age} yosh`;
+            document.getElementById('prof-phone').textContent = formatPhoneDisplay(currentStudent.phone);
+            document.getElementById('prof-pass').textContent = currentStudent.password;
+            document.getElementById('prof-progress').textContent = `${(currentStudent.completedDays || []).length} / ${CURRICULUM.length} kun`;
+
+            const modal = document.getElementById('profile-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+
+        window.closeProfileModal = function() {
+            const modal = document.getElementById('profile-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        };
+
+        function showToast(message, type = "info") {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            let bgClass = "bg-slate-800 text-white";
+            let icon = "fa-circle-info";
+            if (type === "success") {
+                bgClass = "bg-emerald-600 text-white";
+                icon = "fa-circle-check";
+            } else if (type === "error") {
+                bgClass = "bg-rose-600 text-white";
+                icon = "fa-circle-exclamation";
+            }
+
+            toast.className = `${bgClass} px-4 py-3 rounded-2xl shadow-lg text-xs sm:text-sm font-medium flex items-center gap-2.5 transition-all duration-300`;
+            toast.innerHTML = `<i class="fa-solid ${icon} text-base"></i><span>${message}</span>`;
+
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('opacity-0', '-translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3800);
+        }
+
+        // Start App
+        window.addEventListener('DOMContentLoaded', () => {
+            initFirebaseAndSession();
+        });
+    </script>
+</body>
+</html>
