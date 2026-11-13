@@ -1291,13 +1291,15 @@
         };
 
         function renderLesson() {
+            if (!currentStudent) return; // Agar talaba tizimda bo'lmasa, xatolik bermaydi
             const lesson = CURRICULUM.find(d => d.day === currentStudent.activeDay) || CURRICULUM[0];
             const isCompleted = (currentStudent.completedDays || []).includes(lesson.day);
-
+            
             document.getElementById('lesson-day-badge').textContent = `${lesson.day}-KUN MAVZUSI`;
             document.getElementById('lesson-title').textContent = lesson.title;
             document.getElementById('lesson-desc').textContent = lesson.description;
             document.getElementById('lesson-grammar').innerHTML = lesson.grammar;
+           
 
             const statusPill = document.getElementById('lesson-status-pill');
             if (isCompleted) {
