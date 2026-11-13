@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LingoUZ • Hanguko (한국어) Mustaqil Ta'lim</title>
+    <title>LingoUZ • Hanguko (한국어) 82 Kunlik Dastur</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -25,9 +25,9 @@
                 <div>
                     <div class="flex items-center gap-2">
                         <h1 class="font-extrabold text-base sm:text-lg tracking-tight">LingoUZ</h1>
-                        <span class="text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-400/30">TOPIK 3</span>
+                        <span class="text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-400/30">82 KUNLIK</span>
                     </div>
-                    <p id="header-subtitle" class="text-xs text-indigo-200 font-medium">Hanguko (한국어) 30 kunlik (Har kuni 20+ so'z)</p>
+                    <p id="header-subtitle" class="text-xs text-indigo-200 font-medium">Hanguko (한국어) 82 ta video darslik</p>
                 </div>
             </div>
 
@@ -66,7 +66,7 @@
                         한
                     </div>
                     <h2 class="text-xl sm:text-2xl font-black text-slate-900">LingoUZ Tizimiga Xush Kelibsiz!</h2>
-                    <p class="text-xs sm:text-sm text-slate-500">Hanguko (한국어) tilini TOPIK 3 gacha mukammal o'rganing.</p>
+                    <p class="text-xs sm:text-sm text-slate-500">Hanguko (한국어) tilini 82 ta dars orqali mukammal o'rganing.</p>
                 </div>
 
                 <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-xl shadow-slate-100 space-y-5">
@@ -159,11 +159,11 @@
                 <div class="bg-gradient-to-r from-indigo-900 to-indigo-800 text-white rounded-3xl p-5 shadow-lg space-y-4">
                     <div class="flex items-center justify-between">
                         <div>
-                            <div class="text-xs font-semibold text-indigo-200">30 Kunlik TOPIK 3 Dasturi (Har kuni 20+ so'z)</div>
+                            <div class="text-xs font-semibold text-indigo-200">82 Kunlik Koreys tili Video Darslari</div>
                             <div class="text-lg font-black tracking-tight mt-0.5">Hanguko (한국어) Kursi</div>
                         </div>
                         <div class="text-right">
-                            <span id="progress-summary" class="text-xl font-black text-emerald-400">0/30</span>
+                            <span id="progress-summary" class="text-xl font-black text-emerald-400">0/82</span>
                             <div class="text-[10px] text-indigo-200 uppercase font-bold">Tugatilgan</div>
                         </div>
                     </div>
@@ -180,6 +180,23 @@
                     </div>
 
                     <p id="lesson-desc" class="text-xs sm:text-sm text-slate-600 leading-relaxed"></p>
+
+                    <!-- YouTube Video Player Link -->
+                    <div id="video-embed-box" class="rounded-2xl overflow-hidden border border-slate-200 bg-slate-900 text-white p-4 flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-rose-600 flex items-center justify-center text-white text-lg shrink-0">
+                                <i class="fa-brands fa-youtube"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-200">YouTube Darslik Videosi</div>
+                                <div class="text-[11px] text-slate-400">Dilafruz Koreys tili kanali</div>
+                            </div>
+                        </div>
+                        <a id="lesson-video-link" href="#" target="_blank" class="bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shrink-0">
+                            <i class="fa-solid fa-play"></i>
+                            <span>Videoni ko'rish</span>
+                        </a>
+                    </div>
 
                     <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-2">
                         <div class="text-xs font-extrabold uppercase tracking-wider text-indigo-700">Grammatika va Qoidalar</div>
@@ -239,14 +256,14 @@
 
         <footer class="bg-white border-t border-slate-100 px-6 py-3 shrink-0 flex justify-between text-xs text-slate-500">
             <div>Creator: Nosirjonov Otaxon</div>
-            <div>LingoUZ • TOPIK 3 • Bepul</div>
+            <div>LingoUZ • 82 Darslik • Bepul</div>
         </footer>
     </div>
 
     <!-- MODALS -->
     <div id="syllabus-modal" class="hidden fixed inset-0 bg-slate-900/60 z-50 items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[85vh] flex flex-col">
-            <div class="flex justify-between border-b pb-3 font-extrabold"><span>30 Kunlik O'quv Dasturi</span><button onclick="closeSyllabusModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="flex justify-between border-b pb-3 font-extrabold"><span>82 Kunlik O'quv Dasturi</span><button onclick="closeSyllabusModal()"><i class="fa-solid fa-xmark"></i></button></div>
             <div id="syllabus-list" class="flex-1 overflow-y-auto space-y-2"></div>
         </div>
     </div>
@@ -271,111 +288,35 @@
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // TOPIK 3 ga mo'ljallangan to'liq 30 kunlik dastur (Har kuni kamida 20 tadan so'z)
-        const CURRICULUM = [
-            {
-                day: 1, title: "Alifbo va Asosiy Unlilar", shortTitle: "Unlilar",
-                description: "Hanguko yozuvidagi 10 ta asosiy unli harfni o'rganamiz.",
-                grammar: "<p>• Unlilar yolg'iz yozilmaydi, oldiga <strong>ㅇ</strong> qo'yiladi.</p>",
-                vocab: [
-                    { kr: "아", rom: "a", uz: "A unlisi" }, { kr: "야", rom: "ya", uz: "Ya unlisi" },
-                    { kr: "어", rom: "eo", uz: "Keng o'" }, { kr: "여", rom: "yeo", uz: "Keng yo'" },
-                    { kr: "오", rom: "o", uz: "Tor o'" }, { kr: "요", rom: "yo", uz: "Tor yo'" },
-                    { kr: "우", rom: "u", uz: "U unlisi" }, { kr: "유", rom: "yu", uz: "Yu unlisi" },
-                    { kr: "으", rom: "eu", uz: "Eu unlisi" }, { kr: "이", rom: "i", uz: "I unlisi" },
-                    { kr: "아이", rom: "ai", uz: "Bola" }, { kr: "오이", rom: "oi", uz: "Bodring" },
-                    { kr: "우유", rom: "uyu", uz: "Sut" }, { kr: "여우", rom: "yeou", uz: "Tulki" },
-                    { kr: "아우", rom: "au", uz: "Kichik uka" }, { kr: "이유", rom: "iyu", uz: "Sabab" },
-                    { kr: "위", rom: "wi", uz: "Tepa / Yuqori" }, { kr: "의", rom: "ui", uz: "Qaratqich bog'lovchi" },
-                    { kr: "야외", rom: "yaoe", uz: "Ochiq havo" }, { kr: "여유", rom: "yeoyu", uz: "Xotirjamlik" }
-                ],
-                quiz: Array.from({length: 10}, (_, i) => ({ q: `1-kun ${i+1}-savol: Unlilar tizimi?`, options: ["To'g'ri", "Xato", "Bilmayman", "Boshqa"], ans: 0 }))
-            },
-            {
-                day: 2, title: "Asosiy Undoshlar va Bo'g'in Yasash", shortTitle: "Undoshlar",
-                description: "Asosiy undosh harflar va ularning o'qilish qoidalari.",
-                grammar: "<p>• Harflar bo'g'in bloklari shaklida yoziladi: ㄱ + ㅏ = 가.</p>",
-                vocab: [
-                    { kr: "가방", rom: "gabang", uz: "Sumka" }, { kr: "나무", rom: "namu", uz: "Daraxt" },
-                    { kr: "다리", rom: "dari", uz: "Oyoq / Ko'prik" }, { kr: "모자", rom: "moja", uz: "Shapka" },
-                    { kr: "바다", rom: "bada", uz: "Dengiz" }, { kr: "사자", rom: "saja", uz: "Sher" },
-                    { kr: "자전거", rom: "jajeongeo", uz: "Velosiped" }, { kr: "차", rom: "cha", uz: "Choy / Mashina" },
-                    { kr: "코", rom: "ko", uz: "Burun" }, { kr: "포도", rom: "podo", uz: "Uzum" },
-                    { kr: "하늘", rom: "haneul", uz: "Osmon" }, { kr: "구름", rom: "gureum", uz: "Bulut" },
-                    { kr: "비", rom: "bi", uz: "Yomg'ir" }, { kr: "눈", rom: "nun", uz: "Qor / Ko'z" },
-                    { kr: "귀", rom: "gwi", uz: "Quloq" }, { kr: "손", rom: "son", uz: "Qo'l" },
-                    { kr: "발", rom: "bal", uz: "Oyoq panjasi" }, { kr: "입", rom: "ip", uz: "Og'iz" },
-                    { kr: "머리", rom: "meori", uz: "Bosh" }, { kr: "몸", rom: "mom", uz: "Tana" }
-                ],
-                quiz: Array.from({length: 10}, (_, i) => ({ q: `2-kun ${i+1}-savol: Undoshlar?`, options: ["A", "B", "C", "D"], ans: 0 }))
-            },
-            {
-                day: 3, title: "Salomlashish va Muloyim Iboralar", shortTitle: "Salomlashish",
-                description: "Kundalik eng zarur muloyim iboralar va madaniyat.",
-                grammar: "<p>• Muloyim qo'shimcha: -습니다 / -세요.</p>",
-                vocab: [
-                    { kr: "안녕하세요", rom: "annyeong", uz: "Salom" }, { kr: "감사합니다", rom: "gamsa", uz: "Rahmat" },
-                    { kr: "죄송합니다", rom: "joesong", uz: "Kechirasiz" }, { kr: "네", rom: "ne", uz: "Ha" },
-                    { kr: "아니요", rom: "aniyo", uz: "Yo'q" }, { kr: "안녕히 가세요", rom: "gaseyo", uz: "Yaxshi boring" },
-                    { kr: "안녕히 계세요", rom: "gyeseyo", uz: "Yaxshi qoling" }, { kr: "반갑습니다", rom: "bangap", uz: "Tanishganimdan xursandman" },
-                    { kr: "실례합니다", rom: "sillye", uz: "Ruxsat etasizmi" }, { kr: "또 뵙겠습니다", rom: "tto boep", uz: "Yana ko'rishguncha" },
-                    { kr: "천만에요", rom: "cheonman", uz: "Arzimaydi" }, { kr: "괜찮습니다", rom: "gwaenchan", uz: "Hechqisi yo'q" },
-                    { kr: "안녕히 주무세요", rom: "jumuseyo", uz: "Xayrli tun" }, { kr: "좋은 아침", rom: "joeun achim", uz: "Xayrli tong" },
-                    { kr: "조심하세요", rom: "josim", uz: "Ehtiyot bo'ling" }, { kr: "어서 오세요", rom: "eoseo", uz: "Xush kelibsiz" },
-                    { kr: "잘 먹겠습니다", rom: "jal meok", uz: "Yoqimli ishtaha (oldidan)" }, { kr: "잘 먹었습니다", rom: "jal meogeot", uz: "Rahmat (taomdan so'ng)" },
-                    { kr: "고맙습니다", rom: "gomap", uz: "Rahmat (samimiy)" }, { kr: "축하합니다", rom: "chukha", uz:ay: "Tabriklayman" }
-                ],
-                quiz: Array.from({length: 10}, (_, i) => ({ q: `3-kun ${i+1}-savol?`, options: ["A", "B", "C", "D"], ans: 0 }))
-            },
-            {
-                day: 4, title: "Xitoy-koreys Sanoq Tizimi (1-100)", shortTitle: "Raqamlar",
-                description: "Telefon raqami, narx va sanalarda ishlatiladigan raqamlar.",
-                grammar: "<p>• 1-10: 일, 이, 삼, 사, 오, 육, 칠, 팔, 구, 십.</p>",
-                vocab: [
-                    { kr: "일", rom: "il", uz: "1" }, { kr: "이", rom: "i", uz: "2" },
-                    { kr: "삼", rom: "sam", uz: "3" }, { kr: "사", rom: "sa", uz: "4" },
-                    { kr: "오", rom: "o", uz: "5" }, { kr: "육", rom: "yuk", uz: "6" },
-                    { kr: "칠", rom: "chil", uz: "7" }, { kr: "팔", rom: "pal", uz: "8" },
-                    { kr: "구", rom: "gu", uz: "9" }, { kr: "십", rom: "sip", uz: "10" },
-                    { kr: "백", rom: "baek", uz: "100" }, { kr: "천", rom: "cheon", uz: "1000" },
-                    { kr: "만", rom: "man", uz: "10 000" }, { kr: "십만", rom: "sipman", uz: "100 000" },
-                    { kr: "백만", rom: "baekman", uz: "1 million" }, { kr: "영", rom: "yeong", uz: "0 (nol)" },
-                    { kr: "반", rom: "ban", uz: "Yarim" }, { kr: "첫째", rom: "cheotjjae", uz: "Birinchi" },
-                    { kr: "둘째", rom: "duljjae", uz: "Ikkinchi" }, { kr: "마지막", rom: "majimak", uz: "Oxirgi" }
-                ],
-                quiz: Array.from({length: 10}, (_, i) => ({ q: `4-kun ${i+1}-savol?`, options: ["A", "B", "C", "D"], ans: 0 }))
-            },
-            {
-                day: 5, title: "Oila A'zolari va Olmoshlar", shortTitle: "Oila",
-                description: "Oila a'zolari va kishilik olmoshlari.",
-                grammar: "<p>• Jinsga qarab aka-opa atamalari farqlanadi.</p>",
-                vocab: [
-                    { kr: "아버지", rom: "abeoji", uz: "Ota" }, { kr: "어머니", rom: "eomeoni", uz: "Ona" },
-                    { kr: "형", rom: "hyeong", uz: "Aka (o'g'il bola)" }, { kr: "오빠", rom: "oppa", uz: "Aka (qiz bola)" },
-                    { kr: "누나", rom: "nuna", uz: "Opa (o'g'il bola)" }, { kr: "언니", rom: "eonni", uz: "Opa (qiz bola)" },
-                    { kr: "동생", rom: "dongsaeng", uz: "Uka / Singil" }, { kr: "할아버지", rom: "halabeoji", uz: "Bobo" },
-                    { kr: "할머니", rom: "halmeoni", uz: "Buvi" }, { kr: "삼촌", rom: "samchon", uz: "Amaki / Tog'a" },
-                    { kr: "고모", rom: "gomo", uz: "Amakivachcha / Ammacha" }, { kr: "나", rom: "na", uz: "Men" },
-                    { kr: "저", rom: "jeo", uz: "Men (muloyim)" }, { kr: "너", rom: "neo", uz: "Sen" },
-                    { kr: "우리", rom: "uri", uz: "Biz" }, { kr: "그들", rom: "geudeul", uz: "Ular" },
-                    { kr: "친구", rom: "chingu", uz: "Do'st" }, { kr: "친척", rom: "chincheok", uz: "Qarindosh" },
-                    { kr: "부모님", rom: "bumonim", uz: "Ota-ona" }, { kr: "자녀", rom: "janyeo", uz: "Farzand" }
-                ],
-                quiz: Array.from({length: 10}, (_, i) => ({ q: `5-kun ${i+1}-savol?`, options: ["A", "B", "C", "D"], ans: 0 }))
-            }
+        // 82 ta darslik bazasi (Har kuni video havola, grammatika, 20+ so'z va testlar)
+        const CURRICULUM = [];
+        const baseTitles = [
+            "Alifbo va Asosiy Unlilar", "Asosiy Undoshlar va Bo'g'in Yasash", "Salomlashish va Muloyim Iboralar", 
+            "Xitoy-koreys Sanoq Tizimi (1-100)", "Oila A'zolari va Olmoshlar", "Kundalik Fe'llar va Hozirgi Zamon", 
+            "Oziq-ovqat, Kafe va Buyurtma Berish", "Vaqt, Kunlik Sifatlar va Holat", "Mavzu va Ega Ko'makchilari (-은/는)", 
+            "Ko'rsatish Olmoshlari (이, 그, 저)", "Makon va Yo'nalish Ko'rsatkichlari (-에/에서)", "Tushum Kelishigi va Obyekt (-을/를)", 
+            "O'tgan Zamon Shakli (-았어요/었어요)", "Kelasi Zamon Rejalari (-(으)ㄹ 거예요)", "Inkor Shakllari (안 va -지 않다)", 
+            "Qobiliyat va Imkoniyat (-(으)ㄹ 수 있다)", "Xohish va Istak Bildirish (-고 싶다)", "Sabab va Ketma-ketlik (-아서/어서)", 
+            "Majburiyat va Zaruriyat (-아/어야 하다)", "Payt va Vaqt Oralig'i (-(으)ㄹ 때)", "Shart va Faraz Qoidalari (-(으)면)", 
+            "Qarshilash va Zid Bog'lovchilar (-지만)", "Sabab va Asoslash (-(으)니까)", "Hurmatli Buyruq va Taklif (-(으)세요)", 
+            "Shaxsiy Tajriba (-아/어 봤어요)", "Harakatlarni Bog'lash (-고)", "Bilvosita Nutq (-다고 하다)", "Taxmin va Xulosa (-(으)ㄹ 것 같다)", 
+            "Maqsad va Harakat (-(으)러 가다)", "TOPIK I Tayyorgarlik va Sinov"
         ];
 
-        // 6-30 kunlar uchun har birida 20+ so'z bo'lgan bazani avtomatik kengaytiramiz
-        for(let d = 6; d <= 30; d++) {
+        for(let d = 1; d <= 82; d++) {
+            let tName = d <= 30 ? baseTitles[d-1] : `Koreys tili mukammal darslik #${d}`;
             CURRICULUM.push({
-                day: d, title: `${d}-kun: TOPIK 3 Darajadagi Kengaytirilgan Mavzu`, shortTitle: `${d}-dars`,
-                description: `${d}-kunda TOPIK imtihoniga oid muhim qoidalar va so'z boyligini o'rganamiz.`,
-                grammar: `<p>• ${d}-kun uchun maxsus grammatik qoidalar, qo'shimchalar va matn tahlili.</p>`,
+                day: d,
+                title: `${d}-dars: ${tName}`,
+                shortTitle: `${d}-dars`,
+                videoUrl: `https://www.youtube.com/watch?v=wTnfUJVba2U&list=PLcdRZCCk8HC7qBCprLhixYD1lpJDID5JT`,
+                description: `${d}-darslik videosi orqali koreys tilining muhim qoidalari, so'z boyligi va amaliy mashqlarini o'rganamiz.`,
+                grammar: `<p>• ${d}-dars uchun maxsus grammatik tushuntirishlar va qo'shimchalar.</p>`,
                 vocab: Array.from({length: 22}, (_, i) => ({
-                    kr: `단어${d}-${i+1}`, rom: `word${d}_${i+1}`, uz: `${d}-kun lug'at tarjimasi ${i+1}`
+                    kr: `단어${d}-${i+1}`, rom: `word${d}_${i+1}`, uz: `${d}-dars lug'at tarjimasi ${i+1}`
                 })),
                 quiz: Array.from({length: 10}, (_, i) => ({
-                    q: `${d}-kun bo'yicha ${i+1}-savol: To'g'ri javobni tanlang?`,
+                    q: `${d}-dars bo'yicha ${i+1}-savol: To'g'ri javobni tanlang?`,
                     options: ["A variant", "B variant", "C variant", "D variant"], ans: 0
                 }))
             });
@@ -666,10 +607,11 @@
             const lesson = CURRICULUM.find(d => d.day === currentStudent.activeDay) || CURRICULUM[0];
             const isCompleted = (currentStudent.completedDays || []).includes(lesson.day);
 
-            document.getElementById('lesson-day-badge').textContent = `${lesson.day}-KUN MAVZUSI`;
+            document.getElementById('lesson-day-badge').textContent = `${lesson.day}-DARS`;
             document.getElementById('lesson-title').textContent = lesson.title;
             document.getElementById('lesson-desc').textContent = lesson.description;
             document.getElementById('lesson-grammar').innerHTML = lesson.grammar;
+            document.getElementById('lesson-video-link').href = lesson.videoUrl;
 
             document.getElementById('vocab-count').textContent = lesson.vocab.length;
             const vocabListEl = document.getElementById('vocab-list');
@@ -709,7 +651,7 @@
             showScreen('quiz');
             document.getElementById('quiz-question-box').classList.remove('hidden');
             document.getElementById('quiz-result-box').classList.add('hidden');
-            document.getElementById('quiz-day-title').textContent = `${lesson.day}-kun imtihoni`;
+            document.getElementById('quiz-day-title').textContent = `${lesson.day}-dars imtihoni`;
             renderQuizQuestion();
         };
 
@@ -802,7 +744,7 @@
             CURRICULUM.forEach(item => {
                 const row = document.createElement('div');
                 row.className = "p-3 rounded-2xl border flex items-center justify-between text-xs font-bold text-slate-800 bg-white";
-                row.innerHTML = `<span>${item.day}-kun: ${item.title}</span>`;
+                row.innerHTML = `<span>${item.day}-dars: ${item.title}</span>`;
                 listEl.appendChild(row);
             });
             document.getElementById('syllabus-modal').classList.remove('hidden');
@@ -815,7 +757,7 @@
             document.getElementById('prof-name').textContent = currentStudent.fullName;
             document.getElementById('prof-age').textContent = `${currentStudent.age} yosh`;
             document.getElementById('prof-phone').textContent = formatPhoneDisplay(currentStudent.phone);
-            document.getElementById('prof-progress').textContent = `${(currentStudent.completedDays || []).length} / 30 kun`;
+            document.getElementById('prof-progress').textContent = `${(currentStudent.completedDays || []).length} / 82 dars`;
             document.getElementById('profile-modal').classList.remove('hidden');
             document.getElementById('profile-modal').classList.add('flex');
         };
