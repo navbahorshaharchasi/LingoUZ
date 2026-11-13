@@ -562,7 +562,7 @@
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, getDocs, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        const CURRICULUM = [
+       const CURRICULUM = [
             {
                 day: 1,
                 title: "Hanguko (한국어) alifbosi: Asosiy unlilar",
@@ -827,9 +827,720 @@
                     { q: "Hanguko (한국어) tilida sifatlar gapning qayerida keladi?", options: ["Gap oxirida", "Faqat gap boshida", "O'rtasida", "Ishlatilmaydi"], ans: 0 },
                     { q: "'오늘 좋아요' iborasi nimani bildiradi?", options: ["Kecha yomon edi", "Bugun yaxshi", "Ertaga boraman", "Vaqt yo'q"], ans: 1 }
                 ]
+            },
+            {
+                day: 9,
+                title: "Mavzu va ega kelishiklari: -은/는 va -이/가",
+                shortTitle: "Kelishiklar (-은/는)",
+                description: "Gapda egasini ko'rsatish va tanishtirish uchun ishlatiladigan asosiy ko'makchilarni o'rganamiz.",
+                grammar: `
+                    <p>• <strong>-은 / 는</strong>: Mavzu ko'rsatkichi (Kim yoki narsa haqida gap ketayotganini bildiradi). Undoshdan keyin <strong>-은</strong>, unlidan keyin <strong>-는</strong> qo'shiladi.</p>
+                    <p>• <strong>-이 / 가</strong>: Ega ko'rsatkichi (Aniq bir egaga urg'u berganda ishlatiladi). Undoshdan keyin <strong>-이</strong>, unlidan keyin <strong>-가</strong>.</p>
+                `,
+                vocab: [
+                    { kr: "저", rom: "jeo", uz: "Men (muloyim)" },
+                    { kr: "학생", rom: "haksaeng", uz: "Talaba" },
+                    { kr: "선생님", rom: "seonsaengnim", uz: "O'qituvchi" },
+                    { kr: "회사원", rom: "hoesawon", uz: "Ofis xodimi" },
+                    { kr: "의사", rom: "uisa", uz: "Shifokor" },
+                    { kr: "친구", rom: "chingu", uz: "Do'st" },
+                    { kr: "국적", rom: "gukjeok", uz: "Fuqarolik / Millat" },
+                    { kr: "사람", rom: "saram", uz: "Inson / Odam" }
+                ],
+                quiz: [
+                    { q: "Undosh bilan tugagan otga mavzu ko'rsatkichi sifatida nima qo'shiladi?", options: ["는", "은", "가", "이"], ans: 1 },
+                    { q: "'학생' so'ziga mavzu qo'shilsa qanday bo'ladi?", options: ["학생은", "학생는", "학생이", "학생가"], ans: 0 },
+                    { q: "'O'qituvchi' Hanguko (한국어) tilida nima?", options: ["학생", "선생님", "의사", "회사원"], ans: 1 },
+                    { q: "Unli bilan tugagan otga ega ko'rsatkichi sifatida nima qo'shiladi?", options: ["은", "는", "이", "가"], ans: 3 },
+                    { q: "'Shifokor' so'zining tarjimasi qaysi?", options: ["회사원", "의사", "학생", "친구"], ans: 1 },
+                    { q: "'저' so'zining ma'nosi nima?", options: ["Sen", "Men (muloyim)", "U", "Biz"], ans: 1 },
+                    { q: "'Do'st' Hanguko (한국어) tilida qanday?", options: ["친구", "사람", "국적", "선생님"], ans: 0 },
+                    { q: "'-은 / 는' qanday vazifani bajaradi?", options: ["Mavzu ko'rsatkichi", "O'tgan zamon", "Ko'plik", "So'roq"], ans: 0 },
+                    { q: "'회사원' nimani anglatadi?", options: ["Shifokor", "Ofis xodimi", "Talaba", "O'qituvchi"], ans: 1 },
+                    { q: "'Inson / Odam' so'zi qaysi?", options: ["사람", "친구", "저", "국적"], ans: 0 }
+                ]
+            },
+            {
+                day: 10,
+                title: "Tegishlilik va 'Bu, o'sha, u' olmoshlari (이, 그, 저)",
+                shortTitle: "Ko'rsatish olmoshlari",
+                description: "Atrofdagi narsalarni ko'rsatish uchun ishlatiladigan 이 (bu), 그 (o'sha), 저 (ana u) so'zlarini o'rganamiz.",
+                grammar: `
+                    <p>• <strong>이</strong>: O'zimizga yaqin turgan narsa (Bu).</p>
+                    <p>• <strong>그</strong>: Suhbatdoshga yaqin yoki oldin tilga olingan narsa (O'sha).</p>
+                    <p>• <strong>저</strong>: Ikkalamizdan ham uzoqda turgan narsa (Ana u).</p>
+                    <p>• Bu so'zlar ortidan <strong>것 (geot - narsa)</strong> kelib, <strong>이것, 그것, 저것</strong> (bu, o'sha, u narsa) bo'lib keladi.</p>
+                `,
+                vocab: [
+                    { kr: "이것", rom: "igeot", uz: "Bu narsa" },
+                    { kr: "그것", rom: "geugeot", uz: "O'sha narsa" },
+                    { kr: "저것", rom: "jeogeot", uz: "U narsa" },
+                    { kr: "책", rom: "chaek", uz: "Kitob" },
+                    { kr: "공책", rom: "gongchaek", uz: "Daftar" },
+                    { kr: "연필", rom: "yeonpil", uz: "Qalam" },
+                    { kr: "볼펜", rom: "bolpen", uz: "Sharikli ruchka" },
+                    { kr: "지갑", rom: "jigap", uz: "Hamyon" }
+                ],
+                quiz: [
+                    { q: "O'zimizga yaqin turgan narsani ko'rsatish uchun nima ishlatiladi?", options: ["이", "그", "저", "누구"], ans: 0 },
+                    { q: "'Kitob' Hanguko (한국어) tilida qanday?", options: ["연필", "책", "공책", "지갑"], ans: 1 },
+                    { q: "'이것' so'zining ma'nosi nima?", options: ["U narsa", "O'sha narsa", "Bu narsa", "Qayer"], ans: 2 },
+                    { q: "Suhbatdoshga yaqin narsani ko'rsatishda qaysi ishlatiladi?", options: ["이", "그", "저", "어디"], ans: 1 },
+                    { q: "'Qalam' so'zi qaysi?", options: ["연필", "볼펜", "책", "지갑"], ans: 0 },
+                    { q: "'Daftar' Hanguko (한국어) tilida nima?", options: ["공책", "책", "연필", "이것"], ans: 0 },
+                    { q: "'저것' nimani anglatadi?", options: ["Bu narsa", "O'sha narsa", "U narsa (uzoqdagi)", "Hech qaysi"], ans: 2 },
+                    { q: "'Hamyon' so'zi qaysi?", options: ["지갑", "볼펜", "공책", "책"], ans: 0 },
+                    { q: "이, 그, 저 so'zlaridan keyin 'narsa' ma'nosida nima qo'shiladi?", options: ["것", "사람", "나라", "시간"], ans: 0 },
+                    { q: "'볼펜' qaysi o'quv quroli?", options: ["Qalam", "Daftar", "Sharikli ruchka", "Kitob"], ans: 2 }
+                ]
+            },
+            {
+                day: 11,
+                title: "Makon ko'rsatkichlari: -에 va -에서",
+                shortTitle: "Joy kelishiklari",
+                description: "Joylashuv va harakat sodir bo'ladigan o'rinlarni bildirish uchun -에 va -에서 qo'shimchalarini o'rganamiz.",
+                grammar: `
+                    <p>• <strong>-에</strong>: Borish, kelish, turish joyini bildiradi (Masalan: maktabga bormoq).</p>
+                    <p>• <strong>-에서</strong>: Harakat sodir bo'ladigan joyni bildiradi (Masalan: restoran ovqatlanmoq / kutubxonada o'qimoq).</p>
+                `,
+                vocab: [
+                    { kr: "집", rom: "jip", uz: "Uy" },
+                    { kr: "학교", rom: "hakgyo", uz: "Maktab" },
+                    { kr: "회사", rom: "hoesa", uz: "Firma / Ishxona" },
+                    { kr: "식당", rom: "sikdang", uz: "Restor / Oshxona" },
+                    { kr: "도서관", rom: "doseogwan", uz: "Kutubxona" },
+                    { kr: "병원", rom: "byeongwon", uz: "Shifoxona" },
+                    { kr: "시장", rom: "sijang", uz: "Bozor" },
+                    { kr: "은행", rom: "eunhaeng", uz: "Bank" }
+                ],
+                quiz: [
+                    { q: "Turg'un turish yoki borish yo'nalishini bildirish uchun nima qo'shiladi?", options: ["에서", "에", "과", "와"], ans: 1 },
+                    { q: "'Maktab' Hanguko (한국어) tilida nima?", options: ["병원", "학교", "식당", "은행"], ans: 1 },
+                    { q: "Kutubxonada dars qilmoq deganda qaysi joy qo'shimchasi ishlatiladi?", options: ["에", "에서", "은", "가"], ans: 1 },
+                    { q: "'Uy' so'zining tarjimasi qaysi?", options: ["집", "시장", "회사", "식당"], ans: 0 },
+                    { q: "'Shifoxona' Hanguko (한국어) tilida nima?", options: ["도서관", "병원", "은행", "학교"], ans: 1 },
+                    { q: "'Bank' so'zi qaysi?", options: ["시장", "은행", "회사", "집"], ans: 1 },
+                    { q: "'Restor / Oshxona' so'zi qaysi?", options: ["식당", "병원", "도서관", "학교"], ans: 0 },
+                    { q: "Harakat sodir bo'ladigan joyni bildiruvchi qo'shimcha?", options: ["에", "에서", "도", "만"], ans: 1 },
+                    { q: "'Bozor' Hanguko (한국어) tilida nima?", options: ["시장", "은행", "집", "회사"], ans: 0 },
+                    { q: "'Firma / Ishxona' so'zi qaysi?", options: ["회사", "학교", "식당", "도서관"], ans: 0 }
+                ]
+            },
+            {
+                day: 12,
+                title: "Obyekt kelishigi: -을 / 를",
+                shortTitle: "Obyekt (-을/를)",
+                description: "Fe'l bajarilayotgan ob'ektni ko'rsatib beruvchi -을 (undoshdan keyin) va -를 (unlidan keyin) qo'shimchalarini o'rganamiz.",
+                grammar: `
+                    <p>• <strong>-을 / 를</strong>: Kimni yoki nimani degan savolga javob beruvchi tushum kelishigi.</p>
+                    <p>• Masalan: <strong>사과를 먹어요</strong> (Olmani yeyman), <strong>책을 읽어요</strong> (Kitobni o'qiyman).</p>
+                `,
+                vocab: [
+                    { kr: "한국어", rom: "hangugo", uz: "Koreys tili" },
+                    { kr: "영화", rom: "yeonghwa", uz: "Kino / Film" },
+                    { kr: "음악", rom: "eumak", uz: "Musiqa" },
+                    { kr: "운동", rom: "undong", uz: "Sport / Mashq" },
+                    { kr: "친구", rom: "chingu", uz: "Do'st" },
+                    { kr: "편at", rom: "pyonji", uz: "Xat" },
+                    { kr: "한국", rom: "hanguk", uz: "Koreya" },
+                    { kr: "노래", rom: "norae", uz: "Qo'shiq" }
+                ],
+                quiz: [
+                    { q: "Undosh bilan tugagan otga tushum kelishigi sifatida nima qo'shiladi?", options: ["를", "을", "에", "에서"], ans: 1 },
+                    { q: "'Kino' Hanguko (한국어) tilida nima?", options: ["영화", "음악", "노래", "운동"], ans: 0 },
+                    { q: "'Musiqa' so'zining tarjimasi qaysi?", options: ["영화", "음악", "노래", "한국어"], ans: 1 },
+                    { q: "Unli bilan tugagan otga tushum kelishigi sifatida nima qo'shiladi?", options: ["을", "를", "에", "에서"], ans: 1 },
+                    { q: "'Qo'shiq' so'zi qaysi?", options: ["노래", "음악", "영화", "운동"], ans: 0 },
+                    { q: "'Sport / Mashq' so'zi qaysi?", options: ["운동", "한국어", "친구", "영화"], ans: 0 },
+                    { q: "'-을 / 를' qanday kelishik?", options: ["Tushum (obyekt) kelishigi", "O'rin kelishigi", "Qaratqich kelishigi", "Chiqish kelishigi"], ans: 0 },
+                    { q: "'Koreys tili' Hanguko (한국어) tilida nima?", options: ["한국", "한국어", "영어", "중국어"], ans: 1 },
+                    { q: "'Xat' so'zi qaysi?", options: ["편지", "책", "공책", "연필"], ans: 0 },
+                    { q: "영화__ 봐요 (Kino ko'rmoq) bo'sh joyga nima qo'yiladi?", options: ["를", "을", "에", "에서"], ans: 0 }
+                ]
+            },
+            {
+                day: 13,
+                title: "O'tgan zamon (-았어요 / -었어요)",
+                shortTitle: "O'tgan zamon",
+                description: "Sodir bo'lib o'tgan ish-harakatlarni ifodalash uchun o'tgan zamon qo'shimchalarini o'rganamiz.",
+                grammar: `
+                    <p>• Unlisi ㅏ yoki ㅗ bo'lgan fe'llarga <strong>-았어요</strong> qo'shiladi: <strong>가다 → 갔어요</strong> (bordim).</p>
+                    <p>• Boshqa unlili fe'llarga <strong>-었어요</strong> qo'shiladi: <strong>먹다 → 먹었어요</strong> (yedim).</p>
+                    <p>• <strong>하다</strong> fe'llari esa <strong>했어요</strong> bo'lib o'zgaradi: <strong>공부하다 → 공부했어요</strong> (o'qidim).</p>
+                `,
+                vocab: [
+                    { kr: "어제", rom: "eoje", uz: "Kecha" },
+                    { kr: "작년", rom: "jaknyeon", uz: "O'tgan yil" },
+                    { kr: "지난v", rom: "jinan", uz: "O'tgan (hafta/oy)" },
+                    { kr: "만나다", rom: "mannada", uz: "Uchrashmoq" },
+                    { kr: "읽다", rom: "ikda", uz: "O'qimoq (kitob)" },
+                    { kr: "듣다", rom: "deutda", uz: "Eshitmoq" },
+                    { kr: "쉬다", rom: "swida", uz: "Dam olmoq" },
+                    { kr: "일하다", rom: "ilhada", uz: "Ishlamoq" }
+                ],
+                quiz: [
+                    { q: "Unlisi 'ㅏ' bilan tugagan fe'lga o'tgan zamonda nima qo'shiladi?", options: ["었어요", "았어요", "했어요", "에요"], ans: 1 },
+                    { q: "'가다' (bormoq) fe'lining o'tgan zamon shakli qaysi?", options: ["가어요", "갔어요", "오았어요", "갔음"], ans: 1 },
+                    { q: "'하다' bilan tugagan fe'llar o'tgan zamonda qanday bo'ladi?", options: ["했어요", "았어요", "었어요", "에요"], ans: 0 },
+                    { q: "'Kecha' Hanguko (한국어) tilida nima?", options: ["오늘", "내일", "어제", "모레"], ans: 2 },
+                    { q: "'Uchrashmoq' fe'li qaysi?", options: ["만나다", "읽다", "듣다", "쉬다"], ans: 0 },
+                    { q: "'O'qimoq (kitob)' fe'li qaysi?", options: ["읽다", "듣다", "쉬다", "일하다"], ans: 0 },
+                    { q: "'Dam olmoq' fe'li qaysi?", options: ["쉬다", "만나다", "일하다", "듣다"], ans: 0 },
+                    { q: "'일하다' fe'lining o'tgan zamoni qanday?", options: ["일했어요", "일았어요", "일었어요", "일함"], ans: 0 },
+                    { q: "'Eshitmoq' fe'li qaysi?", options: ["듣다", "읽다", "쉬다", "가다"], ans: 0 },
+                    { q: "'O'tgan yil' so'zi qaysi?", options: ["작년", "올해", "내년", "어제"], ans: 0 }
+                ]
+            },
+            {
+                day: 14,
+                title: "Kelasi zamon: -(으)ㄹ 거예요",
+                shortTitle: "Kelasi zamon",
+                description: "Rejalashtirilgan yoki kelajakda bajariladigan ishlarni ifodalash uchun kelasi zamon shaklini o'rganamiz.",
+                grammar: `
+                    <p>• Fe'l asosi undosh bilan tugasa: <strong>-을 거예요</strong> (먹다 → 먹을 거예요 - yeyman/eymiz).</p>
+                    <p>• Fe'l asosi unli bilan tugasa: <strong>-ㄹ 거예요</strong> (가다 → 갈 거예요 - boraman).</p>
+                `,
+                vocab: [
+                    { kr: "내일", rom: "naeil", uz: "Ertaga" },
+                    { kr: "다음", rom: "daeum", uz: "Keyingi" },
+                    { kr: "주말", rom: "jumal", uz: "Dam olish kuni (weekend)" },
+                    { kr: "여행", rom: "yeohaeng", uz: "Sayohat" },
+                    { kr: "준비하다", rom: "junbihada", uz: "Tayyorlanmoq" },
+                    { kr: "살다", rom: "salda", uz: "Yashamoq" },
+                    { kr: "놀다", rom: "nolda", uz: "O'ynamoq / Dam olmoq" },
+                    { kr: "떠나다", rom: "tteonada", uz: "Jo'nab ketmoq" }
+                ],
+                quiz: [
+                    { q: "Fe'l asosi unli bilan tugaganda kelasi zamon uchun nima qo'shiladi?", options: ["을 거예요", "ㄹ 거예요", "았어요", "어요"], ans: 1 },
+                    { q: "'가다' fe'lining kelasi zamon shakli qaysi?", options: ["갈 거예요", "가을 거예요", "갔어요", "가요"], ans: 0 },
+                    { q: "Fe'l asosi undosh bilan tugaganda kelasi zamon uchun nima qo'shiladi?", options: ["ㄹ 거예요", "을 거예요", "었어요", "아요"], ans: 1 },
+                    { q: "'Ertaga' Hanguko (한국어) tilida nima?", options: ["어제", "오늘", "내일", "모레"], ans: 2 },
+                    { q: "'Sayohat' so'zi qaysi?", options: ["여행", "주말", "다음", "내일"], ans: 0 },
+                    { q: "'Dam olish kuni' so'zi qaysi?", options: ["주말", "여행", "작년", "어제"], ans: 0 },
+                    { q: "'Tayyorlanmoq' fe'li qaysi?", options: ["준비하다", "살다", "놀다", "떠나다"], ans: 0 },
+                    { q: "'Yashamoq' fe'li qaysi?", options: ["살다", "놀다", "가다", "오다"], ans: 0 },
+                    { q: "'먹다' fe'lining kelasi zamon shakli qaysi?", options: ["먹을 거예요", "먹ㄹ 거예요", "먹었어요", "먹어요"], ans: 0 },
+                    { q: "'Keyingi' so'zi qaysi?", options: ["다음", "주말", "여행", "내일"], ans: 0 }
+                ]
+            },
+            {
+                day: 15,
+                title: "Inkor shakllari: 안 va -지 않다",
+                shortTitle: "Inkor (-an / -ji antah)",
+                description: "Biror ishni qilmaslik yoki xususiyatga ega emaslikni bildirish uchun inkor yasashni o'rganamiz.",
+                grammar: `
+                    <p>• <strong>안</strong> so'zi fe'ldan oldin kelib inkor hosil qiladi: <strong>안 먹어요</strong> (yemayman).</p>
+                    <p>• <strong>-지 않다</strong> esa fe'l asosiga qo'shiladi: <strong>먹지 않아요</strong> (yemayapman / yemayman).</p>
+                `,
+                vocab: [
+                    { kr: "맵다", rom: "maepda", uz: "Achchiq" },
+                    { kr: "달다", rom: "dalda", uz: "Shirin" },
+                    { kr: "짜다", rom: "jjada", uz: "Sho'r" },
+                    { kr: "맛없다", rom: "maseopda", uz: "Mazasiz" },
+                    { kr: "바쁘다", rom: "bappeuda", uz: "Band bo'lmoq" },
+                    { kr: "Aftidan", rom: "shimsimhada", uz: "Zerikarli" },
+                    { kr: "재미있다", rom: "jaemiitda", uz: "Qiziqarli" },
+                    { kr: "춥다", rom: "chupda", uz: "Sovuq" }
+                ],
+                quiz: [
+                    { q: "Inkor yasash uchun fe'ldan oldin nima qo'yiladi?", options: ["안", "못", "더", "아주"], ans: 0 },
+                    { q: "'Achchiq' so'zi qaysi?", options: ["맵다", "달다", "짜다", "춥다"], ans: 0 },
+                    { q: "'Shirin' so'zi qaysi?", options: ["달다", "맵다", "짜다", "맛없다"], ans: 0 },
+                    { q: "'Sho'r' so'zi qaysi?", options: ["짜다", "달다", "맵다", "춥다"], ans: 0 },
+                    { q: "'Band bo'lmoq' so'zi qaysi?", options: ["바쁘다", "춥다", "재미있다", "맛없다"], ans: 0 },
+                    { q: "'Qiziqarli' so'zi qaysi?", options: ["재미있다", "심심하다", "맵다", "달다"], ans: 0 },
+                    { q: "'Sovuq' so'zi qaysi?", options: ["춥다", "덥다", "따뜻하다", "시원하다"], ans: 0 },
+                    { q: "'안 가요' iborasi nimani anglatadi?", options: ["Boraman",": Bormayman", "Bordim", "Borish kerak"], ans: 1 },
+                    { q: "'Mazasiz' so'zi qaysi?", options: ["맛없다", "맛있어요", "달다", "짜다"], ans: 0 },
+                    { q: "Fe'l asosiga qo'shilib inkor yasovchi qo'shimcha qaysi?", options: ["-지 않다", "-고 싶다", "-ㄹ 수 있다", "-아서"], ans: 0 }
+                ]
+            },
+            {
+                day: 16,
+                title: "Qobiliyat va imkoniyat: -(으)ㄹ 수 있다/없다",
+                shortTitle: "Qobiliyat (-l su itda)",
+                description: "Biror ishni qila olish yoki qila olmaslik qobiliyatini ifodalash uchun ishlatiladigan grammatikani o'rganamiz.",
+                grammar: `
+                    <p>• Fe'l asosi undosh bilan tugasa: <strong>-을 수 있다</strong> (qila olmoq).</p>
+                    <p>• Fe'l asosi unli bilan tugasa: <strong>-ㄹ 수 있다</strong> (qila olmoq).</p>
+                    <p>• Qila olmaslik uchun: <strong>-을 수 없다</strong> yoki <strong>못 + fe'l</strong> ishlatiladi.</p>
+                `,
+                vocab: [
+                    { kr: "수영하다", rom: "suyeonghada", uz: "Suzmoq" },
+                    { kr: "운전하다", rom: "unjeonhada", uz: "Mashina haydamoq" },
+                    { kr: "요리하다", rom: "yorihada", uz: "Ovqat pishirmoq" },
+                    { kr: "노래하다", rom: "noraehada", uz: "Qo'shiq aytmoq" },
+                    { kr: "축구하다", rom: "chukguhada", uz: "Futbol o'ynamoq" },
+                    { kr: "타 a", rom: "tada", uz: "Minmoq" },
+                    { kr: "매다", rom: "maeda", uz: "Bog'lamoq / taqmoq" },
+                    { kr: "배우다", rom: "baeuda", uz: "O'rganmoq" }
+                ],
+                quiz: [
+                    { q: "Biror ishni qila olishni bildirish uchun nima qo'shiladi?", options: ["(으)ㄹ 수 있다", "(으)면", "고 싶다", "아서"], ans: 0 },
+                    { q: "'Suzmoq' fe'li qaysi?", options: ["수영하다", "운전하다", "요리하다", "노래하다"], ans: 0 },
+                    { q: "'Mashina haydamoq' fe'li qaysi?", options: ["운전하다", "수영하다", "축구하다", "요리하다"], ans: 0 },
+                    { q: "'Ovqat pishirmoq' fe'li qaysi?", options: ["요리하다", "수영하다", "운전하다", "배우다"], ans: 0 },
+                    { q: "Qila olmaslikni bildirish uchun yana nima ishlatiladi?", options: ["못", "안", "더", "아주"], ans: 0 },
+                    { q: "'Minmoq' fe'li qaysi?", options: ["타다", "배우다", "노래하다", "수영하다"], ans: 0 },
+                    { q: "'O'rganmoq' fe'li qaysi?", options: ["배우다", "타다", "요리하다", "운전하다"], ans: 0 },
+                    { q: "'가다' (bormoq) fe'li 'bora olaman' bo'lishi uchun nima bo'ladi?", options: ["갈 수 있어요", "가을 수 있어요", "갔어요", "가요"], ans: 0 },
+                    { q: "'Futbol o'ynamoq' fe'li qaysi?", options: ["축구하다", "수영하다", "운전하다", "요리하다"], ans: 0 },
+                    { q: "'-을 수 없다' nimani bildiradi?", ..., options: ["Qila olmaslikni", "Qila olishni", "Xohishni", "Sababni"], ans: 0 }
+                ]
+            },
+            {
+                day: 17,
+                title: "Xohish va istak: -고 싶다",
+                shortTitle: "Xohish (-go shipda)",
+                description: "Biror ishni qilishga bo'lgan xohish va istakni bildirish uchun ishlatiladigan -고 싶다 grammatikasini o'rganamiz.",
+                grammar: `
+                    <p>• Fe'l asosiga qo'shiladi: <strong>-고 싶어요</strong> (qilmoqchiman / qilgim kelyapti).</p>
+                    <p>• Masalan: <strong>한국에 가고 싶어요</strong> (Koreyaga bormoqchiman).</p>
+                `,
+                vocab: [
+                    { kr: "만나고 싶어요", rom: "mannago sipeoyo", uz:irg: "Uchrashgim kelyapti" },
+                    { kr: "먹고 싶어요", rom: "meokgo sipeoyo", uz: "Yegim kelyapti" },
+                    { kr: "쉬고 싶어요", rom: "swigo sipeoyo", uz: "Dam olgim kelyapti" },
+                    { kr: "살고 싶어요", rom: "salgo sipeoyo", uz: "Yashagim kelyapti" },
+                    { kr: "보고 싶어요", rom: "bogo sipeoyo", uz: "Ko'rgim kelyapti / Sog'indim" },
+                    { kr: "사고 싶어요", rom: "sago sipeoyo", uz: "Sotib olgim kelyapti" },
+                    { kr: "읽고 싶어요", rom: "ilkgo sipeoyo", uz: "O'qigim kelyapti" },
+                    { kr: "가고 싶어요", rom: "gago sipeoyo", uz: "Borgim kelyapti" }
+                ],
+                quiz: [
+                    { q: "Xohish va istakni bildirish uchun fe'lga nima qo'shiladi?", options: ["-고 싶다", "-(으)ㄹ 수 있다", "-아서", "-고"], ans: 0 },
+                    { q: "'Borgim kelyapti' Hanguko (한국어) tilida nima?", options: ["가고 싶어요", "먹고 싶어요", "보고 싶어요", "쉬고 싶어요"], ans: 0 },
+                    { q: "'보고 싶어요' nimani anglatadi?", options: ["Ko'rgim kelyapti / Sog'indim", "Eshitgim kelyapti", "O'qigim kelyapti", "Borgim kelyapti"], ans: 0 },
+                    { q: "'Yegim kelyapti' so'zi qaysi?", options: ["먹고 싶어요", "마고 싶어요", "사고 싶어요", "쉬고 싶어요"], ans: 0 },
+                    { q: "'Dam olgim kelyapti' so'zi qaysi?", options: ["쉬고 싶어요", "살고 싶어요", "가고 싶어요", "읽고 싶어요"], ans: 0 },
+                    { q: "'Sotib olgim kelyapti' so'zi qaysi?", options: ["사고 싶어요", "먹고 싶어요", "보고 싶어요", "가고 싶어요"], ans: 0 },
+                    { q: "'-고 싶어요' kimga nisbatan ko'proq 1-shaxsda ishlatiladi?", options: ["O'zimga (men)", "Suhbatdoshga (sen)", "Uchinchi shaxsga", "Hamma shaxsga bir xil"], ans: 0 },
+                    { q: "'읽고 싶어요' nimani bildiradi?", options: ["O'qigim kelyapti", "Yozgim kelyapti", "Eshitgim kelyapti", "Ko'rgim kelyapti"], ans: 0 },
+                    { q: "'Uchrashgim kelyapti' so'zi qaysi?", options: ["만나고 싶어요", "먹고 싶어요", "쉬고 싶어요", "살고 싶어요"], ans: 0 },
+                    { q: "Fe'l asosiga -고 싶다 qo'shilganda u qaysi turkumdagi so'zga aylanadi?", options: ["Sifatga", "Fe'lga", "Otlarga", "Ravishga"], ans: 0 }
+                ]
+            },
+            {
+                day: 18,
+                title: "Sabab va ketma-ketlik: -아서 / -어서",
+                shortTitle: "Sabab (-aseo)",
+                description: "Biror ishning sababini yoki ketma-ket sodir bo'lishini bildirish uchun -아서/-어서 qo'shimchasini o'rganamiz.",
+                grammar: `
+                    <p>• Unlisi ㅏ, ㅗ bo'lgan fe'l/sifatga <strong>-아서</strong> qo'shiladi.</p>
+                    <p>• Boshqa unlilarga <strong>-어서</strong>, 하다 fe'liga esa <strong>해서</strong> qo'shiladi.</p>
+                    <p>• Masalan: <strong>배가 고파서 밥을 먹어요</strong> (Qornim ochgani uchun ovqat yeyman).</p>
+                `,
+                vocab: [
+                    { kr: "배고프다", rom: "baegopeuda", uz: "Qorni ochmoq" },
+                    { kr: "목이 마르다", rom: "mogi mareuda", uz: "Chanqamoq" },
+                    { kr: "피곤하다", rom: "pigonhada", uz: "Charchamoq" },
+                    { kr: "바쁘다", rom: "bappeuda", uz: "Band bo'lmoq" },
+                    { kr: "아프다", rom: "apeuda", uz: "Og'rimoq / Kasal bo'lmoq" },
+                    { kr: "재밌다", rom: "jaemitda", uz: "Qiziqarli bo'lmoq" },
+                    { kr: "날씨", rom: "nalssi", uz: "Ob-havo" },
+                    { kr: "좋ti", rom: "jota", uz: "Yaxshi bo'lmoq" }
+                ],
+                quiz: [
+                    { q: "Sabab va ketma-ketlikni bildirish uchun nima qo'shiladi?", options: ["-아서 / -어서", "-고 싶다", "-(으)ㄹ 수 있다", "-지 않다"], ans: 0 },
+                    { q: "'Qorni ochmoq' so'zi qaysi?", options: ["배고프다", "피곤하다", "아프다", "바쁘다"], ans: 0 },
+                    { q: "'Charchamoq' so'zi qaysi?", options: ["피곤하다", "배고프다", "목이 마르다", "아프다"], ans: 0 },
+                    { q: "'Kasal bo'lmoq / og'rimoq' so'zi qaysi?", options: ["아프다", "바쁘다", "피곤하다", "배고프다"], ans: 0 },
+                    { q: "'Ob-havo' so'zi qaysi?", options: ["날씨", "시간", "국적", "친구"], ans: 0 },
+                    { q: "'Chanqamoq' so'zi qaysi?", options: ["목이 마르다", "배고프다", "피곤하다", "아프다"], ans: 0 },
+                    { q: "'피곤하다' fe'liga sabab qo'shimchasi qo'shilsa nima bo'ladi?", options: ["피곤해서", "피곤아서", "피곤하어서", "피곤해"], ans: 0 },
+                    { q: "Unlisi 'ㅏ' bo'lgan fe'lga nima qo'shiladi?", options: ["-아서", "-어서", "-해서", "-고"], ans: 0 },
+                    { q: "'-아서 / -어서' ning asosiy vazifalaridan biri nima?", options: ["Sababni ko'rsatish", "Inkor yasash", "O'tgan zamon", "Kelasi zamon"], ans: 0 },
+                    { q: "'바쁘다' fe'lining sabab shakli qanday?", options: ["바빠서", "바쁘어서", "바뿌어서", "바쁘서"], ans: 0 }
+                ]
+            },
+            {
+                day: 19,
+                title: "Maslahat va majburiyat: -아/어야 하다",
+                shortTitle: "Majburiyat (-oya hada)",
+                description: "Biror ishni albatta bajarish kerakligini yoki majburiyatni bildirish uchun -아/어야 하다 grammatikasini o'rganamiz.",
+                grammar: `
+                    <p>• Fe'l unlisiga qarab <strong>-아야 하다</strong> yoki <strong>-어야 하다</strong> qo'shiladi.</p>
+                    <p>• Masalan: <strong>공udan(공부)해야 해요</strong> (O'qishim kerak).</p>
+                `,
+                vocab: [
+                    { kr: "숙제하다", rom: "sukjehada", uz: "Uy vazifasini qilmoq" },
+                    { kr: "청소하다", rom: "cheongsohada", uz: "Tozalamoq / Yig'ishtirmoq" },
+                    { kr: "요리하다", rom: "yorihada", uz: "Ovqat pishirmoq" },
+                    { kr: "일하다", rom: "ilhada", uz: "Ishlamoq" },
+                    { kr: "운동하다", rom: "undonghada", uz: "Sport bilan shug'ullanmoq" },
+                    { kr: "준비하다", rom: "junbihada", uz: "Tayyorlanmoq" },
+                    { kr: "약", rom: "yak", uz: "Dori" },
+                    { kr: "먹다", rom: "meokda", uz: "Yemoq" }
+                ],
+                quiz: [
+                    { q: "Majburiyat va zaruriyatni bildirish uchun nima qo'shiladi?", options: ["-아/어야 하다", "-고 싶다", "-ㄹ 수 있다", "-아서"], ans: 0 },
+                    { q: "'Uy vazifasini qilmoq' fe'li qaysi?", options: ["숙제하다", "청소하다", "요리하다", "일하다"], ans: 0 },
+                    { q: "'Tozalamoq / yig'ishtirmoq' fe'li qaysi?", options: ["청소하다", "숙제하다", "운동하다", "준비하다"], ans: 0 },
+                    { q: "'Dori' so'zi qaysi?", options: ["약", "밥", "물", "차"], ans: 0 },
+                    { q: "'공부하다' fe'lining 'qilishim kerak' shakli qanday?", options: ["공부해야 해요", "공부하aya 해요", "공부해서 해요", "공부하고 싶어요"], ans: 0 },
+                    { q: "'-아/어야 하다' ning ma'nosi nima?", options: ["...kerak / majbur", "...xohlayman", "...olaman", "...mumkin"], ans: 0 },
+                    { q: "Xona tozalash kerak demoqchi bo'lsak nima deymiz?", options: ["청소해야 해요", "청소하고 싶어요", "청소할 수 있어요", "청소해요"], ans: 0 },
+                    { q: "Dori ichish kerak deganda qaysi fe'l ishlatiladi?", options: ["약을 먹어야 해요", "약을 먹고 싶어요", "약을 먹어요", "약이어요"], ans: 0 },
+                    { q: "'운동하다' fe'lining majburiyat shakli qanday?", options: ["운동해야 해요", "운동아서 해요", "운동하고 싶어요", "운동할 수 있어요"], ans: 0 },
+                    { q: "Bu grammatika kundalik hayotda nimani ifodalaydi?", options: ["Zaruriy ishni", "Xohishni", "O'tmishni", "Imkoniyatni"], ans: 0 }
+                ]
+            },
+            {
+                day: 20,
+                title: "Vaqtni bildirish: -(으)ㄹ 때 (Payt / Vaqtda)",
+                shortTitle: "Vaqt payti (-l ttae)",
+                description: "Biror ish bajarilayotgan paytni yoki vaqtni ko'rsatish uchun -(으)ㄹ 때 grammatikasini o'rganamiz.",
+                grammar: `
+                    <p>• Fe'l asosi undosh bilan tugasa: <strong>-을 때</strong> (-ganda / paytida).</p>
+                    <p>• Fe'l asosi unli bilan tugasa: <strong>-ㄹ 때</strong> (-ganda / paytida).</p>
+                    <p>• Masalan: <strong>어릴 때</strong> (Bolaligimda), <strong>밥을 먹을 때</strong> (Ovqat yeyayotgan paytimda).</p>
+                `,
+                vocab: [
+                    { kr: "어릴 때", rom: "eoril ttae", uz: "Bolaligimda" },
+                    { kr: "방학 때", rom: "banghak ttae", uz: "Ta'til paytida" },
+                    { kr: "휴가 때", rom: "hyuga ttae", uz: "Mehnat ta'tilida" },
+                    { kr: "바쁠 때", rom: "bappeul ttae", uz: "Band paytimda" },
+                    { kr: "심심할 때", rom: "simsimhal ttae", uz: "Zerikarli paytda" },
+                    { kr: "피곤할 때", rom: "pigonhal ttae", uz: "Charchagan paytda" },
+                    { kr: "아플 때", rom: "apeul ttae", uz: "Kasal bo'lgan paytda" },
+                    { kr: "기쁠 때", rom: "gippeul ttae", uz: "Quvonganda" }
+                ],
+                quiz: [
+                    { q: "Biror ish bajarilayotgan paytni bildirish uchun nima qo'shiladi?", options: ["-(으)ㄹ 때", "-아서", "-고 싶다", "-아야 하다"], ans: 0 },
+                    { q: "'Bolaligimda' Hanguko (한국어) tilida nima?", options: ["어릴 때", "방학 때", "휴가 때", "바쁠 때"], ans: 0 },
+                    { q: "'Ta'til paytida' so'zi qaysi?", options: ["방학 때", "어릴 때", "휴가 때", "기쁠 때"], ans: 0 },
+                    { q: "Undosh bilan tugagan fe'lga payt ma'nosida nima qo'shiladi?", options: ["-을 때", "-ㄹ 때", "-때", "었 때"], ans: 0 },
+                    { q: "'Band paytimda' so'zi qaysi?", options: ["바쁠 때", "심심할 때", "피곤할 때", "아플 때"], ans: 0 },
+                    { q: "'Quvonganda' so'zi qaysi?", options: ["기쁠 때", "아플 때", "바쁠 때", "어릴 때"], ans: 0 },
+                    { q: "'Kasal bo'lgan paytda' so'zi qaysi?", options: ["아플 때", "피곤할 때", "방학 때", "휴가 때"], ans: 0 },
+                    { q: "Unli bilan tugagan fe'lga payt ma'nosida nima qo'shiladi?", options: ["-ㄹ 때", "-을 때", "-때", "는 때"], ans: 0 },
+                    { q: "'Mehnat ta'tilida' so'zi qaysi?", options: ["휴가 때", "방학 때", "어릴 때", "바쁠 때"], ans: 0 },
+                    { q: "Bu grammatika qanday savolga javob beradi?", options: ["Qachon?", "Kim?", "Nima?", "Qayerda?"], ans: 0 }
+                ]
+            },
+            {
+                day: 21,
+                title: "Shart va faraz: -(으)면 (Agar ...sa)",
+                shortTitle: "Shart (-eumyeon)",
+                description: "Shart qo'yish yoki biror ish bajarilsa nima bo'lishini bildirish uchun -(으)면 grammatikasini o'rganamiz.",
+                grammar: `
+                    <p>• Fe'l/sifat asosi undosh bilan tugasa: <strong>-으면</strong> (agar... sa).</p>
+                    <p>• Fe'l/sifat asosi unli bilan tugasa: <strong>-면</strong> (agar... sa).</p>
+                    <p>• Masalan: <strong>비가 오면</strong> (Agar yomg'ir yog'sa), <strong>시간이 있으면</strong> (Agar vaqtim bo'lsa).</p>
+                `,
+                vocab: [
+                    { kr: "비가 오다", rom: "biga oda", uz: "Yomg'ir yog'moq" },
+                    { kr: "날씨가 좋다", rom: "nalssiga jota", uz: "Ob-havo yaxshi bo'lmoq" },
+                    { kr: "돈이 있다", rom: "doni itda", uz: "Puli bo'lmoq" },
+                    { kr: "시간이 없다", rom: "sigani eopda", uz: "Vaqti yo'q bo'lmoq" },
+                    { kr: "피곤하다", rom: "pigonhada", uz: "Charchamoq" },
+                    { kr: "싸다", rom: "ssada", uz: "Arzon bo'lmoq" },
+                    { kr: "비싸다", rom: "bissada", uz: "Qimmat bo'lmoq" },
+                    { kr: "춥다", rom: "chupda", uz: "Sovuq bo'lmoq" }
+                ],
+                quiz: [
+                    { q: "Shart va farazni bildirish uchun fe'l/sifatga nima qo'shiladi?", options: ["-(으)면", "-(으)ㄹ 때", "-아서", "-고 싶다"], ans: 0 },
+                    { q: "Undosh bilan tugagan asosga shart ma'nosida nima qo'shiladi?", options: ["-으면", "-면", "-면요", "-을 때"], ans: 0 },
+                    { q: "'Yomg'ir yog'moq' fe'li qaysi?", options: ["비가 오다", "날씨가 좋다", "돈이 있다", "춥다"], ans: 0 },
+                    { q: "'Arzon bo'lmoq' so'zi qaysi?", options: ["싸다", "비싸다", "춥다", "좋다"], ans: 0 },
+                    { q: "'Qimmat bo'lmoq' so'zi qaysi?", options: ["비싸다", "싸다", "피곤하다", "좋다"], ans: 0 },
+                    { q: "'Puli bo'lmoq' so'zi qaysi?", options: ["돈이 있다", "시간이 없다", "비가 오다", "날씨가 좋다"], ans: 0 },
+                    { q: "Unli bilan tugagan asosga shart ma'nosida nima qo'shiladi?", options: ["-면", "-으면", "-때", "-아서"], ans: 0 },
+                    { q: "'시간이 있다' so'ziga shart qo'shilsa nima bo'ladi?", options: ["시간이 있으면", "시간이 있면", "시간이 있서", "시간이 있 때"], ans: 0 },
+                    { q: "'Vaqti yo'q bo'lmoq' so'zi qaysi?", options: ["시간이 없다", "돈이 있다", "비가 오다", "싸다"], ans: 0 },
+                    { q: "Bu grammatika o'zbek tilidagi qaysi qo'shimchaga mos keladi?", options: ["-sa / agar", "-ganda", "-kani uchun", "-dek"], ans: 0 }
+                ]
+            },
+            {
+                day: 22,
+                title: "Qarshilash va bog'liqlik: -지만 (Lekin / ...sa ham)",
+                shortTitle: "Lekin (-jiman)",
+                description: "Ikki zid fikrni yoki qarshilikni bog'lash uchun ishlatiladigan -지만 grammatikasini o'rganamiz.",
+                grammar: `
+                    <p>• Fe'l yoki sifat asosiga to'g'ridan-to'g'ri <strong>-지만</strong> qo'shiladi.</p>
+                    <p>• Masalan: <strong>날씨는 좋지만 바쁘어요(바빠요)</strong> (Ob-havo yaxshi, lekin bandman).</p>
+                `,
+                vocab: [
+                    { kr: "싸지만 맛있어요", rom: "ssajiman masisseoyo", uz: "Arzon, lekin mazali" },
+                    { kr: "작지만 예뻐요", rom: "jakjiman yeppeoyo", uz: "Kichik, lekin chiroyli" },
+                    { kr: "어렵지만 재미있어요", rom: "eoryeopjiman jaemiitda", uz: "Qiyin, lekin qiziqarli" },
+                    { kr: "멀지만 가요", rom: "meoljiman gayo", uz: "Uzoq, lekin boraman" },
+                    { kr: "바쁘지만 운동해요", rom: "bappeujiman undonghaeyo", uz: "Bandman, lekin sport qilaman" },
+                    { kr: "춥지만 괜찮아요", rom: "chupjiman gwaenchanayo", uz: "Sovuq, lekin hammasi joyida" },
+                    { kr: "크지만 무거워요", rom: "keujiman mugeowoyo", uz: "Katta, lekin og'ir" },
+                    { kr: "비싸지만 좋아요", rom: "bissajiman joayo", uz: "Qimmat, lekin yaxshi" }
+                ],
+                quiz: [
+                    { q: "Zid fikr va qarshilikni bildirish uchun nima qo'shiladi?", options: ["-지만", "-으면", "-아서", "-(으)ㄹ 때"], ans: 0 },
+                    { q: "'Qiyin, lekin qiziqarli' Hanguko (한국어) tilida nima?", options: ["어렵지만 재미있어요", "싸지만 맛있어요", "작지만 예뻐요", "멀지만 가요"], ans: 0 },
+                    { q: "'Arzon, lekin mazali' so'zi qaysi?", options: ["싸지만 맛있어요", "비싸지만 좋아요", "크지만 무거워요", "춥지만 괜찮아요"], ans: 0 },
+                    { q: "'-지만' qaysi turkumdagi so'zlarga qo'shiladi?", options: ["Fe'l va sifat asosiga", "Faqat otlarga", "Faqat ravishlarga", "Sonlarga"], ans: 0 },
+                    { q: "'Kichik, lekin chiroyli' so'zi qaysi?", options: ["작지만 예뻐요", "크지만 무거워요", "멀지만 gayo", "어렵지만 재미있어요"], ans: 0 },
+                    { q: "'Uzoq, lekin boraman' so'zi qaysi?", options: ["멀지만 가요", "싸지만 맛있어요", "작지만 예뻐요", "바쁘지만 운동해요"], ans: 0 },
+                    { q: "'Sovuq, lekin hammasi joyida' so'zi qaysi?", options: ["춥지만 괜찮아요", "비싸지만 좋아요", "크지만 무거워요", "작지만 예뻐요"], ans: 0 },
+                    { q: "Bu grammatika o'zbek tilidagi qaysi so'zga to'g'ri keladi?", options: ["Lekin / biroq / -sa ham", "Chunki", "Shuning uchun", "Agar"], ans: 0 },
+                    { q: "'Katta, lekin og'ir' so'zi qaysi?", options: ["크지만 무거워요", "싸지만 맛있어요", "어렵지만 재미있어요", "멀지만 가요"], ans: 0 },
+                    { q: "Fe'l yoki sifat asosiga -지만 qo'shilganda orqasidan boshqa qo'shimcha kelsa bo'ladimi?", options: ["Ha, bo'ladi", "Yo'q, mutlaqo mumkin emas", "Faqat o'tgan zamon", "Faqat so'roq"], ans: 0 }
+                ]
+            },
+            {
+                day: 23,
+                title: "Sabab va asoslash: -(으)니까 (...shuning uchun)",
+                shortTitle: "Sabab (-으니까)",
+                description: "Shaxsiy fikr, buyruq yoki taklif bildirganda sababni ko'rsatuvchi -(으)니까 grammatikasini o'rganamiz.",
+                grammar: `
+                    <p>• Fe'l asosi undosh bilan tugasa: <strong>-으니까</strong> (...shuning uchun / ...gani sababli).</p>
+                    <p>• Fe'l asosi unli bilan tugasa: <strong>-니까</strong>.</p>
+                    <p>• Masalan: <strong>날씨가 좋으니까 산책합시다</strong> (Ob-havo yaxshi ekan, sayr qilaylik).</p>
+                `,
+                vocab: [
+                    { kr: "바쁘니까", rom: "bappeunika", uz: "Band bo'lganim uchun" },
+                    { kr: "비싸니까", rom: "bissainika", uz: "Qimmat bo'lgani uchun" },
+                    { kr: "멀으니까", rom: "meoreunika", uz: "Uzoq bo'lgani uchun" },
+                    { kr: "재미있으니까", rom: "jaemiitkeunika", uz: "Qiziqarli bo'lgani uchun" },
+                    { kr: "시간이 없으니까", rom: "sigani eopseunika", uz: "Vaqtim yo'q bo'lgani uchun" },
+                    { kr: "배가 고프니까", rom: "baega gopeunika", uz: "Qornim ochgani uchun" },
+                    { kr: "피곤하니까", rom: "pigonhanika", uz: "Charchaganim uchun" },
+                    { kr: "더우니까", rom: "deounika", uz: "Issiq bo'lgani uchun" }
+                ],
+                quiz: [
+                    { q: "Buyruq yoki taklif gaplarda sabab bildirish uchun nima qo'shiladi?", options: ["-(으)니까", "-아서", "-지만", "-고 싶다"], ans: 0 },
+                    { q: "Undosh bilan tugagan asosga sabab ma'nosida nima qo'shiladi?", options: ["-으니까", "-니까", "-아서", "-고"], ans: 0 },
+                    { q: "'Band bo'lganim uchun' Hanguko (한국어) tilida nima?", options: ["바쁘니까", "비싸니까", "피곤하니까", "더우니까"], ans: 0 },
+                    { q: "'Qimmat bo'lgani uchun' so'zi qaysi?", options: ["비싸니까", "바쁘니까", "멀으니까", "재미있으니까"], ans: 0 },
+                    { q: "Unli bilan tugagan asosga sabab ma'nosida nima qo'shiladi?", options: ["-니까", "-으니까", "-면", "-때"], ans: 0 },
+                    { q: "'Qornim ochgani uchun' so'zi qaysi?", options: ["배가 고프니까", "피곤하니까", "더우니까", "시간이 없으니까"], ans: 0 },
+                    { q: "'Issiq bo'lgani uchun' so'zi qaysi?", options: ["더우니까", "추우니까", "바쁘니까", "비싸니까"], ans: 0 },
+                    { q: "Bu grammatika bilan odatda qanday gaplar yakunlanadi?", options: ["Taklif, buyruq, iltimos", "Faqat o'tgan zamon", "Faqat savollar", "Faqat inkorlar"], ans: 0 },
+                    { q: "'Vaqtim yo'q bo'lgani uchun' so'zi qaysi?", options: ["시간이 없으니까", "배가 고프니까", "피곤하니까", "더우니까"], ans: 0 },
+                    { q: "'-니까' va '-아서' ning farqi nimada?", options: ["-으니까 buyruq/taklif bilan keladi", "Ikkalasi mutlaqo bir xil", "-아서 buyruq bilan keladi", "Farqi yo'q"], ans: 0 }
+                ]
+            },
+            {
+                day: 24,
+                title: "Tavsiya va maslahat: -(으)세요 / -(으)ㅂ시다",
+                shortTitle: "Buyruq va taklif",
+                description: "Suhbatdoshga hurmat bilan biror ishni qilishni buyurish yoki birgalikda qilishni taklif qilishni o'rganamiz.",
+                grammar: `
+                    <p>• Hurmatli buyruq: <strong>-(으)세요</strong> (Masalan: 앉으세요 - O'tiring).</p>
+                    <p>• Birgalikdagi taklif: <strong>-(으)ㅂ시다</strong> (Masalan: 갑시다 - Ketaylik / Boring).</p>
+                `,
+                vocab: [
+                    { kr: "앉으세요", rom: "anjeuseyo", uz: "O'tiring" },
+                    { kr: "보세요", rom: "boseyo", uz: "Qarang" },
+                    { kr: "들으세요", rom: "deureuseyo", uz: "Tinglang" },
+                    { kr: "읽으세요", rom: "ilgeuseyo", uz: "O'qing" },
+                    { kr: "갑시다", rom: "gapsida", url: "Ketaylik", uz: "Ketaylik / Boraylik" },
+                    { kr: "먹읍시다", rom: "meogeupsida", uz: "Yeylik" },
+                    { kr: "갑시다", rom: "gapsida", uz: "Boraylik" },
+                    { kr: "갑시다", rom: "gapsida", uz: "Boshlaylik" }
+                ],
+                quiz: [
+                    { q: "Hurmat bilan buyruq berish uchun fe'lga nima qo'shiladi?", options: ["-(으)세요", "-(으)ㅂ시다", "-고 싶다", "-지 않다"], ans: 0 },
+                    { q: "'O'tiring' Hanguko (한국어) tilida nima?", options: ["앉으세요", "보세요", "들으세요", "읽으세요"], ans: 0 },
+                    { q: "'Qarang' so'zi qaysi?", options: ["보세요", "앉으세요", "들으세요", "읽으세요"], ans: 0 },
+                    { q: "Birgalikda ish qilishni taklif qilish uchun nima qo'shiladi?", options: ["-(으)ㅂ시다", "-(으)세요", "-아서", "-면"], ans: 0 },
+                    { q: "'Tinglang' so'zi qaysi?", options: ["들으세요", "읽으세요", "보세요", "앉으세요"], ans: 0 },
+                    { q: "'O'qing' so'zi qaysi?", options: ["읽으세요", "들으세요", "보세요", "앉으세요"], ans: 0 },
+                    { q: "'Yeylik' taklif shakli qaysi?", options: ["먹읍시다", "갑시다", "읽읍시다", "갑시다"], ans: 0 },
+                    { q: "'Boraylik' taklif shakli qaysi?", options: ["갑시다", "먹읍시다", "보세요", "앉으세요"], ans: 0 },
+                    { q: "-(으)세요 qo'shimchasi qanday ohangda ishlatiladi?", options: ["Muloyim buyruq / iltimos", "Qo'pol buyruq", "Savol", "Inkor"], ans: 0 },
+                    { q: "-(으)ㅂ시다 o'zbek tilidagi qaysi ma'noga mos keladi?", options: ["-aylik / -aylikchi", "-ingiz", "-kanman", "-sa"], ans: 0 }
+                ]
+            },
+            {
+                day: 25,
+                title: "Tajriba va ko'rgan-kechirgan: -아/어 봤어요",
+                shortTitle: "Tajriba (-abwasseo)",
+                description: "Oldin biror narsani sinab ko'rgani yoki hayotiy tajribasi borligini aytish uchun -아/어 봤어요 grammatikasini o'rganamiz.",
+                grammar: `
+                    <p>• Fe'l asosiga <strong>-아/어 봤어요</strong> qo'shiladi (qilib ko'rganman).</p>
+                    <p>• Masalan: <strong>김치를 먹어 봤어요</strong> (Kimchini yeb ko'rganman).</p>
+                `,
+                vocab: [
+                    { kr: "먹어 봤어요", rom: "meogeo bwasseo", uz: "Yeb ko'rganman" },
+                    { kr: "가 봤어요", rom: "ga bwasseo", uz: "Borganman" },
+                    { kr: "만n아 봤어요", rom: "manna bwasseo", uz: "Uchrashib ko'rganman" },
+                    { kr: "읽어 봤어요", rom: "ilgeo bwasseo", uz: "O'qib ko'rganman" },
+                    { kr: "배워 봤어요", rom: "baewo bwasseo", uz: "O'rganib ko'rganman" },
+                    { kr: "입어 봤어요", rom: "ibeo bwasseo", uz: "Kiyib ko'rganman" },
+                    { kr: "살아 봤어요", rom: "sara bwasseo", uz: "Yashab ko'rganman" },
+                    { kr: "들어 봤어요", rom: "deureo bwasseo", uz: "Eshitib ko'rganman" }
+                ],
+                quiz: [
+                    { q: "Hayotiy tajribani bildirish uchun fe'lga nima qo'shiladi?", options: ["-아/어 봤어요", "-고 싶다", "-ㄹ 수 있다", "-아서"], ans: 0 },
+                    { q: "'Borganman' Hanguko (한국어) tilida nima?", options: ["가 봤어요", "먹어 봤어요", "읽어 봤어요", "살아 봤어요"], ans: 0 },
+                    { q: "'Yeb ko'rganman' so'zi qaysi?", options: ["먹어 봤어요", "가 봤어요", "배워 봤어요", "입어 봤어요"], ans: 0 },
+                    { q: "'Kiyib ko'rganman' so'zi qaysi?", options: ["입어 봤어요", "읽어 봤어요", "살아 봤어요", "들어 봤어요"], ans: 0 },
+                    { q: "'O'qib ko'rganman' so'zi qaysi?", options: ["읽어 봤어요", "먹어 봤어요", "가 봤어요", "배워 봤어요"], ans: 0 },
+                    { q: "'O'rganib ko'rganman' so'zi qaysi?", options: ["배워 봤어요", "입어 봤어요", "살아 봤어요", "들어 봤어요"], ans: 0 },
+                    { q: "'Yashab ko'rganman' so'zi qaysi?", options: ["살아 봤어요", "가 봤어요", "먹어 봤어요", "들어 봤어요"], ans: 0 },
+                    { q: "'Eshitib ko'rganman' so'zi qaysi?", options: ["들어 봤어요", "읽어 봤어요", "입어 봤어요", "배워 봤어요"], ans: 0 },
+                    { q: "Bu grammatika o'zbek tilidagi qaysi qo'shimchaga mos keladi?", options: ["-ib ko'rganman", "-gandirman", "-yotibman", "-kanman"], ans: 0 },
+                    { q: "하다 fe'li tajriba shaklida qanday bo'ladi?", options: ["해 봤어요", "하 봤어요", "했어요", "하고 봤어요"], ans: 0 }
+                ]
+            },
+            {
+                day: 26,
+                title: "Sabab va natija: -(으)ㄴ/는 데다가 (...ustiga ustak)",
+                shortTitle: "Qo'shimcha sabab",
+                description: "Biror holat ustiga yana boshqa holat qo'shilishini bildirish uchun ishlatiladigan o'rta daraja grammatikasini o'rganamiz.",
+                grammar: `
+                    <p>• Fe'l/sifatga qo'shilib, "...stiga ustak / ...hamda" ma'nosini beradi.</p>
+                    <p>• Masalan: <strong>날씨가 춥은(추운) 데다가 바람도 불어요</strong> (Ob-havo sovuq, ustiga ustak shamol ham esyapti).</p>
+                `,
+                vocab: [
+                    { kr: "싸고", rom: "ssago", uz: "Arzon va" },
+                    { kr: "맛있고", rom: "masitgo", uz: "Mazali va" },
+                    { kr: "깨끗하고", rom: "kkaekkeuthago", uz: "Toza va" },
+                    { kr: "친절하고", rom: "chinjeolhago", uz: "Mehribon va" },
+                    { kr: "조용하고", rom: "joyonghago", uz: "Tinch va" },
+                    { kr: "넓고", rom: "neolgo", uz: "Keng va" },
+                    { kr: "밝고", rom: "balkgo", uz: "Yorug' va" },
+                    { kr: "편하고", rom: "pyeonhago", uz: "Qulay va" }
+                ],
+                quiz: [
+                    { q: "Ikki xususiyatni bog'lab 'va' ma'nosini beruvchi oddiy bog'lovchi qo'shimcha qaysi?", options: ["-고", "-지만", "-아서", "-면"], ans: 0 },
+                    { q: "'Arzon va' Hanguko (한국어) tilida nima?", options: ["싸고", "맛있고", "깨끗하고", "넓고"], ans: 0 },
+                    { q: "'Mazali va' so'zi qaysi?", options: ["맛있고", "싸고", "친절하고", "조용하고"], ans: 0 },
+                    { q: "'Toza va' so'zi qaysi?", options: ["깨끗하고", "조용하고", "넓고", "밝고"], ans: 0 },
+                    { q: "'Mehribon va' so'zi qaysi?", options: ["친절하고", "깨끗하고", "편하고", "밝고"], ans: 0 },
+                    { q: "'Tinch va' so'zi qaysi?", options: ["조용하고", "넓고", "밝고", "편하고"], ans: 0 },
+                    { q: "'Keng va' so'zi qaysi?", options: ["넓고", "조용하고", "깨끗하고", "싸고"], ans: 0 },
+                    { q: "'Qulay va' so'zi qaysi?", options: ["편하고", "밝고", "넓고", "맛있고"], ans: 0 },
+                    { q: "Fe'l asosiga -고 qo'shilsa u qanday vazifani bajaradi?", options: ["Harakatlarni ketma-ket bog'laydi", "Inkor yasaydi", "Shart qo'yadi", "O'tgan zamon qiladi"], ans: 0 },
+                    { q: "'Yorug' va' so'zi qaysi?", options: ["밝고", "편하고", "넓고", "조용하고"], ans: 0 }
+                ]
+            },
+            {
+                day: 27,
+                title: "Aytishicha / Mish: -다고 하다 (Bilvosita nutq)",
+                shortTitle: "Bilvosita nutq",
+                description: "Birovning aytgan gapini boshqasiga yetkazish (mish / aytishicha) uchun -다고 하다 grammatikasini o'rganamiz.",
+                grammar: `
+                    <p>• Hozirgi zamon fe'llarida: <strong>-ㄴ/는다고 해요</strong> (Aytishicha, ...kan).</p>
+                    <p>• Masalan: <strong>친구는 한국어 공부를 한다고 해요</strong> (Do'stim aytishicha, koreys tili o'qiyotgan ekan).</p>
+                `,
+                vocab: [
+                    { kr: "말하다", rom: "malhada", uz: "Gapirmoq" },
+                    { kr: "듣다", rom: "deutda", uz: "Eshitmoq" },
+                    { kr: "소식", rom: "sosik", uz: "Xabar / Yangilik" },
+                    { kr: "약속", rom: "yaksok", uz: "Vada / Kelishuv" },
+                    { kr: "생각하다", rom: "saenggakmada", uz: "O'ylamoq" },
+                    { kr: "알다", rom: "alda", uz: "Bilmoq" },
+                    { kr: "모ruda", rom: "moreuda", uz: "Bilmaslik" },
+                    { kr: "묻다", rom: "mutda", uz: "So'ramoq" }
+                ],
+                quiz: [
+                    { q: "Birovning gapini boshqasiga yetkazish uchun nima ishlatiladi?", options: ["-다고 하다", "-고 싶다", "-아/어 봤어요", "-아야 하다"], ans: 0 },
+                    { q: "'Gapirmoq' fe'li qaysi?", options: ["말하다", "듣다", "알다", "묻다"], ans: 0 },
+                    { q: "'Eshitmoq' fe'li qaysi?", options: ["듣다", "말하다", "생각하다", "알다"], ans: 0 },
+                    { q: "'Xabar / Yangilik' so'zi qaysi?", options: ["소식", "약속", "말", "글"], ans: 0 },
+                    { q: "'Vada / Kelishuv' so'zi qaysi?", options: ["약속", "소식", "생각", "마음"], ans: 0 },
+                    { q: "'O'ylamoq' fe'li qaysi?", options: ["생각하다", "알다", "모ruda", "묻다"], ans: 0 },
+                    { q: "'Bilmoq' fe'li qaysi?", options: ["알다", "모르다", "말하다", "듣다"], ans: 0 },
+                    { q: "'Bilmaslik' fe'li qaysi?", options: ["모르다", "알다", "듣다", "말하다"], ans: 0 },
+                    { q: "Bilvosita nutq o'zbek tilida qanday ma'no beradi?", options: ["...mish / aytishicha", "...kerak", "...olaman", "...sa"], ans: 0 },
+                    { q: "'So'ramoq' fe'li qaysi?", options: ["묻다", "알다", "말하다", "듣다"], ans: 0 }
+                ]
+            },
+            {
+                day: 28,
+                title: "Taxmin qilish: -(으)ㄹ 것 같다",
+                shortTitle: "Taxmin (-l geot gatda)",
+                description: "Biror narsa haqida taxmin qilish yoki o'z fikrini muloyim bildirish uchun -(으)ㄹ 것 같다 grammatikasini o'rganamiz.",
+                grammar: `
+                    <p>• Fe'l/sifat asosiga qo'shilib, "...ovshiga o'xshaydi / ...sa kerak" ma'nosini beradi.</p>
+                    <p>• Masalan: <strong>내일은 비가 올 것 같아요</strong> (Ertaga yomg'ir yog'sa kerak / yog'adiganga o'xshaydi).</p>
+                `,
+                vocab: [
+                    { kr: "아마", rom: "ama", uz: "Ehtimol / Balki" },
+                    { kr: "생각하다", rom: "saenggaknada", uz: "Taxmin qilmoq" },
+                    { kr: "날씨", rom: "nalssi", uz: "Ob-havo" },
+                    { kr: "춥다", rom: "chupda", uz: "Sovuq bo'lmoq" },
+                    { kr: "덥다", rom: "deopda", uz: "Issiq bo'lmoq" },
+                    { kr: "좋다", rom: "jota", uz: "Yaxshi bo'lmoq" },
+                    { kr: "많다", rom: "manta", uz: "Ko'p bo'lmoq" },
+                    { kr: "비싸다", rom: "bissada", uz: "Qimmat bo'lmoq" }
+                ],
+                quiz: [
+                    { q: "Taxmin qilishni bildirish uchun fe'l/sifatga nima qo'shiladi?", options: ["-(으)ㄹ 것 같다", "-고 싶다", "-아야 하다", "-아서"], ans: 0 },
+                    { q: "'Ehtimol / Balki' so'zi qaysi?", options: ["아마", "날씨", "생각", "지금"], ans: 0 },
+                    { q: "'Issiq bo'lmoq' so'zi qaysi?", options: ["덥다", "춥다", "좋다", "많다"], ans: 0 },
+                    { q: "'Ko'p bo'lmoq' so'zi qaysi?", options: ["많다", "비싸다", "좋다", "춥다"], ans: 0 },
+                    { q: "O'zbek tilidagi '...ga o'xshaydi / ...sa kerak' ma'nosi qaysi?", options: ["-(으)ㄹ 것 같다", "-고 싶다", "-지만", "-으니까"], ans: 0 },
+                    { q: "Ertaga yomg'ir yog'adi deb taxmin qilganda nima deyiladi?", options: ["비가 올 것 같아요", "비가 와요", "비가 왔어요", "비가 오고 싶어요"], ans: 0 },
+                    { q: "Sifat asosiga taxmin grammatikasi qo'shilganda qanday qo'shiladi?", options: ["-(으)ㄹ 것 같다", "-는 것 같다", "-ㄴ 것 같다", "Farqi yo'q"], ans: 0 },
+                    { q: "'춥다' so'zining taxmin shakli qanday?", options: ["추울 것 같아요", "추ㅂ 것 같아요", "추운 것 같아요", "춥을 것 같아요"], ans: 0 },
+                    { q: "Bu grammatika kundalik muloqotda nima uchun ishlatiladi?", options: ["O'z fikrini yumshoq bildirish", "Keskin buyruq berish", "Savol berish", "Inkor etish"], ans: 0 },
+                    { q: "'Ehtimol qimmat bo'lsa kerak' demoqchi bo'lsak nima deymiz?", options: ["아마 비쌀 것 같아요", "비싸요", "비쌌어요", "비싸고 싶어요"], ans: 0 }
+                ]
+            },
+            {
+                day: 29,
+                title: "Maqsad va niyat: -(으)러 가다/오다",
+                shortTitle: "Maqsad (-r gada)",
+                description: "Biror joyga ma'lum bir maqsad bilan borish yoki kelishni bildirish uchun -(으)러 가다/오다 grammatikasini o'rganamiz.",
+                grammar: `
+                    <p>• Fe'l asosiga <strong>-(으)러 가다</strong> (bormoq) yoki <strong>-(으)러 오 kelmoq</strong> qo'shiladi.</p>
+                    <p>• Masalan: <strong>밥을 먹으러 식당에 가요</strong> (Ovqat yeb kelgani / ovqatlanish uchun restoraniga boryapman).</p>
+                `,
+                vocab: [
+                    { kr: "공부하러 가다", rom: "gongbuhareo gada", uz: "O'qishga bormoq" },
+                    { kr: "운동하러 가다", rom: "undonghareo gada", uz: "Sportga bormoq" },
+                    { kr: "쇼핑하러 가다", rom: "syopinghareo gada", uz: "Xaridga bormoq" },
+                    { kr: "일하러 가다", rom: "ilhareo gada", uz: "Ishga bormoq" },
+                    { kr: "만나러 가다", rom: "mannareo gada", uz: "Uchrashgani bormoq" },
+                    { kr: "쉬러 가다", rom: "swireo gada", uz: "Dam olgani bormoq" },
+                    { kr: "놀러 가다", rom: "nolreo gada", uz: "Sayrga / o'ynagani bormoq" },
+                    { kr: "책을 사러 가다", rom: "chaegeul sareo gada", uz: "Kitob sotib olgani bormoq" }
+                ],
+                quiz: [
+                    { q: "Maqsad bilan biror joyga borish yoki kelishni bildirish uchun nima qo'shiladi?", options: ["-(으)러 가다/오다", "-아서", "-고 싶다", "-으면"], ans: 0 },
+                    { q: "'O'qishga bormoq' Hanguko (한국어) tilida nima?", options: ["공부하러 가다", "운동하러 가다", "쇼핑하러 가다", "일하러 가다"], ans: 0 },
+                    { q: "'Xaridga bormoq' so'zi qaysi?", options: ["쇼핑하러 가다", "공부하러 가다", "쉬러 가다", "놀러 가다"], ans: 0 },
+                    { q: "'Sportga bormoq' so'zi qaysi?", options: ["운동하러 가다", "일하러 가다", "만나러 가다", "쉬러 가다"], ans: 0 },
+                    { q: "'Ishga bormoq' so'zi qaysi?", options: ["일하러 가다", "쇼핑하러 가다", "공부하러 가다", "놀러 가다"], ans: 0 },
+                    { q: "'Dam olgani bormoq' so'zi qaysi?", options: ["쉬러 가다", "만나러 가다", "놀러 가다", "공부하러 가다"], ans: 0 },
+                    { q: "'Kitob sotib olgani bormoq' so'zi qaysi?", options: ["책을 사러 가다", "책을 읽으러 가다", "책을 보러 가다", "책을 빌리러 가다"], ans: 0 },
+                    { q: "Unli bilan tugagan fe'lga maqsad ma'nosida nima qo'shiladi?", options: ["-러 가다", "-으러 가다", "-러 오다", "고 싶다"], ans: 0 },
+                    { q: "Undosh bilan tugagan fe'lga maqsad ma'nosida nima qo'shiladi?", options: ["-으러 가다", "-러 가다", "-면", "-때"], ans: 0 },
+                    { q: "Bu grammatika qanday fe'llar bilan birga keladi?", options: ["가다 va 오다 (borish/kelish)", "Faqat 하다", "Faqat 먹다", "Faqat 자다"], ans: 0 }
+                ]
+            },
+            {
+                day: 30,
+                title: "TOPIK I & II imtihoniga tayyorgarlik va yakuniy takrorlash",
+                shortTitle: "TOPIK 3 ga tayyorlov",
+                description: "30-kunda shu paytgacha o'rgangan barcha asosiy va o'rta darajadagi grammatika, so'zlar hamda TOPIK test savollarini yakuniy takrorlaymiz.",
+                grammar: `
+                    <p>• Tabriklaymiz! Siz 30 kunlik LingoUZ Hanguko (한국어) dasturini muvaffaqiyatli yakunladingiz.</p>
+                    <p>• Endi siz TOPIK I va TOPIK II (Level 3) darajasidagi matnlarni tushunish, fe'l zamonlari, sabab, shart va xohish shakllarini erkin qo'llay olasiz.</p>
+                `,
+                vocab: [
+                    { kr: "합격하다", rom: "hapgyeoknada", uz: "Imtihondan o'tmoq / Yutmoq" },
+                    { kr: "성공하다", rom: "seonggonghada", uz: "Muvaffaqiyat qozonmoq" },
+                    { kr: "노력하다", rom: "noryeokhada", uz: "Harakat qilmoq" },
+                    { kr: "졸업하다", rom: "joreophada", uz: "Tamomlamoq / Bitirmoq" },
+                    { kr: "시작하다", rom: "sijakhada", uz: "Boshlamoq" },
+                    { kr: "끝내다", rom: "kkeutnaeda", uz: "Tugatmoq" },
+                    { kr: "미래", rom: "mirae", uz: "Kelajak" },
+                    { kr: "꿈", rom: "kkum", uz: "Orzu" }
+                ],
+                quiz: [
+                    { q: "'Imtihondan o'tmoq' Hanguko (한국어) tilida nima?", options: ["합격하다", "성공하다", "졸업하다", "노력하다"], ans: 0 },
+                    { q: "'Orzu' so'zi qaysi?", options: ["꿈", "미래", "시작", "성공"], ans: 0 },
+                    { q: "'Kelajak' so'zi qaysi?", options: ["미래", "꿈", "시작", "끝"], ans: 0 },
+                    { q: "'Harakat qilmoq' fe'li qaysi?", options: ["노력하다", "성공하다", "합격하다", "졸업하다"], ans: 0 },
+                    { q: "'Muvaffaqiyat qozonmoq' so'zi qaysi?", options: ["성공하다", "합격하다", "노력하다", "시작하다"], ans: 0 },
+                    { q: "'Bitirmoq / tamomlamoq' so'zi qaysi?", options: ["졸업하다", "시작하다", "끝내다", "노력하다"], ans: 0 },
+                    { q: "LingoUZ dasturi sizga nima berdi?", options: ["Hanguko (한국어) 0 dan TOPIK 3 gacha poydevor", "Faqat harflar", "Faqat raqamlar", "Hech narsa"], ans: 0 },
+                    { q: "'Boshlamoq' fe'li qaysi?", options: ["시작하다", "끝내다", "합격하다", "성공하다"], ans: 0 },
+                    { q: "'Tugatmoq' fe'li qaysi?", options: ["끝내다", "시작하다", "노력하다", "성공하다"], ans: 0 },
+                    { q: "TOPIK imtihonida muvaffaqiyat qozonish uchun nima qilish kerak?", options: ["Doimiy takrorlash va so'z yodlash", "Faqat uxlash", "Darsni tashlab yuborish", "Hech narsa qilmaslik"], ans: 0 }
+                ]
             }
         ];
-
         const ADMIN_PHONE = "+998505536776";
         const ADMIN_PASS = "O.01112006";
         const appId = 'lingouz-hanguko-app';
