@@ -1493,8 +1493,25 @@
         };
 
         window.speakKorean = function(text, btnElement) {
-            const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=ko&client=tw-ob`;
-            new Audio(audioUrl).play().catch(() => showToast("Talaffuzni ijro etib bo'lmadi.", "error"));
+            try {
+                const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=ko&client=tw-ob`;
+                const audio = new Audio(audioUrl);
+                
+                if (btnElement) {
+                    btnElement.classList.add('bg-indigo-600', 'text-white');
+                    audio.onended = () => btnElement.classList.remove('bg-indigo-600', 'text-white');
+                    audio.onerror = () => {
+                        btnElement.classList.remove('bg-indigo-600', 'text-white');
+                        showToast("Talaffuzni yuklab bo'lmadi.", "error");
+                    };
+                }
+                audio.play().catch(() => {
+                    if (btnElement) btnElement.classList.remove('bg-indigo-600', 'text-white');
+                    showToast("Ovozni ijro etish bloklandi.", "error");
+                });
+            } catch (e) {
+                showToast("Talaffuz xatosi.", "error");
+            }
         };
 
         window.startQuiz = function(dayNum) {
